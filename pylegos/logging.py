@@ -1,41 +1,45 @@
-import sys
+""" The pylegos core logging module
+
+This module will aide in logging efforts for your applications.  It is a
+thin wrapper around the python standard logging library.
+"""
+
 import logging
+from decorators import Singleton
 
+@Singleton
+class LogFactory(object):
+    """ Singleton class that will return a logger with the name of the caller
 
-######
-# FEATURE TODOS:
-# - Create new logger class, with force write to log file only option (or designated stream)
-# - create a way to log parameters/values with standard bracketed format (i.e. |:<pname>=<value>:|) idea: think bind params in cx_Oracle
-#
-
-class LogHelper(object):
-    '''
-    #############################
-    # Class Vars
-    #############################
-
-    #############################
-    '''
-
-    def __init__(self):
-
-        '''
-        Constructor
-        '''
+    This class will retrieve a number of different loggers for you.  It can also be used safely
+    by library type classes that want to log safely. Simply, if the calling application to a
+    library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+    can call the "addNullHandler" routine to prevent this as it will create a "/dev/null" type logger so
+    the library logging statements run without a logger.
+    """
 
     def addNullHandler(self):
-        # Set default logging handler to avoid "No handler found" warnings.
+        """ Call from library code to ensure that there is a parent logger
+
+        :return: None
+        """
         try:
             from logging import NullHandler
-        except ImportError:
+        except:
             class NullHandler(logging.Handler):
-                def emit(self, record):
-                    pass
+                def emit(self, record): pass
 
         rootLogger = logging.getLogger()
         rootLogger.addHandler(NullHandler())
 
-    def getLogger(self, logFile, logLevel='INFO'):
+
+    def getFileLogger(self, logFile, logLevel='INFO'):
+        ''' Use this routine to get a standard file logger, non-rotating
+
+        :param logFile: the path the the logfile where the logger will write
+        :param logLevel: the level
+        :return: python standard logging object
+        '''
 
         Logger = logging.getLogger()
 
