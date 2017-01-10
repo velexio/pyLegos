@@ -739,9 +739,9 @@ class App(object):
         :return: None
         '''
         self.AppName = self.getAppName()
-        appBase = self.getAppBase()
-        confDirs = FileUtils().getDirMatches(baseDir=appBase,pattern='conf')
-        logDirs = FileUtils().getDirMatches(baseDir=appBase,pattern='logs')
+        self.AppBase = self.getAppBase()
+        confDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='conf')
+        logDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='logs')
         '''
           We first check to see if there is an application ini file that has base level settings.  Which currently
           is just that it has a minimal logging configuration.  If no file or conf(ig) directory exists, then a
@@ -750,26 +750,26 @@ class App(object):
           In addition, if a log(s) directory is not present in the "AppBase", then a directory will be created
           so that a log file can be created.
         '''
-        confDir = appBase+PlatformProps.FilePathSeparator+'conf'
-        logDir = appBase+PlatformProps.FilePathSeparator+'logs'
-        appConfFile=confDir+PlatformProps.FilePathSeparator+appName+'.ini'
+        confDir = self.AppBase+PlatformProps.FilePathSeparator+'conf'
+        logDir = self.AppBase+PlatformProps.FilePathSeparator+'logs'
+        appConfFile=confDir+PlatformProps.FilePathSeparator+self.AppName+'.ini'
         if len(confDirs) < 1:
             FileUtils().mkdir(confDir)
         if not FileUtils().fileExists(appConfFile):
-            self.__createStarterConfigFile(appBase=appBase, appName=self.AppName, confFile=appConfFile)
+            self.__createStarterConfigFile(appBase=self.AppBase, appName=self.AppName, confFile=appConfFile)
         if len(logDirs) < 1:
             FileUtils().mkdir(logDir)
         self.AppContext = IniConfig().getConfigMap(configFile=appConfFile)
-        self.log = LogFactory().getLogger(appName=self.AppName,appBase=appBase)
+        self.log = LogFactory().getLogger(appName=self.AppName, appBase=self.AppBase)
         logUtil = LogUtil(logger=self.log)
-        sys.path.append(appBase+'/lib')
+        sys.path.append(self.AppBase+'/lib')
         self.AppVersion = self.getAppVersion()
         appInitMessage = """
          Application Initialized Successfully
                 Name: %s
              Version: %s
             BasePath: %s
-         """ % (self.AppName, self.AppVersion, appBase)
+         """ % (self.AppName, self.AppVersion, self.AppBase)
         logUtil.appendToLog(appInitMessage)
 
 
