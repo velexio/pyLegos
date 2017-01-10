@@ -738,7 +738,7 @@ class App(object):
            - Load the AppContext class
         :return: None
         '''
-        appName = self.getAppName()
+        self.AppName = self.getAppName()
         appBase = self.getAppBase()
         confDirs = FileUtils().getDirMatches(baseDir=appBase,pattern='conf')
         logDirs = FileUtils().getDirMatches(baseDir=appBase,pattern='logs')
@@ -756,20 +756,20 @@ class App(object):
         if len(confDirs) < 1:
             FileUtils().mkdir(confDir)
         if not FileUtils().fileExists(appConfFile):
-            self.__createStarterConfigFile(appBase=appBase, appName=appName, confFile=appConfFile)
+            self.__createStarterConfigFile(appBase=appBase, appName=self.AppName, confFile=appConfFile)
         if len(logDirs) < 1:
             FileUtils().mkdir(logDir)
         self.AppContext = IniConfig().getConfigMap(configFile=appConfFile)
-        self.log = LogFactory().getLogger(appName=appName,appBase=appBase)
+        self.log = LogFactory().getLogger(appName=self.AppName,appBase=appBase)
         logUtil = LogUtil(logger=self.log)
         sys.path.append(appBase+'/lib')
-        appVersion = self.getAppVersion()
+        self.AppVersion = self.getAppVersion()
         appInitMessage = """
          Application Initialized Successfully
                 Name: %s
              Version: %s
             BasePath: %s
-         """ % (appName, appVersion, appBase)
+         """ % (self.AppName, self.AppVersion, appBase)
         logUtil.appendToLog(appInitMessage)
 
 
@@ -792,7 +792,7 @@ class App(object):
         return callerMod
 
     def getAppVersion(self):
-        modName = self.getAppName().strip('.py')+'_manifest'
+        modName = self.AppName+'_manifest'
         locals()['manifest_mod'] = __import__(modName)
         version = manifest_mod.VersionInfo['MAJOR']+'.'+manifest_mod.VersionInfo['MINOR']
         return version
