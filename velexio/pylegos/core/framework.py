@@ -1,6 +1,6 @@
 import inspect
 import logging
-import re
+import imp
 import platform
 import traceback
 import random
@@ -793,11 +793,15 @@ class App(object):
 
     def getAppVersion(self):
         modName = self.AppName+'_manifest'
-        locals()['manifest_mod'] = __import__(modName)
-        version = manifest_mod.VersionInfo['MAJOR']+'.'+manifest_mod.VersionInfo['MINOR']
-        return version
+        f, filename, description = imp.find_module(modName)
+        try:
+            manifest_mod = imp.load_module(modName, f, filename, description)
+            version = manifest_mod.VersionInfo['MAJOR']+'.'+manifest_mod.VersionInfo['MINOR']
+            return version
+        finally:
+            f.close()
 
-    def appendToLog(self,messageObj):
+    def appendToLog(self, messageObj):
         logUtil = LogUtil(logger=self.log)
         logUtil.appendToLog(messageObj=messageObj)
 
