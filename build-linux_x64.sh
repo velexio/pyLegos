@@ -7,11 +7,13 @@ nuitka --module velexio/pylegos/core/framework.py --output-dir dist/velexio/pyle
 
 cp -r deplibs/* dist/velexio/pylegos/deplibs/.
 cd dist
+
 touch velexio/__init__.py
 touch velexio/pylegos/__init__.py
 touch velexio/pylegos/core/__init__.py
 touch velexio/pylegos/database/__init__.py
 
+rm vx_pylegos-linux_x64.tar.gz
 tar -czf vx_pylegos-linux_x64.tar.gz velexio 
 
 rm -rf velexio

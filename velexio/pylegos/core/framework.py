@@ -792,8 +792,9 @@ class App(object):
         return callerMod
 
     def getAppVersion(self):
-        import manifest
-        version = manifest.VersionInfo['MAJOR']+'.'+manifest.VersionInfo['MINOR']
+        modName = self.getAppName().strip('.py')+'_manifest'
+        locals()['manifest_mod'] = __import__(modName)
+        version = manifest_mod.VersionInfo['MAJOR']+'.'+manifest_mod.VersionInfo['MINOR']
         return version
 
     def appendToLog(self,messageObj):

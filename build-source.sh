@@ -1,6 +1,18 @@
-from distutils.core import setup
-from Cython.Build import cythonize
+#!/bin/bash
+echo Building...
+cd dist
 
-setup(
-    ext_modules = cythonize("framework.py")
-)
+cp -r ../velexio .
+
+touch velexio/__init__.py
+touch velexio/pylegos/__init__.py
+touch velexio/pylegos/core/__init__.py
+touch velexio/pylegos/database/__init__.py
+
+tar -czf vx_pylegos-source.tar.gz velexio 
+
+rm -rf velexio
+cd ..
+echo Finished
+
+
