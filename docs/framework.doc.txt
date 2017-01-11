@@ -1,0 +1,586 @@
+Help on module velexio.pylegos.core.framework in velexio.pylegos.core:
+
+NAME
+    velexio.pylegos.core.framework
+
+FILE
+    /Users/gchristiansen/projects/pyLegos/velexio/pylegos/core/framework.py
+
+CLASSES
+    __builtin__.object
+        DictionaryUtil
+        ExceptionHelper
+        FileUtils
+        IniConfig
+        LogFactory
+        LogUtil
+        PlatformProps
+        QuoteMachine
+        UnixOSHelper
+    exceptions.Exception(exceptions.BaseException)
+        AppNotInitializedException
+        OSRunException
+        PyLegosFrameworkException
+    Singleton
+    
+    class AppNotInitializedException(exceptions.Exception)
+     |  Method resolution order:
+     |      AppNotInitializedException
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __int__(self, errorMessage='This feature cannot be used unless you have used...egos.App.init() call at the start of your program')
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.Exception:
+     |  
+     |  __init__(...)
+     |      x.__init__(...) initializes x; see help(type(x)) for signature
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |  
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |  
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |  
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |  
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |  
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |      
+     |      Use of negative indices is not supported.
+     |  
+     |  __reduce__(...)
+     |  
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |  
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(...)
+     |      x.__str__() <==> str(x)
+     |  
+     |  __unicode__(...)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |  
+     |  __dict__
+     |  
+     |  args
+     |  
+     |  message
+    
+    class DictionaryUtil(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |  
+     |  formatToString(self, dictObj)
+     |  
+     |  toFormattedString(self, dictObj)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class ExceptionHelper(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |  
+     |  getOffender(self, sysExecptionInfo)
+     |  
+     |  handleError(self, errorMessage)
+     |  
+     |  handleInputError(self, errorMessage)
+     |  
+     |  printSimpleStacktrace(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  Logger = None
+    
+    class FileUtils(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |  
+     |  dirExists(self, directoryPath)
+     |      Use to check if a directory exists.  This will only return true
+     |      if it exists and is also a directory (as opposed to a file)
+     |      :param directoryPath: The full path to the directory
+     |      :return: Boolean (True|False)
+     |  
+     |  dirMatchExist(self, baseDir, pattern, strictCheck=True)
+     |      Used to check to see if a directory that matches a pattern exists.  The pattern is
+     |      a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)
+     |      It will only return true if the object that matches is a directory, not a file.  If you
+     |      do not care if match is a directory, but also want to return if a file is found that matches
+     |      the pattern, set the optional parameter strict check to False.
+     |      :param baseDir:  The base directory to look in
+     |      :param pattern: The unix style pattern to check
+     |      :param strictCheck: Indicates if only a directory will be considered a match. Default is True
+     |      :return: Boolean
+     |  
+     |  fileExists(self, filePath)
+     |      Used to check if file exists.  It will return true if the file
+     |      exists and it is a file, not a directory
+     |      :param filePath: Full path to the file
+     |      :return: Boolean (True|False)
+     |  
+     |  fileMatchExist(self, baseDir, pattern, strictCheck=True)
+     |      Use to check if a file exists based on a pattern. The pattern that is used is
+     |      simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).
+     |      It will only return True if the file is a file, not a directory.  If do not care if
+     |      it is a file or directory, set optional parameter useStrictCheck to False
+     |      :param baseDir: The directory to look in
+     |      :param pattern: The pattern to use for match
+     |      :param strictCheck: Indicates if it should make sure the match is a file Default is True
+     |      :return: Boolean
+     |  
+     |  getAppBase(self)
+     |  
+     |  getDirMatches(self, baseDir, pattern, strictCheck=True)
+     |      This will return true if a list of directories that match the pattern.  If there are
+     |      no matching directories, then an empty list is returned
+     |      :param baseDir: The directory to search in.
+     |      :param pattern: Pattern to search for (ie conf*)
+     |      :param strictCheck: Indicates to only include directory objects (not files) that match
+     |      :return: List<String>
+     |  
+     |  getFileMatches(self, baseDir, pattern, strictCheck=True)
+     |      This will return true if a list of files that match the pattern.  If there are
+     |      no matching files, then an empty list is returned
+     |      :param baseDir: The directory to search in.
+     |      :param pattern: Pattern to search for (ie conf*)
+     |      :param strictCheck: Indicates to only include file objects (not directories) that match
+     |      :return: List<String>
+     |  
+     |  getParentDir(self, filePath)
+     |  
+     |  mkdir(self, dirPath)
+     |      Simple wrapper to os.mkdir
+     |      :param dirPath: Full path of directory to create
+     |      :return: None
+     |  
+     |  rmDirMatch(self, dirPath, pattern)
+     |  
+     |  rmdir(self, dirPath)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  Inspector = <velexio.pylegos.core.framework.Inspector object>
+     |  
+     |  Logger = None
+    
+    class IniConfig(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |  
+     |  getConfig(self, configFile)
+     |  
+     |  getConfigKeys(self, configFile, sectionName)
+     |  
+     |  getConfigMap(self, configFile)
+     |  
+     |  getConfigValue(self, configFile, sectionName, propertyName)
+     |  
+     |  setConfigValue(self, configFile, section, key, value)
+     |  
+     |  writeConfigMap(self, configMap, fileName)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  Config = None
+     |  
+     |  Logger = None
+    
+    class LogFactory(__builtin__.object)
+     |  Singleton class that will return a logger with the name of the caller
+     |  
+     |  This class will retrieve a number of different loggers for you.  It can also be used safely
+     |  by library type classes that want to log safely. Simply, if the calling application to a
+     |  library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+     |  can call the "addNullHandler" routine to prevent this as it will create a "/dev/null" type logger so
+     |  the library logging statements run without a logger.
+     |  
+     |  Methods defined here:
+     |  
+     |  addNullHandler(self)
+     |      Call from library code to ensure that there is a parent logger
+     |      :return: None
+     |  
+     |  changeLoggingLevel(self, logLevel, logger=None)
+     |      This module is for changing the logging level on the fly.  For example, changing the logging level
+     |      via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger
+     |      will be looked up dynamically.
+     |      :param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel
+     |      :param logger: The logger object that the program is using to log.
+     |      :return: None
+     |  
+     |  getConsoleLogger(self, loggerName=None, logLevel=20, formatString=None)
+     |      This will return a logger for logging messages to the console.
+     |      :param logLevel:
+     |      :param formatString:
+     |      :return:
+     |  
+     |  getFileLogger(self, logFile=None, loggerName=None, logLevel=10, formatString=None)
+     |      Use this routine to get a standard file logger, non-rotating
+     |      
+     |      :param logFile: the path the the logfile where the logger will write
+     |      :param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO
+     |      :return: python standard logging object
+     |  
+     |  getLibLogger(self)
+     |  
+     |  getLogger(self, appName, appBase, logLevel=None)
+     |      This class is meant to initialize a set of default loggers for an application.
+     |      :param logFile:
+     |      :param logLevel:
+     |      :return:
+     |  
+     |  getTimedRotateFileLogger(self, loggerName=None, logFile=None, logLevel=10, formatString=None, whenRotate='D', interval=1, keepCount=10)
+     |      This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate
+     |      the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.
+     |      Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python
+     |      logging library documentation.
+     |      
+     |      :param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.
+     |      :param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()
+     |      :param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO
+     |      :param formatString: Custom format string.  If left to default value of None, the framework default will be used.
+     |      :param whenRotate: When should rotation occur.  Default is 'D' for daily.
+     |      :param interval: How often to rotate.  Default is 1.
+     |      :param keepCount: How many files to keep after file is rotated.  Default is 10
+     |      :return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  CodeInspector = <velexio.pylegos.core.framework.Inspector object>
+     |  
+     |  LogLevel = <class 'velexio.pylegos.core.framework.LogLevel'>
+    
+    class LogUtil(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self, logger)
+     |  
+     |  appendToLog(self, messageObj)
+     |  
+     |  getLogfileList(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  Logger = None
+    
+    class OSRunException(exceptions.Exception)
+     |  Method resolution order:
+     |      OSRunException
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, command, stderr)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |  
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |  
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |  
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |  
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |  
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |      
+     |      Use of negative indices is not supported.
+     |  
+     |  __reduce__(...)
+     |  
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |  
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(...)
+     |      x.__str__() <==> str(x)
+     |  
+     |  __unicode__(...)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |  
+     |  __dict__
+     |  
+     |  args
+     |  
+     |  message
+    
+    class PlatformProps(__builtin__.object)
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  FilePathSeparator = '/'
+     |  
+     |  PathSeparator = ':'
+    
+    class PyLegosFrameworkException(exceptions.Exception)
+     |  Method resolution order:
+     |      PyLegosFrameworkException
+     |      exceptions.Exception
+     |      exceptions.BaseException
+     |      __builtin__.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, msg)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from exceptions.Exception:
+     |  
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from exceptions.BaseException:
+     |  
+     |  __delattr__(...)
+     |      x.__delattr__('name') <==> del x.name
+     |  
+     |  __getattribute__(...)
+     |      x.__getattribute__('name') <==> x.name
+     |  
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |  
+     |  __getslice__(...)
+     |      x.__getslice__(i, j) <==> x[i:j]
+     |      
+     |      Use of negative indices is not supported.
+     |  
+     |  __reduce__(...)
+     |  
+     |  __repr__(...)
+     |      x.__repr__() <==> repr(x)
+     |  
+     |  __setattr__(...)
+     |      x.__setattr__('name', value) <==> x.name = value
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(...)
+     |      x.__str__() <==> str(x)
+     |  
+     |  __unicode__(...)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from exceptions.BaseException:
+     |  
+     |  __dict__
+     |  
+     |  args
+     |  
+     |  message
+    
+    class QuoteMachine(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  getErrorMessage(self)
+     |  
+     |  getFinishSuccessMessage(self)
+     |  
+     |  getInvalidInputMessage(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  ErrorQuotes = ['I blame this error on you!', 'One of these days this w...
+     |  
+     |  InvalidInputSayings = ['Hmm, are your fingers tired? That input is inc...
+     |  
+     |  SuccessFinishPhrases = ['Nice work, donuts on me!', 'Good job, I knew ...
+    
+    class Singleton
+     |  A non-thread-safe helper class to ease implementing singletons.
+     |  This should be used as a decorator -- not a metaclass -- to the
+     |  class that should be a singleton.
+     |  
+     |  The decorated class can define one `__init__` function that
+     |  takes only the `self` argument. Also, the decorated class cannot be
+     |  inherited from. Other than that, there are no restrictions that apply
+     |  to the decorated class.
+     |  
+     |  To get the singleton instance, use the `Instance` method. Trying
+     |  to use `__call__` will result in a `TypeError` being raised.
+     |  
+     |  Methods defined here:
+     |  
+     |  Instance(self)
+     |      Returns the singleton instance. Upon its first call, it creates a
+     |      new instance of the decorated class and calls its `__init__` method.
+     |      On all subsequent calls, the already created instance is returned.
+     |  
+     |  __call__(self)
+     |  
+     |  __init__(self, decorated)
+     |  
+     |  __instancecheck__(self, inst)
+    
+    class UnixOSHelper(__builtin__.object)
+     |  Methods defined here:
+     |  
+     |  __init__(self)
+     |  
+     |  checkFile4Errors(self, filename, errorMatchPattern='ERROR:')
+     |  
+     |  getHostname(self, shortName=False)
+     |  
+     |  getOSName(self)
+     |  
+     |  getOSVersion(self)
+     |  
+     |  run(self, command, useReturnCode=True, simMode=False)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  Logger = None
+
+DATA
+    App = <velexio.pylegos.core.framework.Singleton instance>
+    Inspector = <velexio.pylegos.core.framework.Singleton instance>
+    STDOUT = -2
+
+
