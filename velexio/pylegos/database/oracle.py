@@ -153,8 +153,12 @@ class Database(object):
         be used to run an anonymous pl/sql block.  If you want to execute a stored pl/sql procedure
         or function, use the executePL subtroutine
         """
-        cursor = self.Connection.cursor()
-        cursor.execute(dml, bindValues)
+        try:
+            cursor = self.Connection.cursor()
+            cursor.execute(dml, bindValues)
+        except cx_Oracle.DatabaseError as e:
+            raise DatabaseDMLExeption("DML ERROR: "+str(e))
+
 
     def execProc(self, procedureName, parameters=[], namedParameters={}, inOutParams={}):
         pass
@@ -307,3 +311,7 @@ class Admin(object):
 class DatabaseConnectionException(Exception):
     def __init__(self):
         self.message = "Unable to connect to database"
+
+class DatabaseDMLExeption(Exception):
+    def __init__(self, msg):
+        self.message = msg
