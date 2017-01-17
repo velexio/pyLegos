@@ -253,9 +253,8 @@ class LogFactory(object):
     def __getDefaultConsoleFormatter(self):
         return logging.Formatter('::| %(message)s')
 
-    def __getBaseLogger(self, loggerName, logLevel=LogLevel.DEBUG):
-        logger = logging.getLogger(loggerName)
-        #logger.setLevel(self.LogLevel.DEBUG)
+    def __getBaseLogger(self, logLevel=LogLevel.DEBUG):
+        logger = logging.getLogger()
         logger.setLevel(logLevel)
         return logger
 
@@ -310,11 +309,13 @@ class LogFactory(object):
         if calledLogLevel is None:
             configValue = appConfig['LOGGING']['LogLevel']
             calledLogLevel = self.LogLevel().convert(configValue)
-        logger = self.__getBaseLogger(loggerName=appName,  logLevel=calledLogLevel)
+        logger = self.__getBaseLogger(logLevel=calledLogLevel)
         logger = self.__addConsoleHandler(logger=logger)
         # logger = self.__addTimeRotatedFileHandler(logger=logger, logFile=logFilename, logLevel=logLevel)
         logger = self.__addFileHandler(logger=logger, logFile=logFilename)
-        return logger
+        appLogger = logging.getLogger(appName)
+        appLogger.setLevel(calledLogLevel)
+        return appLogger
 
     def changeLoggingLevel(self,logLevel,logger=None):
         '''

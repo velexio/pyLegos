@@ -68,8 +68,10 @@ class Database(object):
         """
         try:
             if asSysdba:
-                self.Connection = cx_Oracle.connect(user=username, password=password, dsn=connectString,
-                                                mode=cx_Oracle.SYSDBA)
+                self.Connection = cx_Oracle.connect(user=username,
+                                                    password=password,
+                                                    dsn=connectString,
+                                                    mode=cx_Oracle.SYSDBA)
             else:
                 self.Connection = cx_Oracle.connect(username, password, connectString)
         except cx_Oracle.DatabaseError:
@@ -115,7 +117,7 @@ class Database(object):
         formattedResultSet = OrderedDict()
         formattedRowNumber = 1
         cursor = self.Connection.cursor()
-        cursor.execDML(query, bindValues)
+        cursor.execute(query, bindValues)
 
         curMeta = self.generateRSMetadata(cursor=cursor)
 
@@ -152,7 +154,7 @@ class Database(object):
         or function, use the executePL subtroutine
         """
         cursor = self.Connection.cursor()
-        cursor.execDML(dml, bindValues)
+        cursor.execute(dml, bindValues)
 
     def execProc(self, procedureName, parameters=[], namedParameters={}, inOutParams={}):
         pass
@@ -160,9 +162,9 @@ class Database(object):
     def execFunc(self, functionName, oracleReturnType, parameters=[], namedParameters={}):
         cursor = self.Connection.cursor()
         retValue = cursor.callfunc(functionName,
-                                   cx_Oracle.NUMBER, [p_department_id])
-        return l_count
-    if len(pa)
+                                   oracleReturnType,
+                                   parameters)
+        return retValue
 
     def commit(self):
         self.Connection.commit();
