@@ -41,25 +41,47 @@ END of ENUM Type Classes
 '''
 
 class Database(object):
-    '''
-    classdocs
-    '''
-    Connection = None
-    Logger = None
+    """This represents an oracle database object.  Use this object to perform data operations against the database (i.e dml)
+    """
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        """Constructor takes no arguments, just instantiates the logger object
+        """
+
         self.Connection = None
         self.Logger = LogFactory().getLibLogger()
 
+    class OracleDataType(object):
+        NUMBER = cx_Oracle.NUMBER
+
+
+
     def connect(self, username, password, connectString, asSysdba=False):
-        if asSysdba:
-            self.Connection = cx_Oracle.connect(user=username, password=password, dsn=connectString,
+        """
+        This method will create a connection to the database. Before you can call any other method, a connection must be established
+        <br>
+        :param username: The username to use for the connection <br>
+        :param password: The password for the connection <br>
+        :param connectString: The connection string in the format of db-host:port/service_name or db-host:port:sid <br>
+        :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False <br>
+        :return: None <br>
+        """
+        try:
+            if asSysdba:
+                self.Connection = cx_Oracle.connect(user=username, password=password, dsn=connectString,
                                                 mode=cx_Oracle.SYSDBA)
-        else:
-            self.Connection = cx_Oracle.connect(username, password, connectString)
+            else:
+                self.Connection = cx_Oracle.connect(username, password, connectString)
+        except cx_Oracle.DatabaseError:
+            raise DatabaseConnectionException()
+
+
+    def disconnect(self):
+        """
+        This method will close the connection now rather than when application terminates and/or Database object is garbage collected.
+        :return: None
+        """
+        self.Connection.close()
 
     def generateRSMetadata(self, cursor):
         cursorDesc = cursor.description
@@ -93,7 +115,7 @@ class Database(object):
         formattedResultSet = OrderedDict()
         formattedRowNumber = 1
         cursor = self.Connection.cursor()
-        cursor.execute(query, bindValues)
+        cursor.execDML(query, bindValues)
 
         curMeta = self.generateRSMetadata(cursor=cursor)
 
@@ -123,14 +145,24 @@ class Database(object):
 
         return formattedResultSet
 
-    def execute(self, dml, bindValues=[]):
+    def execDML(self, dml, bindValues=[]):
         """
         This function is to be used to call any dml operation (insert,update,delete). It can also
         be used to run an anonymous pl/sql block.  If you want to execute a stored pl/sql procedure
         or function, use the executePL subtroutine
         """
         cursor = self.Connection.cursor()
-        cursor.execute(dml, bindValues)
+        cursor.execDML(dml, bindValues)
+
+    def execProc(self, procedureName, parameters=[], namedParameters={}, inOutParams={}):
+        pass
+
+    def execFunc(self, functionName, oracleReturnType, parameters=[], namedParameters={}):
+        cursor = self.Connection.cursor()
+        retValue = cursor.callfunc(functionName,
+                                   cx_Oracle.NUMBER, [p_department_id])
+        return l_count
+    if len(pa)
 
     def commit(self):
         self.Connection.commit();
@@ -268,4 +300,8 @@ class Admin(object):
                "profile " + profile + " "
                "account unlock")
 
-        self.database.execute(ddl);
+        self.database.execDML(ddl);
+
+class DatabaseConnectionException(Exception):
+    def __init__(self):
+        self.message = "Unable to connect to database"

@@ -1064,6 +1064,7 @@ table {
     <li class="mono"><a href="#oracle.Database.__init__">__init__</a></li>
     <li class="mono"><a href="#oracle.Database.commit">commit</a></li>
     <li class="mono"><a href="#oracle.Database.connect">connect</a></li>
+    <li class="mono"><a href="#oracle.Database.disconnect">disconnect</a></li>
     <li class="mono"><a href="#oracle.Database.execute">execute</a></li>
     <li class="mono"><a href="#oracle.Database.generateRSMetadata">generateRSMetadata</a></li>
     <li class="mono"><a href="#oracle.Database.getDefaultTablespace">getDefaultTablespace</a></li>
@@ -1158,25 +1159,38 @@ table {
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    classdocs</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">Connection</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="sd">&quot;&quot;&quot;This represents an oracle database object.  Use this object to perform data operations against the database (i.e dml)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Constructor</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;Constructor takes no arguments, just instantiates the logger object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">,</span> <span class="n">asSysdba</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method will create a connection to the database. Before you can call any other method, a connection must be established</span>
+<span class="sd">        &lt;br&gt;</span>
+<span class="sd">        :param username: The username to use for the connection &lt;br&gt;</span>
+<span class="sd">        :param password: The password for the connection &lt;br&gt;</span>
+<span class="sd">        :param connectString: The connection string in the format of db-host:port/service_name or db-host:port:sid &lt;br&gt;</span>
+<span class="sd">        :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False &lt;br&gt;</span>
+<span class="sd">        :return: None &lt;br&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
                                                 <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method will close the connection now rather than when application terminates and/or Database object is garbage collected.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">generateRSMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
         <span class="n">cursorDesc</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span>
@@ -1608,30 +1622,43 @@ table {
       <p id="oracle.Database" class="name">class <span class="ident">Database</span></p>
       
   
-    <div class="desc"><p>classdocs</p></div>
+    <div class="desc"><p>This represents an oracle database object.  Use this object to perform data operations against the database (i.e dml)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.Database', this);">Show source &equiv;</a></p>
   <div id="source-oracle.Database" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    classdocs</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">Connection</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="sd">&quot;&quot;&quot;This represents an oracle database object.  Use this object to perform data operations against the database (i.e dml)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Constructor</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;Constructor takes no arguments, just instantiates the logger object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">,</span> <span class="n">asSysdba</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method will create a connection to the database. Before you can call any other method, a connection must be established</span>
+<span class="sd">        &lt;br&gt;</span>
+<span class="sd">        :param username: The username to use for the connection &lt;br&gt;</span>
+<span class="sd">        :param password: The password for the connection &lt;br&gt;</span>
+<span class="sd">        :param connectString: The connection string in the format of db-host:port/service_name or db-host:port:sid &lt;br&gt;</span>
+<span class="sd">        :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False &lt;br&gt;</span>
+<span class="sd">        :return: None &lt;br&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
                                                 <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method will close the connection now rather than when application terminates and/or Database object is garbage collected.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">generateRSMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
         <span class="n">cursorDesc</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span>
@@ -1744,27 +1771,6 @@ table {
           <li><a href="#oracle.Database">Database</a></li>
           <li>__builtin__.object</li>
           </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="oracle.Database.Connection" class="name">var <span class="ident">Connection</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="oracle.Database.Logger" class="name">var <span class="ident">Logger</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
           <h3>Instance variables</h3>
             <div class="item">
             <p id="oracle.Database.Connection" class="name">var <span class="ident">Connection</span></p>
@@ -1796,14 +1802,13 @@ table {
 
     
   
-    <div class="desc"><p>Constructor</p></div>
+    <div class="desc"><p>Constructor takes no arguments, just instantiates the logger object</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.Database.__init__', this);">Show source &equiv;</a></p>
   <div id="source-oracle.Database.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Constructor</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;Constructor takes no arguments, just instantiates the logger object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
 </pre></div>
@@ -1843,15 +1848,58 @@ table {
 
     
   
+    <div class="desc"><p>This method will create a connection to the database. Before you can call any other method, a connection must be established
+<br>
+:param username: The username to use for the connection <br>
+:param password: The password for the connection <br>
+:param connectString: The connection string in the format of db-host:port/service_name or db-host:port:sid <br>
+:param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False <br>
+:return: None <br></p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.Database.connect', this);">Show source &equiv;</a></p>
   <div id="source-oracle.Database.connect" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">,</span> <span class="n">asSysdba</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method will create a connection to the database. Before you can call any other method, a connection must be established</span>
+<span class="sd">    &lt;br&gt;</span>
+<span class="sd">    :param username: The username to use for the connection &lt;br&gt;</span>
+<span class="sd">    :param password: The password for the connection &lt;br&gt;</span>
+<span class="sd">    :param connectString: The connection string in the format of db-host:port/service_name or db-host:port:sid &lt;br&gt;</span>
+<span class="sd">    :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False &lt;br&gt;</span>
+<span class="sd">    :return: None &lt;br&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
                                             <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="oracle.Database.disconnect">
+    <p>def <span class="ident">disconnect</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This method will close the connection now rather than when application terminates and/or Database object is garbage collected.
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.Database.disconnect', this);">Show source &equiv;</a></p>
+  <div id="source-oracle.Database.disconnect" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method will close the connection now rather than when application terminates and/or Database object is garbage collected.</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
   </div>

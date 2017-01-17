@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>framework.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>framework.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">imp</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">fcntl</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">RawConfigParser</span>
+<span class="kn">from</span> <span class="nn">fnmatch</span> <span class="kn">import</span> <span class="n">fnmatch</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">check_output</span><span class="p">,</span><span class="n">CalledProcessError</span><span class="p">,</span><span class="n">STDOUT</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>A non-thread-safe helper class to ease implementing singletons.
+This should be used as a decorator -- not a metaclass -- to the
+class that should be a singleton.</p>
+<p>The decorated class can define one <code>__init__</code> function that
+takes only the <code>self</code> argument. Also, the decorated class cannot be
+inherited from. Other than that, there are no restrictions that apply
+to the decorated class.</p>
+<p>To get the singleton instance, use the <code>Instance</code> method. Trying
+to use <code>__call__</code> will result in a <code>TypeError</code> being raised.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Singleton</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decorated</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decorated</span> <span class="o">=</span> <span class="n">decorated</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Returns the singleton instance. Upon its first call, it creates a
+new instance of the decorated class and calls its <code>__init__</code> method.
+On all subsequent calls, the already created instance is returned.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">Instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instance</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorated</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instance</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Singletons must be accessed through `Instance()`.&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__instancecheck__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inst</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorated</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">Inspector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">getCallerFilePath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callLevel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">callLevel</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">getCallerMod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callLevel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">fileName</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">callLevel</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">modName</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">modName</span>
+
+
+    <span class="k">def</span> <span class="nf">getCallerFunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callLevel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">iStack</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="n">callLevel</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    def getCallerClass(self, callLevel=2):</span>
+<span class="sd">        iStack = inspect.stack()</span>
+<span class="sd">        callingClass = None</span>
+<span class="sd">        fullClassName = None</span>
+<span class="sd">        try:</span>
+<span class="sd">            fullClassName = str(inspect.stack()[callLevel][0].f_locals[&quot;self&quot;].__class__)</span>
+<span class="sd">        except KeyError:</span>
+<span class="sd">            try:</span>
+<span class="sd">                fullClassName = str(inspect.stack()[callLevel][0].f_locals[&quot;cls&quot;])</span>
+<span class="sd">            except KeyError:</span>
+<span class="sd">                pass</span>
+
+<span class="sd">        callingClass = re.match(r&quot;(&lt;class &#39;)([\w.]+)\.([\w]+)(&#39;&gt;)&quot;, fullClassName).group(3)</span>
+<span class="sd">        return callingClass</span>
+<span class="sd">     &#39;&#39;&#39;</span>
+
+
+    <span class="k">def</span> <span class="nf">getCallerFQN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callLevel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Function to get the FQN of caller (FQN = module.class.function or module.function)</span>
+
+<span class="sd">        :return: The name of the calling function</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">moduleName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getCallerMod</span><span class="p">(</span><span class="n">callLevel</span><span class="o">=</span><span class="n">callLevel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>className = str(str(self.getCallerClass(callLevel=callLevel + 1)) + '.').replace("None.", '')</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">funcName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCallerFunc</span><span class="p">(</span><span class="n">callLevel</span><span class="o">=</span><span class="n">callLevel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>caller = moduleName + className + funcName</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">caller</span> <span class="o">=</span> <span class="n">moduleName</span><span class="o">+</span><span class="n">funcName</span>
+        <span class="k">return</span> <span class="n">caller</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">DictionaryUtil</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">KeyLevel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RootKey</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ParentKey</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PrevParent</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">toFormattedString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dictObj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Not yet implemented&#39;</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        formattedString=&#39;&#39;</span>
+<span class="sd">        for k,v in dictObj.iteritems():</span>
+<span class="sd">            if self.KeyLevel == 0:</span>
+<span class="sd">                self.RootKey = str(k)</span>
+<span class="sd">            else:</span>
+<span class="sd">                self.KeyLevel += 1</span>
+<span class="sd">            formattedString += (&#39;\t&#39; * self.KeyLevel)+str(k)#+&#39; : &#39;</span>
+<span class="sd">            if type(v) is dict:</span>
+<span class="sd">                formattedString += &#39; :\n&#39;</span>
+<span class="sd">#DIVIDER</span>
+<span class="sd">                formattedString += self.toFormattedString(dictObj=v)</span>
+<span class="sd">            else:</span>
+<span class="sd">#DIVIDER</span>
+<span class="sd">                formattedString += &#39; = &#39;+str(v)+&#39;\n&#39;</span>
+<span class="sd">            if self.RootKey == str(k):</span>
+<span class="sd">                self.KeyLevel = 0</span>
+<span class="sd">#DIVIDER</span>
+<span class="sd">        return formattedString</span>
+<span class="sd">        &#39;&#39;&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>formattedString += '\n'+('\t' * self.KeyLevel)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">formatToString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dictObj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Not yet implemented&#39;</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        formattedString = &#39;&#39;</span>
+<span class="sd">        for k,v in dictObj.iteritems():</span>
+<span class="sd">            if self.ParentKey is None:</span>
+<span class="sd">                formattedString = str(k)</span>
+<span class="sd">            else:</span>
+<span class="sd">                formattedString += (&#39;\t&#39; * self.KeyLevel)+str(k)</span>
+<span class="sd">            if type(v) is dict:</span>
+<span class="sd">                self.PrevParent = self.ParentKey</span>
+<span class="sd">                self.ParentKey = str(k)</span>
+<span class="sd">                self.KeyLevel += 1</span>
+<span class="sd">                formattedString += &#39; :\n&#39;</span>
+<span class="sd">                formattedString += self.formatToString(dictObj=v)</span>
+<span class="sd">            else:</span>
+<span class="sd">                formattedString += &#39; = &#39;+str(v)+&#39;\n&#39;</span>
+<span class="sd">            if self.ParentKey == str(k):</span>
+<span class="sd">                self.KeyLevel -= 1</span>
+
+<span class="sd">        return formattedString</span>
+<span class="sd">        &#39;&#39;&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>formattedString += str(v)+'\n'+('\t'*self.KeyLevel)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">LogUtil</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>formattedString = formattedString[:len(formattedString)-1]</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getLogfileList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">filelist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="ow">is</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">:</span>
+                <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">baseFilename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filelist</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">appendToLog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messageObj</span><span class="p">):</span>
+        <span class="n">headerLine</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="o">*</span><span class="mi">120</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">footerLine</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">120</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">logTimeMessage</span> <span class="o">=</span> <span class="s1">&#39;| &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">+</span><span class="s1">&#39; |</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">logHeader</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">headerLine</span><span class="o">+</span><span class="n">logTimeMessage</span><span class="o">+</span><span class="n">headerLine</span>
+        <span class="n">logMessage</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">messageObj</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        if type(messageObj) is str or type(messageObj) is int:</span>
+<span class="sd">            logMessage = str(messageObj)</span>
+<span class="sd">        elif type(messageObj) is dict:</span>
+<span class="sd">#DIVIDER</span>
+<span class="sd">            logMessage = str(messageObj)</span>
+<span class="sd">        elif type(messageObj) is list:</span>
+<span class="sd">            print(&#39;process list&#39;)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLogfileList</span><span class="p">():</span>
+            <span class="n">lf</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span><span class="p">)</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logHeader</span><span class="p">)</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">logMessage</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">footerLine</span><span class="p">)</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">LogFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">CodeInspector</span> <span class="o">=</span> <span class="n">Inspector</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">class</span> <span class="nc">LogLevel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+        <span class="n">CRITICAL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span>
+        <span class="n">ERROR</span>    <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="n">WARNING</span>  <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
+        <span class="n">INFO</span>     <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+        <span class="n">DEBUG</span>    <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <p>Need to format , for now until DictionaryUtil is complete, just convert to string</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">levelString</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">levelString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG</span>
+            <span class="k">elif</span> <span class="n">levelString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;INFO&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">INFO</span>
+            <span class="k">elif</span> <span class="n">levelString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">WARNING</span>
+            <span class="k">elif</span> <span class="n">levelString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ERROR</span>
+            <span class="k">elif</span> <span class="n">levelString</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;CRITICAL&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CRITICAL</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>Singleton class that will return a logger with the name of the caller</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">addNullHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <pre><code>This class will retrieve a number of different loggers for you.  It can also be used safely
+by library type classes that want to log safely. Simply, if the calling application to a
+library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+can call the "addNullHandler" routine to prevent this as it will create a "/dev/null" type logger so
+the library logging statements run without a logger.
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">NullHandler</span>
+        <span class="k">except</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="k">class</span> <span class="nc">NullHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span> <span class="k">pass</span>
+
+        <span class="n">rootLogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="n">rootLogger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">NullHandler</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>Call from library code to ensure that there is a parent logger</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__getDefaultFileFormatter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(levelname)-8s</span><span class="s1">|</span><span class="si">%(name)-15s</span><span class="s1">|</span><span class="si">%(lineno)-3d</span><span class="s1">|</span><span class="si">%(asctime)s</span><span class="s1">.</span><span class="si">%(msecs)-3d</span><span class="s1">| </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;%m.</span><span class="si">%d</span><span class="s1">.%y %H:%M:%S&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <pre><code>    :return: None
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__getDefaultConsoleFormatter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;::| </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__getBaseLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loggerName</span><span class="p">,</span> <span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">loggerName</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__setHandleFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logHandler</span><span class="p">,</span> <span class="n">formatterString</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">defaultFunc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">formatterString</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">handleFormat</span> <span class="o">=</span> <span class="n">defaultFunc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">handleFormat</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">formatterString</span><span class="p">)</span>
+        <span class="n">logHandler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">handleFormat</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logHandler</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__addConsoleHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logger</span><span class="p">,</span> <span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">defaultFormatFunc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getDefaultConsoleFormatter</span><span class="p">()</span>
+        <span class="n">consoleHandler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+        <span class="n">consoleHandler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setHandleFormat</span><span class="p">(</span><span class="n">logHandler</span><span class="o">=</span><span class="n">consoleHandler</span><span class="p">,</span> <span class="n">formatterString</span><span class="o">=</span><span class="n">formatString</span><span class="p">,</span> <span class="n">defaultFunc</span><span class="o">=</span><span class="n">defaultFormatFunc</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">consoleHandler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__addTimeRotatedFileHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">logFile</span><span class="p">,</span> <span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">whenRotate</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepCount</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">logging</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">TimedRotatingFileHandler</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">logFile</span><span class="p">,</span>
+                                                                  <span class="n">when</span><span class="o">=</span><span class="n">whenRotate</span><span class="p">,</span>
+                                                                  <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
+                                                                  <span class="n">backupCount</span><span class="o">=</span><span class="n">keepCount</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setHandleFormat</span><span class="p">(</span><span class="n">logHandler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">formatterString</span><span class="o">=</span><span class="n">formatString</span><span class="p">,</span> <span class="n">defaultFunc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__getDefaultFileFormatter</span><span class="p">())</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <p>logger.setLevel(self.LogLevel.DEBUG)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__addFileHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logger</span><span class="p">,</span><span class="n">logFile</span><span class="p">,</span> <span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">fileHandler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logFile</span><span class="p">)</span>
+        <span class="n">fileHandler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__setHandleFormat</span><span class="p">(</span><span class="n">logHandler</span><span class="o">=</span><span class="n">fileHandler</span><span class="p">,</span> <span class="n">formatterString</span><span class="o">=</span><span class="n">formatString</span><span class="p">,</span> <span class="n">defaultFunc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__getDefaultFileFormatter</span><span class="p">())</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fileHandler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getLibLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addNullHandler</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CodeInspector</span><span class="o">.</span><span class="n">getCallerMod</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appName</span><span class="p">,</span> <span class="n">appBase</span><span class="p">,</span> <span class="n">logLevel</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This class is meant to initialize a set of default loggers for an application.</span>
+<span class="sd">        :param logFile:</span>
+<span class="sd">        :param logLevel:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">calledLogLevel</span> <span class="o">=</span> <span class="n">logLevel</span>
+        <span class="n">appConfig</span> <span class="o">=</span> <span class="n">IniConfig</span><span class="p">()</span><span class="o">.</span><span class="n">getConfigMap</span><span class="p">(</span><span class="n">appBase</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="s1">&#39;conf&#39;</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">appName</span><span class="o">+</span><span class="s1">&#39;.ini&#39;</span><span class="p">)</span>
+        <span class="n">logFilename</span> <span class="o">=</span> <span class="n">appBase</span> <span class="o">+</span> <span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span> <span class="o">+</span> <span class="s1">&#39;logs&#39;</span> <span class="o">+</span> <span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span> <span class="o">+</span> <span class="n">appName</span> <span class="o">+</span> <span class="s1">&#39;.log&#39;</span>
+        <span class="k">if</span> <span class="n">calledLogLevel</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">configValue</span> <span class="o">=</span> <span class="n">appConfig</span><span class="p">[</span><span class="s1">&#39;LOGGING&#39;</span><span class="p">][</span><span class="s1">&#39;LogLevel&#39;</span><span class="p">]</span>
+            <span class="n">calledLogLevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LogLevel</span><span class="p">()</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">configValue</span><span class="p">)</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getBaseLogger</span><span class="p">(</span><span class="n">loggerName</span><span class="o">=</span><span class="n">appName</span><span class="p">,</span>  <span class="n">logLevel</span><span class="o">=</span><span class="n">calledLogLevel</span><span class="p">)</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addConsoleHandler</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addFileHandler</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span> <span class="n">logFile</span><span class="o">=</span><span class="n">logFilename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">changeLoggingLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logLevel</span><span class="p">,</span><span class="n">logger</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This module is for changing the logging level on the fly.  For example, changing the logging level</span>
+<span class="sd">        via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger</span>
+<span class="sd">        will be looked up dynamically.</span>
+<span class="sd">        :param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel</span>
+<span class="sd">        :param logger: The logger object that the program is using to log.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">modLogger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">callerMod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Inspector</span><span class="o">.</span><span class="n">getCallerMod</span><span class="p">()</span>
+            <span class="n">modLogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">callerMod</span><span class="p">)</span>
+
+        <span class="n">handlers</span> <span class="o">=</span> <span class="n">modLogger</span><span class="o">.</span><span class="n">handlers</span>
+
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">handlers</span><span class="p">:</span>
+            <span class="n">h</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logLevel</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getConsoleLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">loggerName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span><span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This will return a logger for logging messages to the console.</span>
+<span class="sd">        :param logLevel:</span>
+<span class="sd">        :param formatString:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getBaseLogger</span><span class="p">(</span><span class="n">loggerName</span><span class="o">=</span><span class="n">loggerName</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addConsoleHandler</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">,</span><span class="n">formatString</span><span class="o">=</span><span class="n">formatString</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getFileLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logFile</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">loggerName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Use this routine to get a standard file logger, non-rotating</span>
+
+<span class="sd">        :param logFile: the path the the logfile where the logger will write</span>
+<span class="sd">        :param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO</span>
+<span class="sd">        :return: python standard logging object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getBaseLogger</span><span class="p">(</span><span class="n">loggerName</span><span class="o">=</span><span class="n">loggerName</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addFileHandler</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span><span class="n">logFile</span><span class="o">=</span><span class="n">logFile</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">,</span><span class="n">formatString</span><span class="o">=</span><span class="n">formatString</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      <p>logger = self.__addTimeRotatedFileHandler(logger=logger, logFile=logFilename, logLevel=logLevel)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getTimedRotateFileLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">loggerName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">logFile</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">logLevel</span><span class="o">=</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span><span class="n">formatString</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">whenRotate</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">keepCount</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate</span>
+<span class="sd">        the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.</span>
+<span class="sd">        Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python</span>
+<span class="sd">        logging library documentation.</span>
+
+<span class="sd">        :param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.</span>
+<span class="sd">        :param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()</span>
+<span class="sd">        :param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO</span>
+<span class="sd">        :param formatString: Custom format string.  If left to default value of None, the framework default will be used.</span>
+<span class="sd">        :param whenRotate: When should rotation occur.  Default is &#39;D&#39; for daily.</span>
+<span class="sd">        :param interval: How often to rotate.  Default is 1.</span>
+<span class="sd">        :param keepCount: How many files to keep after file is rotated.  Default is 10</span>
+<span class="sd">        :return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getBaseLogger</span><span class="p">(</span><span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">,</span><span class="n">loggerName</span><span class="o">=</span><span class="n">loggerName</span><span class="p">)</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addTimeRotatedFileHandler</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+                                                  <span class="n">logFile</span><span class="o">=</span><span class="n">logFile</span><span class="p">,</span>
+                                                  <span class="n">logLevel</span><span class="o">=</span><span class="n">logLevel</span><span class="p">,</span>
+                                                  <span class="n">formatString</span><span class="o">=</span><span class="n">formatString</span><span class="p">,</span>
+                                                  <span class="n">whenRotate</span><span class="o">=</span><span class="n">whenRotate</span><span class="p">,</span>
+                                                  <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
+                                                  <span class="n">keepCount</span><span class="o">=</span><span class="n">keepCount</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">FileUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">Inspector</span> <span class="o">=</span> <span class="n">Inspector</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getParentDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filePath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">filePath</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAppBase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">callingFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Inspector</span><span class="o">.</span><span class="n">getCallerFilePath</span><span class="p">()</span>
+        <span class="n">basePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getParentDir</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">callingFile</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">basePath</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">dirExists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">directoryPath</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Use to check if a directory exists.  This will only return true</span>
+<span class="sd">        if it exists and is also a directory (as opposed to a file)</span>
+<span class="sd">        :param directoryPath: The full path to the directory</span>
+<span class="sd">        :return: Boolean (True|False)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directoryPath</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">fileExists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filePath</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used to check if file exists.  It will return true if the file</span>
+<span class="sd">        exists and it is a file, not a directory</span>
+<span class="sd">        :param filePath: Full path to the file</span>
+<span class="sd">        :return: Boolean (True|False)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">fileMatchExist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">baseDir</span><span class="p">,</span><span class="n">pattern</span><span class="p">,</span><span class="n">strictCheck</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Use to check if a file exists based on a pattern. The pattern that is used is</span>
+<span class="sd">        simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).</span>
+<span class="sd">        It will only return True if the file is a file, not a directory.  If do not care if</span>
+<span class="sd">        it is a file or directory, set optional parameter useStrictCheck to False</span>
+<span class="sd">        :param baseDir: The directory to look in</span>
+<span class="sd">        :param pattern: The pattern to use for match</span>
+<span class="sd">        :param strictCheck: Indicates if it should make sure the match is a file Default is True</span>
+<span class="sd">        :return: Boolean</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">matchExists</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">fileMatches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">baseDir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">fileMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strictCheck</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">fileMatches</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileExists</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">baseDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">match</span><span class="p">):</span>
+                    <span class="n">matchExists</span><span class="o">=</span><span class="bp">True</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fileMatches</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">matchExists</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">matchExists</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">dirMatchExist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">baseDir</span><span class="p">,</span><span class="n">pattern</span><span class="p">,</span><span class="n">strictCheck</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used to check to see if a directory that matches a pattern exists.  The pattern is</span>
+<span class="sd">        a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)</span>
+<span class="sd">        It will only return true if the object that matches is a directory, not a file.  If you</span>
+<span class="sd">        do not care if match is a directory, but also want to return if a file is found that matches</span>
+<span class="sd">        the pattern, set the optional parameter strict check to False.</span>
+<span class="sd">        :param baseDir:  The base directory to look in</span>
+<span class="sd">        :param pattern: The unix style pattern to check</span>
+<span class="sd">        :param strictCheck: Indicates if only a directory will be considered a match. Default is True</span>
+<span class="sd">        :return: Boolean</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">matchFound</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">matchedDirs</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">baseDir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">matchedDirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strictCheck</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matchedDirs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirExists</span><span class="p">(</span><span class="n">directoryPath</span><span class="o">=</span><span class="n">baseDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">match</span><span class="p">):</span>
+                    <span class="n">matchFound</span><span class="o">=</span><span class="bp">True</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matchedDirs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">matchFound</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">matchFound</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getFileMatches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">baseDir</span><span class="p">,</span><span class="n">pattern</span><span class="p">,</span><span class="n">strictCheck</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This will return true if a list of files that match the pattern.  If there are</span>
+<span class="sd">        no matching files, then an empty list is returned</span>
+<span class="sd">        :param baseDir: The directory to search in.</span>
+<span class="sd">        :param pattern: Pattern to search for (ie conf*)</span>
+<span class="sd">        :param strictCheck: Indicates to only include file objects (not directories) that match</span>
+<span class="sd">        :return: List&lt;String&gt;</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">matches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">fileMatches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">baseDir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strictCheck</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileExists</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">baseDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">match</span><span class="p">):</span>
+                    <span class="n">fileMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fileMatches</span><span class="o">=</span><span class="n">matches</span>
+
+        <span class="k">return</span> <span class="n">fileMatches</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getDirMatches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">baseDir</span><span class="p">,</span><span class="n">pattern</span><span class="p">,</span><span class="n">strictCheck</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This will return true if a list of directories that match the pattern.  If there are</span>
+<span class="sd">        no matching directories, then an empty list is returned</span>
+<span class="sd">        :param baseDir: The directory to search in.</span>
+<span class="sd">        :param pattern: Pattern to search for (ie conf*)</span>
+<span class="sd">        :param strictCheck: Indicates to only include directory objects (not files) that match</span>
+<span class="sd">        :return: List&lt;String&gt;</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">matches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">dirsFound</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">baseDir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strictCheck</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirExists</span><span class="p">(</span><span class="n">directoryPath</span><span class="o">=</span><span class="n">baseDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">match</span><span class="p">):</span>
+                    <span class="n">dirsFound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dirsFound</span><span class="o">=</span><span class="n">matches</span>
+
+        <span class="k">return</span> <span class="n">dirsFound</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-52'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-52'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dirPath</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Simple wrapper to os.mkdir</span>
+<span class="sd">        :param dirPath: Full path of directory to create</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dirPath</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-53'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-53'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dirPath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">dirPath</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rmDirMatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dirPath</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+        <span class="n">dirMatches</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dirPath</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">dirMatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">dirMatches</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">dirPath</span><span class="o">=</span><span class="n">dirPath</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="n">match</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">UnixOSHelper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-57'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-57'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getHostname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">shortName</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">node</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">shortName</span><span class="p">:</span>
+            <span class="n">hostname</span><span class="o">=</span><span class="n">platform</span><span class="o">.</span><span class="n">node</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">hostname</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-58'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-58'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getOSName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">osName</span><span class="o">=</span><span class="bp">None</span>
+        <span class="n">systemName</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">systemName</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+            <span class="n">osName</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">linux_distribution</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">systemName</span> <span class="o">==</span> <span class="s1">&#39;Darwin&#39;</span><span class="p">:</span>
+            <span class="n">osName</span> <span class="o">=</span> <span class="s1">&#39;MacOS&#39;</span>
+        <span class="k">return</span> <span class="n">osName</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-59'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-59'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getOSVersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">osName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getOSName</span><span class="p">()</span>
+        <span class="n">osVer</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">osName</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+            <span class="n">osVer</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">linux_distribution</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">osName</span> <span class="o">==</span> <span class="s1">&#39;Darwin&#39;</span><span class="p">:</span>
+            <span class="n">osVer</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">mac_ver</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">osVer</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-60'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-60'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">checkFile4Errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">errorMatchPattern</span><span class="o">=</span><span class="s1">&#39;ERROR:&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Checking output file [&#39;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;] for error match [&#39;</span><span class="o">+</span><span class="n">errorMatchPattern</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="n">errLines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;egrep &#39;</span><span class="o">+</span><span class="n">errorMatchPattern</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">errLines</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-61'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-61'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">useReturnCode</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">simMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Running command: &#39;</span> <span class="o">+</span> <span class="n">command</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">simMode</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">stdout</span> <span class="o">=</span> <span class="n">check_output</span><span class="p">(</span><span class="n">command</span><span class="p">,</span><span class="n">stderr</span><span class="o">=</span><span class="n">STDOUT</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Returned: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">stdout</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">stdout</span>
+            <span class="k">except</span> <span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Caught a non-zero return from running command [&#39;</span><span class="o">+</span><span class="n">command</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">useReturnCode</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">OSRunException</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">OSRunException</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;If live run, the following command would have been run on host [&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">getHostname</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-62'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-62'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">PlatformProps</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    &#39;&#39;&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-63'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-63'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">FilePathSeparator</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span>
+    <span class="n">PathSeparator</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-64'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-64'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">IniConfig</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-65'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-65'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">Config</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-66'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-66'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-67'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-67'>#</a>
+      </div>
+      <p><strong>metaclass</strong> = Singleton</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-68'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-68'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configFile</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">RawConfigParser</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">optionxform</span> <span class="o">=</span> <span class="nb">str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Reading configuration file [&#39;</span> <span class="o">+</span> <span class="n">configFile</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">configFile</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-69'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-69'>#</a>
+      </div>
+      <h6></h6>
+<p>CLASS VARS</p>
+<h6></h6>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getConfigValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configFile</span><span class="p">,</span> <span class="n">sectionName</span><span class="p">,</span> <span class="n">propertyName</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="n">configFile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Returning value from section [&#39;</span> <span class="o">+</span> <span class="n">sectionName</span> <span class="o">+</span> <span class="s1">&#39;], property [&#39;</span> <span class="o">+</span> <span class="n">propertyName</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sectionName</span><span class="p">,</span> <span class="n">propertyName</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-70'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-70'>#</a>
+      </div>
+      <h6></h6>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getConfigKeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configFile</span><span class="p">,</span> <span class="n">sectionName</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="n">configFile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Getting all properties for section [&#39;</span> <span class="o">+</span> <span class="n">sectionName</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">sectionName</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-71'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-71'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getConfigMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configFile</span><span class="p">):</span>
+        <span class="n">configMap</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="n">configFile</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Building config map&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Building section [&#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="n">sectionMap</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Getting value for key [&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+                <span class="n">sectionMap</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Adding section map ||&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sectionMap</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|| to the config map&#39;</span><span class="p">)</span>
+            <span class="n">configMap</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">sectionMap</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Returning config map ||&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">configMap</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;||&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">configMap</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-72'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-72'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">setConfigValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configFile</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="n">configFile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;Setting config value [&#39;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;] for section [&#39;</span> <span class="o">+</span> <span class="n">section</span> <span class="o">+</span> <span class="s1">&#39;] and property [&#39;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">configFile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Writing changes to file&#39;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-73'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-73'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">writeConfigMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configMap</span><span class="p">,</span> <span class="n">fileName</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Building the config from map object&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">configMap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Building section [&#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">configMap</span><span class="p">[</span><span class="n">s</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Adding property [&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;] with value [&#39;</span> <span class="o">+</span> <span class="n">configMap</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">configMap</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">k</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Opening config file [&#39;</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;] for write&#39;</span><span class="p">)</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Writing config to the file&#39;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-74'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-74'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@Singleton</span>
+<span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class has methods to setup an application.</span>
+<span class="sd">       The standard application setup is based on the following file structure</span>
+<span class="sd">        AppBase</span>
+<span class="sd">          |</span>
+<span class="sd">           -- bin</span>
+<span class="sd">           -- conf</span>
+<span class="sd">           -- logs</span>
+<span class="sd">           -- lib</span>
+<span class="sd">           -- libexec</span>
+
+<span class="sd">        AppBase - Where app is installed</span>
+<span class="sd">          bin:  Where the main application file(s) are stored</span>
+<span class="sd">          conf: This is where configuration files are stored</span>
+<span class="sd">          logs: Where log files are placed</span>
+<span class="sd">          lib: Location for all libraries used by application that are not part of python installation</span>
+<span class="sd">          libexec: optional directory for placing executable libraries</span>
+
+<span class="sd">    The primary purpose of this class is to populate the AppContext class variable.  This varialbe is</span>
+<span class="sd">    a &quot;shareable&quot; memory context that can be used in various parts of th pylegos libraries as well as</span>
+<span class="sd">    the program that is using the framework.  It is an in memory representation of the App.ini configuration</span>
+<span class="sd">    file.  Anything that is defined in the ini file will be available to any process via calls to</span>
+<span class="sd">    the AppContext. The app context is a dictionary object, with two dimensions</span>
+
+<span class="sd">    The pattern of the call is app.AppContext[&#39;SECTION NAME&#39;][&#39;PropertyName&#39;], where &quot;app&quot; is the instance</span>
+<span class="sd">    of this class.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    from pylegos.app_legos import App</span>
+
+<span class="sd">    app = App()</span>
+<span class="sd">    logFile = app.AppContext[&#39;LOGGING&#39;][&#39;LogFile&#39;]</span>
+<span class="sd">    or</span>
+<span class="sd">    logFile = App().AppContext[&#39;LOGGING&#39;][&#39;LogFile&#39;]</span>
+
+<span class="sd">    This will load from the following example ini file</span>
+
+<span class="sd">    [LOGGING]</span>
+<span class="sd">    LogLevel=DEBUG</span>
+<span class="sd">    LogFile=MyApp.log</span>
+<span class="sd">&#39;&#39;&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-75'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-75'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">AppContext</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">log</span><span class="o">=</span><span class="bp">None</span>   <span class="c1"># This class var violates naming convention by design.  Because logging is used so often</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-76'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-76'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-77'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-77'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This will do the following:</span>
+<span class="sd">           - Create any required directories missing from app base</span>
+<span class="sd">           - Build application configuration file if it is missing</span>
+<span class="sd">           - Load the AppContext class</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AppName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAppName</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAppBase</span><span class="p">()</span>
+        <span class="n">confDirs</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">getDirMatches</span><span class="p">(</span><span class="n">baseDir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s1">&#39;conf&#39;</span><span class="p">)</span>
+        <span class="n">logDirs</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">getDirMatches</span><span class="p">(</span><span class="n">baseDir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s1">&#39;logs&#39;</span><span class="p">)</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">          We first check to see if there is an application ini file that has base level settings.  Which currently</span>
+<span class="sd">          is just that it has a minimal logging configuration.  If no file or conf(ig) directory exists, then a</span>
+<span class="sd">          default configuration will be created.</span>
+
+<span class="sd">          In addition, if a log(s) directory is not present in the &quot;AppBase&quot;, then a directory will be created</span>
+<span class="sd">          so that a log file can be created.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">confDir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="s1">&#39;conf&#39;</span>
+        <span class="n">logDir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="s1">&#39;logs&#39;</span>
+        <span class="n">appConfFile</span><span class="o">=</span><span class="n">confDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="o">+</span><span class="s1">&#39;.ini&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">confDirs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">confDir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">fileExists</span><span class="p">(</span><span class="n">appConfFile</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__createStarterConfigFile</span><span class="p">(</span><span class="n">appBase</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="p">,</span> <span class="n">appName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="p">,</span> <span class="n">confFile</span><span class="o">=</span><span class="n">appConfFile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logDirs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">logDir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AppContext</span> <span class="o">=</span> <span class="n">IniConfig</span><span class="p">()</span><span class="o">.</span><span class="n">getConfigMap</span><span class="p">(</span><span class="n">configFile</span><span class="o">=</span><span class="n">appConfFile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="p">,</span> <span class="n">appBase</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="p">)</span>
+        <span class="n">logUtil</span> <span class="o">=</span> <span class="n">LogUtil</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="o">+</span><span class="s1">&#39;/lib&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AppVersion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAppVersion</span><span class="p">()</span>
+        <span class="n">appInitMessage</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">         Application Initialized Successfully</span>
+<span class="s2">                Name: </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">             Version: </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">            BasePath: </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">         &quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppVersion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="p">)</span>
+        <span class="n">logUtil</span><span class="o">.</span><span class="n">appendToLog</span><span class="p">(</span><span class="n">appInitMessage</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-78'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-78'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__createStarterConfigFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appName</span><span class="p">,</span> <span class="n">appBase</span><span class="p">,</span> <span class="n">confFile</span><span class="p">):</span>
+        <span class="n">defaultConfig</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">defaultConfig</span><span class="p">[</span><span class="s1">&#39;LOGGING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;LogLevel&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;LogFile&#39;</span><span class="p">:</span> <span class="n">appName</span><span class="o">+</span><span class="s1">&#39;.log&#39;</span><span class="p">}</span>
+        <span class="n">defaultConfig</span><span class="p">[</span><span class="s1">&#39;APP_INFO&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AppName&#39;</span><span class="p">:</span> <span class="n">appName</span><span class="p">,</span> <span class="s1">&#39;AppBasePath&#39;</span><span class="p">:</span> <span class="n">appBase</span><span class="p">}</span>
+        <span class="n">IniConfig</span><span class="p">()</span><span class="o">.</span><span class="n">writeConfigMap</span><span class="p">(</span><span class="n">configMap</span><span class="o">=</span><span class="n">defaultConfig</span><span class="p">,</span><span class="n">fileName</span><span class="o">=</span><span class="n">confFile</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-79'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-79'>#</a>
+      </div>
+      <p><strong>metaclass</strong> = Singleton</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAppBase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">inspector</span> <span class="o">=</span> <span class="n">Inspector</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span>
+        <span class="n">callingFile</span> <span class="o">=</span> <span class="n">inspector</span><span class="o">.</span><span class="n">getCallerFilePath</span><span class="p">(</span><span class="n">callLevel</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">basePath</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">getParentDir</span><span class="p">(</span><span class="n">FileUtils</span><span class="p">()</span><span class="o">.</span><span class="n">getParentDir</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">callingFile</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">basePath</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-80'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-80'>#</a>
+      </div>
+      <p>the goal is to make the call to the app logger as convenient as possible</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAppName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">inspector</span> <span class="o">=</span> <span class="n">Inspector</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span>
+        <span class="n">callerMod</span> <span class="o">=</span> <span class="n">inspector</span><span class="o">.</span><span class="n">getCallerMod</span><span class="p">(</span><span class="n">callLevel</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">callerMod</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-81'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-81'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAppVersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">modName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="o">+</span><span class="s1">&#39;_manifest&#39;</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">find_module</span><span class="p">(</span><span class="n">modName</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manifest_mod</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">modName</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="n">manifest_mod</span><span class="o">.</span><span class="n">VersionInfo</span><span class="p">[</span><span class="s1">&#39;MAJOR&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">manifest_mod</span><span class="o">.</span><span class="n">VersionInfo</span><span class="p">[</span><span class="s1">&#39;MINOR&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">version</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-82'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-82'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">appendToLog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messageObj</span><span class="p">):</span>
+        <span class="n">logUtil</span> <span class="o">=</span> <span class="n">LogUtil</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
+        <span class="n">logUtil</span><span class="o">.</span><span class="n">appendToLog</span><span class="p">(</span><span class="n">messageObj</span><span class="o">=</span><span class="n">messageObj</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-83'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-83'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">QuoteMachine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">ErrorQuotes</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="s1">&#39;I blame this error on you!&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;One of these days this will work...just not today!&#39;</span>
+    <span class="p">]</span>
+    <span class="n">SuccessFinishPhrases</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Nice work, donuts on me!&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Good job, I knew you had it in you!&#39;</span>
+    <span class="p">]</span>
+    <span class="n">InvalidInputSayings</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;Hmm, are your fingers tired? That input is incorrect&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Is it Monday, or do you just like giving invalid input?&#39;</span>
+    <span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-84'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-84'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getErrorMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">randNum</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ErrorQuotes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;Awe SNAP! &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ErrorQuotes</span><span class="p">[</span><span class="n">randNum</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-85'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-85'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getFinishSuccessMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">randNum</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ErrorQuotes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SuccessFinishPhrases</span><span class="p">[</span><span class="n">randNum</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-86'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-86'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getInvalidInputMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">randNum</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ErrorQuotes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">InvalidInputSayings</span><span class="p">[</span><span class="n">randNum</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-87'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-87'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">AppNotInitializedException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-88'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-88'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">errorMessage</span><span class="o">=</span><span class="s1">&#39;This feature cannot be used unless you have used the pylegos.app_legos.App.init() call at the start of your program&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">errorMessage</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-89'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-89'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">PyLegosFrameworkException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-90'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-90'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">msg</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-91'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-91'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ExceptionHelper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-92'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-92'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-93'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-93'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">Logger</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-94'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-94'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-95'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-95'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-96'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-96'>#</a>
+      </div>
+      <p><strong>metaclass</strong> = Singleton</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">handleInputError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">):</span>
+        <span class="n">ieQuote</span> <span class="o">=</span> <span class="n">QuoteMachine</span><span class="p">()</span><span class="o">.</span><span class="n">getRandonQuote</span><span class="p">(</span><span class="n">quoteType</span><span class="o">=</span><span class="s1">&#39;INPUT_ERROR&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">ieQuote</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-97'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-97'>#</a>
+      </div>
+      <h6></h6>
+<p>Class Vars</p>
+<h6></h6>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">handleError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">):</span>
+        <span class="n">errorQuote</span> <span class="o">=</span> <span class="n">QuoteMachine</span><span class="p">()</span><span class="o">.</span><span class="n">getRandomQuote</span><span class="p">(</span><span class="n">quoteType</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">errorQuote</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-98'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-98'>#</a>
+      </div>
+      <h6></h6>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getOffender</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sysExecptionInfo</span><span class="p">):</span>
+        <span class="n">eType</span><span class="p">,</span> <span class="n">eObj</span><span class="p">,</span> <span class="n">eTable</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+        <span class="n">eFrame</span> <span class="o">=</span> <span class="n">eTable</span><span class="o">.</span><span class="n">tb_frame</span>
+        <span class="n">eLine</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">eTable</span><span class="o">.</span><span class="n">tb_lineno</span><span class="p">)</span>
+        <span class="n">eFileName</span> <span class="o">=</span> <span class="n">eFrame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span>
+        <span class="n">eFileName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">eFileName</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">eFileName</span> <span class="o">+</span> <span class="s1">&#39;][&#39;</span> <span class="o">+</span> <span class="n">eLine</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-99'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-99'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">printSimpleStacktrace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stack</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;File&#39;</span><span class="p">):</span>
+                <span class="n">rawName</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;File &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+                <span class="n">modName</span> <span class="o">=</span> <span class="n">rawName</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">rawName</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)</span>
+                <span class="n">lineNum</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;File &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;line &#39;</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">modName</span> <span class="o">+</span> <span class="s1">&#39;][&#39;</span> <span class="o">+</span> <span class="n">lineNum</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-100'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-100'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">OSRunException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-101'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-101'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">stderr</span><span class="p">):</span>
+        <span class="n">errMsg</span> <span class="o">=</span> <span class="s1">&#39;The following command return a non-zero return value, indicating an error.</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">errMsg</span> <span class="o">+=</span> <span class="s1">&#39;Command: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">errMsg</span> <span class="o">+=</span> <span class="s1">&#39;Here is the error output </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">errMsg</span> <span class="o">+=</span> <span class="s1">&#39;Command wrote no error message&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stderr</span><span class="p">:</span>
+                <span class="n">errMsg</span> <span class="o">+=</span> <span class="n">line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">errMsg</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-102'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-102'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-103'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-103'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-104'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-104'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-105'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-105'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
