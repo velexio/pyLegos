@@ -327,8 +327,8 @@ class DatabaseDMLException(Exception):
 
     def __extractObjectName(self):
         objectName = 'Undefined'
-        matchObj = re.match(r'\(([A-Z0-9."#_-]+)\)', self.message)
-        if matchObj.group(1):
+        matchObj = re.match(r'ORA-\d+:\s[a-zA-Z0-9\s]+\(([A-Z0-9."#_]+)\)', self.message)
+        if matchObj.groups():
             objectName = matchObj.group(1).replace('"','')
         return objectName
 
