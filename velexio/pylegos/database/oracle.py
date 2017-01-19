@@ -5,6 +5,7 @@ Created on Sep 19, 2016
 '''
 import cx_Oracle
 import sys
+import re
 from collections import OrderedDict
 from velexio.pylegos.core.framework import LogFactory
 
@@ -15,14 +16,6 @@ ENUM Type Classes
 '''
 
 
-class DatabaseProperty(object):
-    NAME = 'name'
-    DBID = 'dbid'
-
-
-class TablespaceContentType(object):
-    Permanent = 1
-    Temporary = 2
 
 
 class CxOracleType(object):
@@ -54,6 +47,13 @@ class Database(object):
     class OracleDataType(object):
         NUMBER = cx_Oracle.NUMBER
 
+    class DatabaseProperty(object):
+        NAME = 'name'
+        DBID = 'dbid'
+
+    class TablespaceContentType(object):
+        Permanent = 1
+        Temporary = 2
 
 
     def connect(self, username, password, connectString, asSysdba=False):
@@ -157,8 +157,7 @@ class Database(object):
             cursor = self.Connection.cursor()
             cursor.execute(dml, bindValues)
         except cx_Oracle.DatabaseError as e:
-            raise DatabaseDMLExeption("DML ERROR: "+str(e))
-
+            raise DatabaseDMLException(str(e))
 
     def execProc(self, procedureName, parameters=[], namedParameters={}, inOutParams={}):
         pass
@@ -201,7 +200,6 @@ class Database(object):
 
 
 class ResultSet(object):
-    formattedResultSet = None
 
     def __init__(self, resultSet):
         self.formattedResultSet = resultSet
@@ -308,10 +306,29 @@ class Admin(object):
 
         self.database.execDML(ddl);
 
+
 class DatabaseConnectionException(Exception):
     def __init__(self):
         self.message = "Unable to connect to database"
 
-class DatabaseDMLExeption(Exception):
+
+class DatabaseDMLException(Exception):
     def __init__(self, msg):
         self.message = msg
+        self.ErrCode = str(msg).split(':')[0]
+        self.__defineMessage()
+
+    def __defineMessage(self):
+        objName = self.__extractObjectName()
+        if self.ErrCode == 'ORA-00001':
+            self.ErrMessage = 'The operation could not be performed as it would violate the unique constraint ['+objName+']'
+        elif self.ErrCode == 'ORA-01400':
+            self.ErrMessage = 'The field '+objName+' must be assigned a value before the record can be saved'
+
+    def __extractObjectName(self):
+        objectName = 'Undefined'
+        matchObj = re.match(r'\(([A-Z0-9."#_-]+)\)', self.message)
+        if matchObj.group(1):
+            objectName = matchObj.group(1).replace('"','')
+        return objectName
+
