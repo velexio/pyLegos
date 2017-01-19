@@ -321,8 +321,10 @@ class DatabaseDMLException(Exception):
     def __defineMessage(self):
         objName = self.__extractObjectName()
         if self.ErrCode == 'ORA-00001':
+            self.ErrName = 'UniqueViolated'
             self.ErrMessage = 'The operation could not be performed as it would violate the unique constraint ['+objName+']'
         elif self.ErrCode == 'ORA-01400':
+            self.ErrName = 'NotNullViolated'
             self.ErrMessage = 'The field '+objName+' must be assigned a value before the record can be saved'
 
     def __extractObjectName(self):
@@ -330,5 +332,6 @@ class DatabaseDMLException(Exception):
         matchObj = re.match(r'ORA-\d+:\s[a-zA-Z0-9\s]+\(([A-Z0-9."#_]+)\)', self.message)
         if matchObj.groups():
             objectName = matchObj.group(1).replace('"','')
+        self.ConstraintName=objectName
         return objectName
 
