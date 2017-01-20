@@ -42,9 +42,9 @@ class Database(object):
         """
 
         self.Connection = None
-        self.Logger = LogFactory().getLibLogger()
+        self.logger = LogFactory().getLibLogger()
 
-    class OracleDataType(object):
+    class DataType(object):
         NUMBER = cx_Oracle.NUMBER
 
     class DatabaseProperty(object):
@@ -54,7 +54,6 @@ class Database(object):
     class TablespaceContentType(object):
         Permanent = 1
         Temporary = 2
-
 
     def connect(self, username, password, connectString, asSysdba=False):
         """
@@ -76,7 +75,6 @@ class Database(object):
                 self.Connection = cx_Oracle.connect(username, password, connectString)
         except cx_Oracle.DatabaseError:
             raise DatabaseConnectionException()
-
 
     def disconnect(self):
         """
@@ -105,7 +103,7 @@ class Database(object):
         resultSetObj = ResultSet(formatedResults)
         return resultSetObj
 
-    def queryForSingleValue(self, query, columnName, bindValues=[]):
+    def queryForSingleValue(self, query, columnName, bindValues=[], secureLog=False):
         retVal = None
         res = self.getQueryResult(query=query, bindValues=bindValues)
         if len(res) > 1:
@@ -113,10 +111,13 @@ class Database(object):
 
         return retVal
 
-    def getQueryResult(self, query, bindValues=[]):
+    def getQueryResult(self, query, bindValues=[], secureLog=False):
         formattedResultSet = OrderedDict()
         formattedRowNumber = 1
         cursor = self.Connection.cursor()
+        self.logger.debug('Running query: '+query)
+        if not secureLog:
+            self.logger.debug('Bind values for above query are '+str(bindValues))
         cursor.execute(query, bindValues)
 
         curMeta = self.generateRSMetadata(cursor=cursor)
@@ -147,6 +148,38 @@ class Database(object):
 
         return formattedResultSet
 
+    def getColumnMungedResultset(self, query, bindValues=[], secureLog=False):
+        queryResult = self.getQueryResult(query=query, bindValues=bindValues, secureLog=secureLog)
+        rsMeta = queryResult[0]
+        resultSet = []
+        self.logger.debug('Munging column values of resultset')
+        for i in range(1,len(queryResult)):
+            mungedColData = ''
+            for k,v in rsMeta.iteritems():
+                colVal = queryResult[i][k]
+                mungedColData += colVal
+            resultSet.append(mungedColData)
+        if not secureLog:
+            self.logger.debug('Returning munged resultset: '+str(resultSet))
+        return resultSet
+
+    def getColumnDelimitedResultset(self, query, bindValues=[], fieldDelimiter=',', secureLog=False):
+        queryResult = self.getQueryResult(query=query, bindValues=bindValues, secureLog=secureLog)
+        rsMeta = queryResult[0]
+        resultSet = []
+        self.logger.debug('Generating record set with field delimiter [' + fieldDelimiter + ']')
+        for i in range(1,len(queryResult)):
+            recordData = ''
+            for k,v in rsMeta.iteritems():
+                colVal = queryResult[i][k]
+                recordData += colVal + fieldDelimiter
+            # NEED TO REMOVE THE TRAILING DELIMETER
+            recordData = recordData[:len(recordData)-1]
+            resultSet.append(recordData)
+        if not secureLog:
+            self.logger.debug('Returning resultset: '+str(resultSet))
+        return resultSet
+
     def execDML(self, dml, bindValues=[]):
         """
         This function is to be used to call any dml operation (insert,update,delete). It can also
@@ -159,14 +192,20 @@ class Database(object):
         except cx_Oracle.DatabaseError as e:
             raise DatabaseDMLException(str(e))
 
-    def execProc(self, procedureName, parameters=[], namedParameters={}, inOutParams={}):
-        pass
+    def execProc(self, procedureName, parameters=[], namedParameters={}, outParam=None):
+        cursor = self.Connection.cursor()
+        cursor.callproc(name=procedureName,
+                        parameters=parameters,
+                        keywordParameters=namedParameters)
+        if outParam is not None:
+            return outParam
 
     def execFunc(self, functionName, oracleReturnType, parameters=[], namedParameters={}):
         cursor = self.Connection.cursor()
-        retValue = cursor.callfunc(functionName,
-                                   oracleReturnType,
-                                   parameters)
+        retValue = cursor.callfunc(name=functionName,
+                                   returnType=oracleReturnType,
+                                   parameters=parameters,
+                                   keywordParameters=namedParameters)
         return retValue
 
     def commit(self):

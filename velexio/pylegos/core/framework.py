@@ -579,15 +579,29 @@ class UnixOSHelper(object):
         errLines = self.run('egrep '+errorMatchPattern+' '+filename)
         return errLines
 
-    def run(self, command, useReturnCode=True, simMode=False):
-        self.Logger.debug('Running command: ' + command)
+    def run(self, command, useReturnCode=True, simMode=False, secureLog=False):
+        """
+        Use this to run an os command.  If the command itself is secure in nature or it could
+        output data that is considered secure (i.e. passwords), make sure to turn the secureLog
+        parameter to True.
+        :param command: The full command that is to be run
+        :param useReturnCode: Boolean flag to indicate if non-zero return value of command dictates failure
+        :param simMode: Boolean flag to only simulate the run.
+        :param secureLog: Boolean flag to turn logging off for any command references or logging output
+        :return: None
+        """
+        if not secureLog:
+            self.Logger.debug('Running command: ' + command)
         if not simMode:
             try:
-                stdout = check_output(command,stderr=STDOUT)
-                self.Logger.debug('Returned: ' + str(stdout))
+                stdout = check_output(command, stderr=STDOUT)
+                if not secureLog:
+                    self.Logger.debug('Returned: ' + str(stdout))
                 return stdout
             except CalledProcessError as e:
-                self.Logger.error('Caught a non-zero return from running command ['+command+']')
+                self.Logger.error('Caught a non-zero return from running command')
+                if not secureLog:
+                    self.Logger.debug('Command was ['+command+']')
                 if useReturnCode:
                     raise OSRunException(command=command, stderr=e.output)
             except OSError as e:
