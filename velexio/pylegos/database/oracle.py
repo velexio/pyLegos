@@ -156,7 +156,7 @@ class Database(object):
         for i in range(1,len(queryResult)):
             mungedColData = ''
             for k,v in rsMeta.iteritems():
-                colVal = queryResult[i][k]
+                colVal = str(queryResult[i][k])
                 mungedColData += colVal
             resultSet.append(mungedColData)
         if not secureLog:
@@ -171,7 +171,7 @@ class Database(object):
         for i in range(1,len(queryResult)):
             recordData = ''
             for k,v in rsMeta.iteritems():
-                colVal = queryResult[i][k]
+                colVal = str(queryResult[i][k])
                 recordData += colVal + fieldDelimiter
             # NEED TO REMOVE THE TRAILING DELIMETER
             recordData = recordData[:len(recordData)-1]

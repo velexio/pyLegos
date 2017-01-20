@@ -1,4 +1,5 @@
 import sys
+import os
 
 from progress.spinner import Spinner as ProgressSpinner
 from progress.spinner import PieSpinner
@@ -87,4 +88,60 @@ class ProgressBar(object):
         :return: None
         """
         self.bar.finish()
+
+
+class ColorPrinter(object):
+
+    def __init__(self):
+        self.RESET = '\033[0m'
+
+    class Style(object):
+        BOLD = 1
+        DARK = 2
+        UNDERLINE = 4
+        BLINK = 5
+        REVERSE = 7
+        CONCEALED = 8
+
+    class Color(object):
+        GREY = 30
+        RED = 31
+        GREEN = 32
+        YELLOW = 33
+        BLUE = 34
+        MAGENTA = 35
+        CYAN = 36
+        WHITE = 37
+
+    class Background(object):
+        GREY = 40
+        RED = 41
+        GREEN = 42
+        YELLOW = 43
+        BLUE = 44
+        MAGENTA = 45
+        CYAN = 46
+        WHITE = 47
+
+    def colorMessage(self, message, textColor, textBackground=None, textStyle=None):
+        if os.getenv('ANSI_COLORS_DISABLED') is None:
+            colorFormat = '\033[%dm%s'
+            message = colorFormat % (textColor, message)
+            if textBackground is not None:
+                message = colorFormat % (textBackground, message)
+            if textStyle is not None:
+                message = colorFormat % (textStyle, message)
+            message += self.RESET
+        return message
+
+    def printInColor(self, message, textColor, textBackground=None, textStyle=None, printNewLine=True):
+        coloredMessage = self.colorMessage(message=message,
+                                          textColor=textColor,
+                                          textBackground=textBackground,
+                                          textStyle=textStyle)
+        if printNewLine:
+            print(coloredMessage)
+        else:
+            sys.stdout.write(coloredMessage)
+            sys.stdout.flush()
 
