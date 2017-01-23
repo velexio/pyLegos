@@ -65,8 +65,10 @@ class Database(object):
         :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False <br>
         :return: None <br>
         """
+        self.logger.debug('Connecting to database with connect string ['+connectString+']')
         try:
             if asSysdba:
+                self.logger.debug('Connecting as sysdba')
                 self.Connection = cx_Oracle.connect(user=username,
                                                     password=password,
                                                     dsn=connectString,
@@ -118,12 +120,15 @@ class Database(object):
         self.logger.debug('Running query: '+query)
         if not secureLog:
             self.logger.debug('Bind values for above query are '+str(bindValues))
+        self.logger.debug('Executing query')
+        if not secureLog:
+            self.logger.debug('Session effective query user (current_schema) is ['+self.Connection.current_schema+']')
         cursor.execute(query, bindValues)
-
+        self.logger.debug('Generating Resultset Metadata')
         curMeta = self.generateRSMetadata(cursor=cursor)
-
+        self.logger.debug('Fetching all records')
         rawResultSet = cursor.fetchall()
-
+        self.logger.debug('Formatting resultset')
         for row in rawResultSet:
             formattedRec = {}
             for field in curMeta:
@@ -145,7 +150,7 @@ class Database(object):
             formattedRowNumber += 1
 
         formattedResultSet[0] = curMeta;
-
+        self.logger.debug('Returning resultset with ['+str(len(formattedResultSet)-1)+'] records')
         return formattedResultSet
 
     def getColumnMungedResultset(self, query, bindValues=[], secureLog=False):
