@@ -1092,6 +1092,14 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * NOTE: Still if dev, so use at own riske ;)</span>
+<span class="sd">        This procedure will run the named function in a seperate thread so that async operation is possible</span>
+<span class="sd">        :param threadName: &lt;br&gt;</span>
+<span class="sd">        :param runFunc: &lt;br&gt;</span>
+<span class="sd">        :param funcArgs: &lt;br&gt;</span>
+<span class="sd">        :return: None &lt;br&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
         <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1141,6 +1149,14 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * NOTE: Still if dev, so use at own riske ;)</span>
+<span class="sd">        This procedure will run the named function in a seperate thread so that async operation is possible</span>
+<span class="sd">        :param threadName: &lt;br&gt;</span>
+<span class="sd">        :param runFunc: &lt;br&gt;</span>
+<span class="sd">        :param funcArgs: &lt;br&gt;</span>
+<span class="sd">        :return: None &lt;br&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
         <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1244,11 +1260,26 @@ table {
 
     
   
-    <div class="desc"><p>ToDo, check if thread name already exists, if so throw exception</p></div>
+    <div class="desc"><ul>
+<li>NOTE: Still if dev, so use at own riske ;)
+This procedure will run the named function in a seperate thread so that async operation is possible
+:param threadName: <br>
+:param runFunc: <br>
+:param funcArgs: <br>
+:return: None <br></li>
+</ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndWait', this);">Show source &equiv;</a></p>
   <div id="source-threadlegos.Thread.runAndWait" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * NOTE: Still if dev, so use at own riske ;)</span>
+<span class="sd">    This procedure will run the named function in a seperate thread so that async operation is possible</span>
+<span class="sd">    :param threadName: &lt;br&gt;</span>
+<span class="sd">    :param runFunc: &lt;br&gt;</span>
+<span class="sd">    :param funcArgs: &lt;br&gt;</span>
+<span class="sd">    :return: None &lt;br&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
     <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
