@@ -20,6 +20,14 @@ class Thread(object):
         self.queue.task_done()
 
     def runAndWait(self,threadName, runFunc, funcArgs):
+        """
+        * NOTE: Still if dev, so use at own riske ;)
+        This procedure will run the named function in a seperate thread so that async operation is possible
+        :param threadName: <br>
+        :param runFunc: <br>
+        :param funcArgs: <br>
+        :return: None <br>
+        """
         '''ToDo, check if thread name already exists, if so throw exception'''
         self.queue.put(item=threadName)
         threadArgs = []
