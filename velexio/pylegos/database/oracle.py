@@ -65,25 +65,30 @@ class Database(object):
         :param asSysdba: Boolean (True|False) for whether connection should be made as sysdba.  Default is False <br>
         :return: None <br>
         """
-        self.logger.debug('Connecting to database with connect string ['+connectString+']')
-        try:
-            if asSysdba:
-                self.logger.debug('Connecting as sysdba')
-                self.Connection = cx_Oracle.connect(user=username,
-                                                    password=password,
-                                                    dsn=connectString,
-                                                    mode=cx_Oracle.SYSDBA)
-            else:
-                self.Connection = cx_Oracle.connect(username, password, connectString)
-        except cx_Oracle.DatabaseError:
-            raise DatabaseConnectionException()
+        if self.Connection is None:
+            self.logger.debug('Connecting to database with connect string ['+connectString+']')
+            try:
+                if asSysdba:
+                    self.logger.debug('Connecting as sysdba')
+                    self.Connection = cx_Oracle.connect(user=username,
+                                                        password=password,
+                                                        dsn=connectString,
+                                                        mode=cx_Oracle.SYSDBA)
+                else:
+                    self.Connection = cx_Oracle.connect(username, password, connectString)
+            except cx_Oracle.DatabaseError:
+                raise DatabaseConnectionException()
+        else:
+            self.logger.debug('Connection already active, not creating an additional connection')
 
     def disconnect(self):
         """
         This method will close the connection now rather than when application terminates and/or Database object is garbage collected.
         :return: None
         """
-        self.Connection.close()
+        if self.Connection is not None:
+            self.Connection.close()
+            self.Connection = None
 
     def generateRSMetadata(self, cursor):
         cursorDesc = cursor.description
@@ -370,7 +375,8 @@ class Admin(object):
 
 
 class DatabaseConnectionException(Exception):
-    def __init__(self):
+
+    def __init__(self, cxExceptionObj):
         self.message = "Unable to connect to database"
 
 
