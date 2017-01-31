@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>threadlegos API documentation</title>
+    <title>velexio.pylegos.core API documentation</title>
     <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1038,22 +1038,12 @@ table {
     <ul id="index">
 
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#threadlegos.Thread">Thread</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#threadlegos.Thread.__init__">__init__</a></li>
-    <li class="mono"><a href="#threadlegos.Thread.runAndContinue">runAndContinue</a></li>
-    <li class="mono"><a href="#threadlegos.Thread.runAndWait">runAndWait</a></li>
-  </ul>
 
-        </li>
+    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
+      <ul>
+        <li class="mono"><a href="framework.m.html">velexio.pylegos.core.framework</a></li>
       </ul>
     </li>
-
     </ul>
   </div>
 
@@ -1065,214 +1055,23 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">threadlegos</span> module</h1>
+  <h1 class="title"><span class="name">velexio.pylegos.core</span> module</h1>
   
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos', this);">Show source &equiv;</a></p>
-  <div id="source-threadlegos" class="source">
-    <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">Queue</span> <span class="kn">import</span> <span class="n">Queue</span>
-<span class="kn">from</span> <span class="nn">framework</span> <span class="kn">import</span> <span class="n">LogFactory</span>
-<span class="kn">from</span> <span class="nn">termlegos</span> <span class="kn">import</span> <span class="n">Spinner</span>
-
-
-<span class="k">class</span> <span class="nc">Thread</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">func</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
-        <span class="n">threadName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Thread [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;] calling func [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
-        <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Finished running function setting queue task to done&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-        <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-            <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
-        <span class="k">pass</span>
-</pre></div>
-
-  </div>
 
   </header>
 
   <section id="section-items">
 
 
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
+
+    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p id="threadlegos.Thread" class="name">class <span class="ident">Thread</span></p>
+      <p class="name"><a href="framework.m.html">velexio.pylegos.core.framework</a></p>
       
   
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread', this);">Show source &equiv;</a></p>
-  <div id="source-threadlegos.Thread" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Thread</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">func</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
-        <span class="n">threadName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Thread [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;] calling func [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
-        <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Finished running function setting queue task to done&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-        <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-            <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
-        <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#threadlegos.Thread">Thread</a></li>
-          <li>__builtin__.object</li>
-          </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="threadlegos.Thread.logger" class="name">var <span class="ident">logger</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="threadlegos.Thread.queue" class="name">var <span class="ident">queue</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="threadlegos.Thread.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-threadlegos.Thread.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="threadlegos.Thread.runAndContinue">
-    <p>def <span class="ident">runAndContinue</span>(</p><p>self, runFunc, args)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndContinue', this);">Show source &equiv;</a></p>
-  <div id="source-threadlegos.Thread.runAndContinue" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
-    <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="threadlegos.Thread.runAndWait">
-    <p>def <span class="ident">runAndWait</span>(</p><p>self, threadName, runFunc, funcArgs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>ToDo, check if thread name already exists, if so throw exception</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndWait', this);">Show source &equiv;</a></p>
-  <div id="source-threadlegos.Thread.runAndWait" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-    <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
-    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-    <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
       </div>
-      </div>
-
   </section>
 
     </article>
