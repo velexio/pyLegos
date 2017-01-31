@@ -2,12 +2,11 @@ import sys
 import os
 
 
-#from progress.spinner import Spinner as ProgressSpinner
-#from progress.spinner import PieSpinner
-#from progress.spinner import MoonSpinner
-#from progress.bar import IncrementalBar
+from progress.spinner import Spinner as ProgressSpinner
+from progress.spinner import PieSpinner
+from progress.spinner import MoonSpinner
+from progress.bar import IncrementalBar
 
-'''
 class SpinnerType(object):
     """ Used as a enum type of class, used to set the type of spinner to use
     when initializing a Spinner object
@@ -89,7 +88,6 @@ class ProgressBar(object):
         :return: None
         """
         self.bar.finish()
-'''
 
 class ColorPrinter(object):
 
@@ -155,7 +153,7 @@ class TermUI(object):
     def getUserInput(self, promptMessage, validChoices=[], secureMode=False):
         validInput = False
         if len(validChoices) > 0:
-            while not validInput
+            while not validInput:
                 if len(validChoices) <= 3:
                     promptMessage += promptMessage.replace(':',str(validChoices))+': '
                 userInput = raw_input(promptMessage)

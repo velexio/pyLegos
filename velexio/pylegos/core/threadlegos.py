@@ -2,8 +2,8 @@ import re
 import threading
 import time
 from Queue import Queue
-from framework import LogFactory
-from termlegos import Spinner
+from velexio.pylegos.core.framework import LogFactory
+from velexio.pylegos.core.termlegos import Spinner
 
 
 class Thread(object):
