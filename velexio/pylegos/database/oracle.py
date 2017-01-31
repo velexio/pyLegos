@@ -76,8 +76,8 @@ class Database(object):
                                                         mode=cx_Oracle.SYSDBA)
                 else:
                     self.Connection = cx_Oracle.connect(username, password, connectString)
-            except cx_Oracle.DatabaseError:
-                raise DatabaseConnectionException()
+            except cx_Oracle.DatabaseError as e:
+                raise DatabaseConnectionException(e)
         else:
             self.logger.debug('Connection already active, not creating an additional connection')
 
@@ -377,7 +377,17 @@ class Admin(object):
 class DatabaseConnectionException(Exception):
 
     def __init__(self, cxExceptionObj):
-        self.message = "Unable to connect to database"
+        self.message = str(cxExceptionObj)
+        self.ErrCode = self.message.split(':')[0]
+
+    def __defineMessage(self):
+        self.ErrMessage = 'ERROR: '
+        if self.ErrCode == 'ORA-01017':
+            self.ErrName = 'InvalidLoginCreds'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The credentials used are not valid'
+        else:
+            self.ErrName = 'Undefined'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - '+self.message
 
 
 class DatabaseQueryException(Exception):
