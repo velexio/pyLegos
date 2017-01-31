@@ -375,10 +375,15 @@ class Admin(object):
 
 
 class DatabaseConnectionException(Exception):
+    """
+    This exeception will be thrown if there is an issue connecting to the database. The
+    exception will have the following attributes that can be used
+    """
 
     def __init__(self, cxExceptionObj):
         self.message = str(cxExceptionObj)
         self.ErrCode = self.message.split(':')[0]
+        self.__defineMessage()
 
     def __defineMessage(self):
         self.ErrMessage = 'ERROR: '

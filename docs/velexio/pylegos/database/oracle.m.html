@@ -1516,10 +1516,15 @@ table {
 
 
 <span class="k">class</span> <span class="nc">DatabaseConnectionException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This exeception will be thrown if there is an issue connecting to the database. The</span>
+<span class="sd">    exception will have the following attributes that can be used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__defineMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrMessage</span> <span class="o">=</span> <span class="s1">&#39;ERROR: &#39;</span>
@@ -2615,14 +2620,21 @@ or function, use the executePL subtroutine</p></div>
       <p id="oracle.DatabaseConnectionException" class="name">class <span class="ident">DatabaseConnectionException</span></p>
       
   
+    <div class="desc"><p>This exeception will be thrown if there is an issue connecting to the database. The
+exception will have the following attributes that can be used</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.DatabaseConnectionException', this);">Show source &equiv;</a></p>
   <div id="source-oracle.DatabaseConnectionException" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DatabaseConnectionException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This exeception will be thrown if there is an issue connecting to the database. The</span>
+<span class="sd">    exception will have the following attributes that can be used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__defineMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrMessage</span> <span class="o">=</span> <span class="s1">&#39;ERROR: &#39;</span>
@@ -2694,6 +2706,7 @@ or function, use the executePL subtroutine</p></div>
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 </pre></div>
 
   </div>
