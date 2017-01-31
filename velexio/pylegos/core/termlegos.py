@@ -1,6 +1,7 @@
 import sys
 import os
 
+
 #from progress.spinner import Spinner as ProgressSpinner
 #from progress.spinner import PieSpinner
 #from progress.spinner import MoonSpinner
@@ -151,14 +152,16 @@ class TermUI(object):
     def __init__(self):
         pass
 
-    def getUserInput(self, promptMessage, validChoices=[]):
+    def getUserInput(self, promptMessage, validChoices=[], secureMode=False):
         validInput = False
         if len(validChoices) > 0:
             while not validInput
                 if len(validChoices) <= 3:
                     promptMessage += promptMessage.replace(':',str(validChoices))+': '
-                userInput = input(promptMessage)
+                userInput = raw_input(promptMessage)
         else:
-            userInput = input(promptMessage)
+            userInput = raw_input(promptMessage)
 
         return userInput
+
+

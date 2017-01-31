@@ -116,44 +116,48 @@ class Database(object):
     def getQueryResult(self, query, bindValues=[], secureLog=False):
         formattedResultSet = OrderedDict()
         formattedRowNumber = 1
-        cursor = self.Connection.cursor()
-        self.logger.debug('Running query: '+query)
-        if not secureLog:
-            self.logger.debug('Bind values for above query are '+str(bindValues))
-        self.logger.debug('Executing query')
-        if not secureLog:
-            self.logger.debug('Session effective query user (current_schema) is ['+self.Connection.current_schema+']')
-        cursor.execute(query, bindValues)
-        self.logger.debug('Generating Resultset Metadata')
-        curMeta = self.generateRSMetadata(cursor=cursor)
-        self.logger.debug('Fetching all records')
-        rawResultSet = cursor.fetchall()
-        self.logger.debug('Formatting resultset')
-        for row in rawResultSet:
-            formattedRec = {}
-            for field in curMeta:
-                rowVal = row[curMeta[field]['FieldNumber']]
-                formattedRec[field] = rowVal
-                '''
-                Determine if maxVal needs increase
-                '''
-                if (len(str(rowVal)) > curMeta[field]['MaxSize']) or (
-                        len(str(rowVal)) == curMeta[field]['MaxSize'] and curMeta[field]['Scale'] > 0):
-                    if curMeta[field]['Scale'] > 0:
-                        curMeta[field]['MaxSize'] = len(str(rowVal)) + 1
-                    elif curMeta[field]['DataType'] == str(CxOracleType.Timestamp):
-                        curMeta[field]['MaxSize'] = 26
-                    else:
-                        curMeta[field]['MaxSize'] = len(str(rowVal))
+        try:
+            cursor = self.Connection.cursor()
+            self.logger.debug('Running query: '+query)
+            if not secureLog:
+                self.logger.debug('Bind values for above query are '+str(bindValues))
+            self.logger.debug('Executing query')
+            if not secureLog:
+                self.logger.debug('Session effective query user (current_schema) is ['+self.Connection.current_schema+']')
+            cursor.execute(query, bindValues)
+            self.logger.debug('Generating Resultset Metadata')
+            curMeta = self.generateRSMetadata(cursor=cursor)
+            self.logger.debug('Fetching all records')
+            rawResultSet = cursor.fetchall()
+            self.logger.debug('Formatting resultset')
+            for row in rawResultSet:
+                formattedRec = {}
+                for field in curMeta:
+                    rowVal = row[curMeta[field]['FieldNumber']]
+                    formattedRec[field] = rowVal
+                    '''
+                    Determine if maxVal needs increase
+                    '''
+                    if (len(str(rowVal)) > curMeta[field]['MaxSize']) or (
+                            len(str(rowVal)) == curMeta[field]['MaxSize'] and curMeta[field]['Scale'] > 0):
+                        if curMeta[field]['Scale'] > 0:
+                            curMeta[field]['MaxSize'] = len(str(rowVal)) + 1
+                        elif curMeta[field]['DataType'] == str(CxOracleType.Timestamp):
+                            curMeta[field]['MaxSize'] = 26
+                        else:
+                            curMeta[field]['MaxSize'] = len(str(rowVal))
 
-            formattedResultSet[formattedRowNumber] = formattedRec
-            formattedRowNumber += 1
+                formattedResultSet[formattedRowNumber] = formattedRec
+                formattedRowNumber += 1
 
-        formattedResultSet[0] = curMeta;
-        self.logger.debug('Returning resultset with ['+str(len(formattedResultSet)-1)+'] records')
-        return formattedResultSet
+            formattedResultSet[0] = curMeta;
+            self.logger.debug('Returning resultset with ['+str(len(formattedResultSet)-1)+'] records')
+            return formattedResultSet
+        except cx_Oracle.DatabaseError as e:
+            self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
+            raise DatabaseQueryException(e)
 
-    def getColumnMungedResultset(self, query, bindValues=[], secureLog=False):
+    def getColumnMungedResultset(self, query, bindValues=[], colDelimiter='', secureLog=False):
         queryResult = self.getQueryResult(query=query, bindValues=bindValues, secureLog=secureLog)
         rsMeta = queryResult[0]
         resultSet = []
@@ -162,8 +166,9 @@ class Database(object):
             mungedColData = ''
             for k,v in rsMeta.iteritems():
                 colVal = str(queryResult[i][k])
-                mungedColData += colVal
-            resultSet.append(mungedColData)
+                mungedColData += colVal+colDelimiter
+            trimmedColData = mungedColData[:len(mungedColData)-len(colDelimiter)]
+            resultSet.append(trimmedColData)
         if not secureLog:
             self.logger.debug('Returning munged resultset: '+str(resultSet))
         return resultSet
@@ -195,26 +200,39 @@ class Database(object):
             cursor = self.Connection.cursor()
             cursor.execute(dml, bindValues)
         except cx_Oracle.DatabaseError as e:
-            raise DatabaseDMLException(str(e))
+            self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
+            raise DatabaseDMLException(e)
 
     def execProc(self, procedureName, parameters=[], namedParameters={}, outParam=None):
-        cursor = self.Connection.cursor()
-        cursor.callproc(name=procedureName,
-                        parameters=parameters,
-                        keywordParameters=namedParameters)
-        if outParam is not None:
-            return outParam
+        try:
+            cursor = self.Connection.cursor()
+            cursor.callproc(name=procedureName,
+                            parameters=parameters,
+                            keywordParameters=namedParameters)
+            if outParam is not None:
+                return outParam
+        except cx_Oracle.DatabaseError as e:
+            self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
+            raise DatabaseDMLException(e)
 
     def execFunc(self, functionName, oracleReturnType, parameters=[], namedParameters={}):
-        cursor = self.Connection.cursor()
-        retValue = cursor.callfunc(name=functionName,
-                                   returnType=oracleReturnType,
-                                   parameters=parameters,
-                                   keywordParameters=namedParameters)
-        return retValue
+        try:
+            cursor = self.Connection.cursor()
+            retValue = cursor.callfunc(name=functionName,
+                                       returnType=oracleReturnType,
+                                       parameters=parameters,
+                                       keywordParameters=namedParameters)
+            return retValue
+        except cx_Oracle.DatabaseError as e:
+            self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
+            raise DatabaseDMLException(e)
 
     def commit(self):
-        self.Connection.commit();
+        try:
+            self.Connection.commit();
+        except cx_Oracle.DatabaseError as e:
+            self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
+            raise DatabaseDMLException(e)
 
     def rollback(self):
         self.Connection.rollback();
@@ -356,20 +374,41 @@ class DatabaseConnectionException(Exception):
         self.message = "Unable to connect to database"
 
 
+class DatabaseQueryException(Exception):
+
+    def __init__(self, cxExceptionObj):
+        self.message = str(cxExceptionObj)
+        self.ErrCode = self.message.split(':')[0]
+        self.__defineMessage()
+
+    def __defineMessage(self):
+        self.ErrMessage = 'ERROR: '
+        if self.ErrCode == 'ORA-00942':
+            self.ErrName = 'TableMissing'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The table referenced does not exist or your session user lacks privileges'
+        else:
+            self.ErrName = 'Undefined'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - '+self.message
+
+
 class DatabaseDMLException(Exception):
-    def __init__(self, msg):
-        self.message = msg
-        self.ErrCode = str(msg).split(':')[0]
+    def __init__(self, cxExceptionObj):
+        self.message = str(cxExceptionObj)
+        self.ErrCode = str(cxExceptionObj).split(':')[0]
         self.__defineMessage()
 
     def __defineMessage(self):
         objName = self.__extractObjectName()
+        self.ErrMessage = 'ERROR: '
         if self.ErrCode == 'ORA-00001':
             self.ErrName = 'UniqueViolated'
-            self.ErrMessage = 'The operation could not be performed as it would violate the unique constraint ['+objName+']'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The operation could not be performed as it would violate the unique constraint ['+objName+']'
         elif self.ErrCode == 'ORA-01400':
             self.ErrName = 'NotNullViolated'
-            self.ErrMessage = 'The field '+objName+' must be assigned a value before the record can be saved'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The field '+objName+' must be assigned a value before the record can be saved'
+        else:
+            self.ErrName = 'Undefined'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - '+self.message
 
     def __extractObjectName(self):
         objectName = 'Undefined'
