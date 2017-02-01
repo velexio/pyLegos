@@ -12,16 +12,16 @@ class Thread(object):
         self.logger = LogFactory().getLibLogger()
         self.queue = Queue()
 
-    def __runThread(self,func,args):
+    def __runThread(self, func, args=[]):
         threadName = self.queue.get()
         self.logger.debug('Thread ['+str(threadName)+'] calling func ['+str(func)+']')
         func(args)
         self.logger.debug('Finished running function setting queue task to done')
         self.queue.task_done()
 
-    def runAndWait(self,threadName, runFunc, funcArgs):
+    def runAndWait(self, threadName, runFunc, funcArgs=[]):
         """
-        * NOTE: Still if dev, so use at own riske ;)
+        * NOTE: Still if dev, so use at own risk ;)
         This procedure will run the named function in a seperate thread so that async operation is possible
         :param threadName: <br>
         :param runFunc: <br>

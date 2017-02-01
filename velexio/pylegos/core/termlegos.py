@@ -26,7 +26,7 @@ class Spinner(object):
     some customizations.
     """
 
-    def __init__(self,message='Running ', spinnerType=SpinnerType.Clock):
+    def __init__(self, message='Running ', spinnerType=SpinnerType.Clock):
         """
         This will iniatialize a spinner class.
         :param message: The message to display in front of spinner.  Default is 'Running '

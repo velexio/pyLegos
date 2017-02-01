@@ -390,6 +390,15 @@ class DatabaseConnectionException(Exception):
         if self.ErrCode == 'ORA-01017':
             self.ErrName = 'InvalidLoginCreds'
             self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The credentials used are not valid'
+        elif self.ErrCode == 'ORA-12154':
+            self.ErrName = 'InvalidHost'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The host name used in the connection string is not correct or cannot be resolved'
+        elif self.ErrCode == 'ORA-12514':
+            self.ErrName = 'InvalidService'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The service name used in the connection string is not correct or is not running on the database server'
+        elif self.ErrCode == 'ORA-12541':
+            self.ErrName = 'NoListener'
+            self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - The database listener did not respond. Verify the port is correct and all firewall ports are open between client and database server'
         else:
             self.ErrName = 'Undefined'
             self.ErrMessage += '['+self.ErrName+']['+self.ErrCode+'] - '+self.message
