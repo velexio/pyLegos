@@ -401,7 +401,7 @@ class DatabaseConnectionException(Exception):
     exception will have the following attributes that can be used
     """
 
-    def __init__(self, message=None, cxExceptionObj=None):
+    def __init__(self, cxExceptionObj=None, message=None):
         if message is not None:
             self.message = message
         else:
