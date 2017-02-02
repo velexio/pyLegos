@@ -6,6 +6,7 @@ from progress.spinner import Spinner as ProgressSpinner
 from progress.spinner import PieSpinner
 from progress.spinner import MoonSpinner
 from progress.bar import IncrementalBar
+from progress.bar import Bar
 
 class SpinnerType(object):
     """ Used as a enum type of class, used to set the type of spinner to use
@@ -26,7 +27,7 @@ class Spinner(object):
     some customizations.
     """
 
-    def __init__(self, message='Running ', spinnerType=SpinnerType.Clock):
+    def __init__(self, message='Running ', spinnerType=SpinnerType.Classic):
         """
         This will iniatialize a spinner class.
         :param message: The message to display in front of spinner.  Default is 'Running '
@@ -48,7 +49,7 @@ class Spinner(object):
         console by completely removing the message and spinner character.
         :return:
         """
-        sys.stdout.write('\b'*(len(self.spinnerMessage)+1))
+        sys.stdout.write('\b'*(len(self.spinnerMessage)+2))
         sys.stdout.flush()
         sys.stderr.write('\r ')
 
@@ -68,6 +69,7 @@ class ProgressBar(object):
         :param numOperations: The total number of operations that the progress bar will cover.
         """
         self.bar = IncrementalBar(message=initialMessage, max=numOperations, suffix='%(percent).1f%% - %(eta)ds')
+        self.bar.update()
 
     def updateProgress(self):
         """
@@ -79,8 +81,16 @@ class ProgressBar(object):
     def updateMessage(self, message):
         """Will update the message displayed in front of the progress bar
         :message: The new message to display
+        :return: None
         """
         self.bar.message = message
+        self.bar.update()
+
+    def updateStatus(self):
+        """Will update the status of the progress bar
+        :return: None
+        """
+        self.bar.update()
 
     def finish(self):
         """

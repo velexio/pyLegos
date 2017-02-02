@@ -1047,6 +1047,7 @@ table {
   <ul>
     <li class="mono"><a href="#threadlegos.Thread.__init__">__init__</a></li>
     <li class="mono"><a href="#threadlegos.Thread.runAndContinue">runAndContinue</a></li>
+    <li class="mono"><a href="#threadlegos.Thread.runAndShowProgress">runAndShowProgress</a></li>
     <li class="mono"><a href="#threadlegos.Thread.runAndWait">runAndWait</a></li>
   </ul>
 
@@ -1076,6 +1077,8 @@ table {
 <span class="kn">from</span> <span class="nn">Queue</span> <span class="kn">import</span> <span class="n">Queue</span>
 <span class="kn">from</span> <span class="nn">velexio.pylegos.core.framework</span> <span class="kn">import</span> <span class="n">LogFactory</span>
 <span class="kn">from</span> <span class="nn">velexio.pylegos.core.termlegos</span> <span class="kn">import</span> <span class="n">Spinner</span>
+<span class="kn">from</span> <span class="nn">velexio.pylegos.core.termlegos</span> <span class="kn">import</span> <span class="n">SpinnerType</span>
+<span class="kn">from</span> <span class="nn">velexio.pylegos.core.termlegos</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
 
 
 <span class="k">class</span> <span class="nc">Thread</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1084,14 +1087,14 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="n">threadName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Thread [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;] calling func [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
-        <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Finished running function setting queue task to done&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waitMessage</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="o">=</span><span class="p">{},</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        * NOTE: Still if dev, so use at own risk ;)</span>
 <span class="sd">        This procedure will run the named function in a seperate thread so that async operation is possible</span>
@@ -1102,20 +1105,57 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-        <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-            <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">runAndShowProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobMap</span><span class="p">,</span> <span class="n">initMesg</span><span class="o">=</span><span class="s1">&#39;Initializing&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will run a &quot;jobMap&quot; in a blocking fashion and show a progress bar, updating after</span>
+<span class="sd">        each step in the job is complete. The jobMap argument must be a dictionary that has the following</span>
+<span class="sd">        format:&lt;br&gt;&lt;br&gt;</span>
+<span class="sd">        jobMap = {&#39;Step 1&#39;: {&#39;func&#39;: stepOneFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                      &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                      }</span>
+<span class="sd">                             },</span>
+<span class="sd">                  &#39;Step 2&#39;: {&#39;func&#39;: stepTwoFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue}</span>
+<span class="sd">                             },</span>
+<span class="sd">                  &#39;Step 3&#39;: {&#39;func&#39;: stepThreeFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                      &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                      }</span>
+<span class="sd">                             }</span>
+<span class="sd">        &lt;br&gt;&lt;br&gt;</span>
+<span class="sd">        :param jobMap: The job map that follows above format that holds the functions to run</span>
+<span class="sd">        :param initMesg: The initial message to show on the progress bar.  Default &#39;Initializing&#39;</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">progressBar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">initialMessage</span><span class="o">=</span><span class="n">initMesg</span><span class="p">,</span> <span class="n">numOperations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">jobMap</span><span class="p">))</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">msgHeader</span><span class="o">=</span><span class="s1">&#39;Running -&gt; &#39;</span>
+        <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">stepAttribs</span> <span class="ow">in</span> <span class="n">jobMap</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+            <span class="n">stepMessage</span> <span class="o">=</span> <span class="n">msgHeader</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">stepMessage</span><span class="p">)</span>
+            <span class="n">fx</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">]</span>
+            <span class="n">fxa</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">fxa</span><span class="p">,))</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;  : &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">15</span><span class="p">)</span>
+            <span class="n">progressBar</span><span class="o">.</span><span class="n">updateProgress</span><span class="p">()</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="s1">&#39;Finished&#39;</span><span class="p">)</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -1141,14 +1181,14 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">__runThread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="n">threadName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Thread [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;] calling func [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
-        <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Finished running function setting queue task to done&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waitMessage</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="o">=</span><span class="p">{},</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        * NOTE: Still if dev, so use at own risk ;)</span>
 <span class="sd">        This procedure will run the named function in a seperate thread so that async operation is possible</span>
@@ -1159,20 +1199,57 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-        <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-            <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
         <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">runAndShowProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobMap</span><span class="p">,</span> <span class="n">initMesg</span><span class="o">=</span><span class="s1">&#39;Initializing&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will run a &quot;jobMap&quot; in a blocking fashion and show a progress bar, updating after</span>
+<span class="sd">        each step in the job is complete. The jobMap argument must be a dictionary that has the following</span>
+<span class="sd">        format:&lt;br&gt;&lt;br&gt;</span>
+<span class="sd">        jobMap = {&#39;Step 1&#39;: {&#39;func&#39;: stepOneFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                      &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                      }</span>
+<span class="sd">                             },</span>
+<span class="sd">                  &#39;Step 2&#39;: {&#39;func&#39;: stepTwoFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue}</span>
+<span class="sd">                             },</span>
+<span class="sd">                  &#39;Step 3&#39;: {&#39;func&#39;: stepThreeFunc,</span>
+<span class="sd">                             &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                      &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                      }</span>
+<span class="sd">                             }</span>
+<span class="sd">        &lt;br&gt;&lt;br&gt;</span>
+<span class="sd">        :param jobMap: The job map that follows above format that holds the functions to run</span>
+<span class="sd">        :param initMesg: The initial message to show on the progress bar.  Default &#39;Initializing&#39;</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">progressBar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">initialMessage</span><span class="o">=</span><span class="n">initMesg</span><span class="p">,</span> <span class="n">numOperations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">jobMap</span><span class="p">))</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">msgHeader</span><span class="o">=</span><span class="s1">&#39;Running -&gt; &#39;</span>
+        <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">stepAttribs</span> <span class="ow">in</span> <span class="n">jobMap</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+            <span class="n">stepMessage</span> <span class="o">=</span> <span class="n">msgHeader</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">stepMessage</span><span class="p">)</span>
+            <span class="n">fx</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">]</span>
+            <span class="n">fxa</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">fxa</span><span class="p">,))</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;  : &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">15</span><span class="p">)</span>
+            <span class="n">progressBar</span><span class="o">.</span><span class="n">updateProgress</span><span class="p">()</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="s1">&#39;Finished&#39;</span><span class="p">)</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -1242,7 +1319,7 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndContinue', this);">Show source &equiv;</a></p>
   <div id="source-threadlegos.Thread.runAndContinue" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">runFunc</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndContinue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 
@@ -1253,8 +1330,88 @@ table {
   
             
   <div class="item">
+    <div class="name def" id="threadlegos.Thread.runAndShowProgress">
+    <p>def <span class="ident">runAndShowProgress</span>(</p><p>self, jobMap, initMesg=&#39;Initializing&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will run a "jobMap" in a blocking fashion and show a progress bar, updating after
+each step in the job is complete. The jobMap argument must be a dictionary that has the following
+format:<br><br>
+jobMap = {'Step 1': {'func': stepOneFunc,
+                     'args': {'parameter1': parameterValue,
+                              'parameter2': parameterValue
+                              }
+                     },
+          'Step 2': {'func': stepTwoFunc,
+                     'args': {'parameter1': parameterValue}
+                     },
+          'Step 3': {'func': stepThreeFunc,
+                     'args': {'parameter1': parameterValue,
+                              'parameter2': parameterValue
+                              }
+                     }
+<br><br>
+:param jobMap: The job map that follows above format that holds the functions to run
+:param initMesg: The initial message to show on the progress bar.  Default 'Initializing'
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndShowProgress', this);">Show source &equiv;</a></p>
+  <div id="source-threadlegos.Thread.runAndShowProgress" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndShowProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobMap</span><span class="p">,</span> <span class="n">initMesg</span><span class="o">=</span><span class="s1">&#39;Initializing&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This will run a &quot;jobMap&quot; in a blocking fashion and show a progress bar, updating after</span>
+<span class="sd">    each step in the job is complete. The jobMap argument must be a dictionary that has the following</span>
+<span class="sd">    format:&lt;br&gt;&lt;br&gt;</span>
+<span class="sd">    jobMap = {&#39;Step 1&#39;: {&#39;func&#39;: stepOneFunc,</span>
+<span class="sd">                         &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                  &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                  }</span>
+<span class="sd">                         },</span>
+<span class="sd">              &#39;Step 2&#39;: {&#39;func&#39;: stepTwoFunc,</span>
+<span class="sd">                         &#39;args&#39;: {&#39;parameter1&#39;: parameterValue}</span>
+<span class="sd">                         },</span>
+<span class="sd">              &#39;Step 3&#39;: {&#39;func&#39;: stepThreeFunc,</span>
+<span class="sd">                         &#39;args&#39;: {&#39;parameter1&#39;: parameterValue,</span>
+<span class="sd">                                  &#39;parameter2&#39;: parameterValue</span>
+<span class="sd">                                  }</span>
+<span class="sd">                         }</span>
+<span class="sd">    &lt;br&gt;&lt;br&gt;</span>
+<span class="sd">    :param jobMap: The job map that follows above format that holds the functions to run</span>
+<span class="sd">    :param initMesg: The initial message to show on the progress bar.  Default &#39;Initializing&#39;</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">progressBar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">initialMessage</span><span class="o">=</span><span class="n">initMesg</span><span class="p">,</span> <span class="n">numOperations</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">jobMap</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">msgHeader</span><span class="o">=</span><span class="s1">&#39;Running -&gt; &#39;</span>
+    <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">stepAttribs</span> <span class="ow">in</span> <span class="n">jobMap</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+        <span class="n">stepMessage</span> <span class="o">=</span> <span class="n">msgHeader</span> <span class="o">+</span> <span class="n">step</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">stepMessage</span><span class="p">)</span>
+        <span class="n">fx</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">]</span>
+        <span class="n">fxa</span><span class="o">=</span><span class="n">stepAttribs</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">fxa</span><span class="p">,))</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;  : &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateProgress</span><span class="p">()</span>
+    <span class="n">progressBar</span><span class="o">.</span><span class="n">updateMessage</span><span class="p">(</span><span class="s1">&#39;Finished&#39;</span><span class="p">)</span>
+    <span class="n">progressBar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
     <div class="name def" id="threadlegos.Thread.runAndWait">
-    <p>def <span class="ident">runAndWait</span>(</p><p>self, threadName, runFunc, funcArgs=[])</p>
+    <p>def <span class="ident">runAndWait</span>(</p><p>self, waitMessage, threadName, runFunc, funcNamedParams={}, spinnerType=&lt;class &#39;progress.spinner.Spinner&#39;&gt;)</p>
     </div>
     
 
@@ -1271,7 +1428,7 @@ This procedure will run the named function in a seperate thread so that async op
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-threadlegos.Thread.runAndWait', this);">Show source &equiv;</a></p>
   <div id="source-threadlegos.Thread.runAndWait" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcArgs</span><span class="o">=</span><span class="p">[]):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">runAndWait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waitMessage</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="o">=</span><span class="p">{},</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * NOTE: Still if dev, so use at own risk ;)</span>
 <span class="sd">    This procedure will run the named function in a seperate thread so that async operation is possible</span>
@@ -1282,18 +1439,13 @@ This procedure will run the named function in a seperate thread so that async op
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
-    <span class="n">threadArgs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runFunc</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">funcArgs</span><span class="p">:</span>
-        <span class="n">threadArgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">threadArgs</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
     <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">()</span>
+    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
     <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
     <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ok, thread is finished&#39;</span><span class="p">)</span>
 </pre></div>
 
   </div>

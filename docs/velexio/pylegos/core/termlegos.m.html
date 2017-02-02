@@ -1060,6 +1060,7 @@ table {
     <li class="mono"><a href="#termlegos.ProgressBar.finish">finish</a></li>
     <li class="mono"><a href="#termlegos.ProgressBar.updateMessage">updateMessage</a></li>
     <li class="mono"><a href="#termlegos.ProgressBar.updateProgress">updateProgress</a></li>
+    <li class="mono"><a href="#termlegos.ProgressBar.updateStatus">updateStatus</a></li>
   </ul>
 
         </li>
@@ -1115,6 +1116,7 @@ table {
 <span class="kn">from</span> <span class="nn">progress.spinner</span> <span class="kn">import</span> <span class="n">PieSpinner</span>
 <span class="kn">from</span> <span class="nn">progress.spinner</span> <span class="kn">import</span> <span class="n">MoonSpinner</span>
 <span class="kn">from</span> <span class="nn">progress.bar</span> <span class="kn">import</span> <span class="n">IncrementalBar</span>
+<span class="kn">from</span> <span class="nn">progress.bar</span> <span class="kn">import</span> <span class="n">Bar</span>
 
 <span class="k">class</span> <span class="nc">SpinnerType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Used as a enum type of class, used to set the type of spinner to use</span>
@@ -1135,7 +1137,7 @@ table {
 <span class="sd">    some customizations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This will iniatialize a spinner class.</span>
 <span class="sd">        :param message: The message to display in front of spinner.  Default is &#39;Running &#39;</span>
@@ -1157,7 +1159,7 @@ table {
 <span class="sd">        console by completely removing the message and spinner character.</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1"> &#39;</span><span class="p">)</span>
 
@@ -1177,6 +1179,7 @@ table {
 <span class="sd">        :param numOperations: The total number of operations that the progress bar will cover.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">IncrementalBar</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">initialMessage</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">numOperations</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(percent).1f%%</span><span class="s1"> - </span><span class="si">%(eta)d</span><span class="s1">s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">updateProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1188,8 +1191,16 @@ table {
     <span class="k">def</span> <span class="nf">updateMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Will update the message displayed in front of the progress bar</span>
 <span class="sd">        :message: The new message to display</span>
+<span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">updateStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Will update the status of the progress bar</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1503,6 +1514,7 @@ one decimal place and also give an ETA.</p></div>
 <span class="sd">        :param numOperations: The total number of operations that the progress bar will cover.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">IncrementalBar</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">initialMessage</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">numOperations</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(percent).1f%%</span><span class="s1"> - </span><span class="si">%(eta)d</span><span class="s1">s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">updateProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1514,8 +1526,16 @@ one decimal place and also give an ETA.</p></div>
     <span class="k">def</span> <span class="nf">updateMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Will update the message displayed in front of the progress bar</span>
 <span class="sd">        :message: The new message to display</span>
+<span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">updateStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Will update the status of the progress bar</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1573,6 +1593,7 @@ one decimal place and also give an ETA.</p></div>
 <span class="sd">    :param numOperations: The total number of operations that the progress bar will cover.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">IncrementalBar</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">initialMessage</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">numOperations</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(percent).1f%%</span><span class="s1"> - </span><span class="si">%(eta)d</span><span class="s1">s&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1617,15 +1638,18 @@ one decimal place and also give an ETA.</p></div>
     
   
     <div class="desc"><p>Will update the message displayed in front of the progress bar
-:message: The new message to display</p></div>
+:message: The new message to display
+:return: None</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ProgressBar.updateMessage', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.ProgressBar.updateMessage" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">updateMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Will update the message displayed in front of the progress bar</span>
 <span class="sd">    :message: The new message to display</span>
+<span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1660,6 +1684,32 @@ one decimal place and also give an ETA.</p></div>
 
   </div>
   
+            
+  <div class="item">
+    <div class="name def" id="termlegos.ProgressBar.updateStatus">
+    <p>def <span class="ident">updateStatus</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Will update the status of the progress bar
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ProgressBar.updateStatus', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.ProgressBar.updateStatus" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">updateStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Will update the status of the progress bar</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1684,7 +1734,7 @@ some customizations.</p></div>
 <span class="sd">    some customizations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This will iniatialize a spinner class.</span>
 <span class="sd">        :param message: The message to display in front of spinner.  Default is &#39;Running &#39;</span>
@@ -1706,7 +1756,7 @@ some customizations.</p></div>
 <span class="sd">        console by completely removing the message and spinner character.</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1"> &#39;</span><span class="p">)</span>
 </pre></div>
@@ -1746,7 +1796,7 @@ some customizations.</p></div>
             
   <div class="item">
     <div class="name def" id="termlegos.Spinner.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, message=&#39;Running &#39;, spinnerType=&lt;class &#39;progress.spinner.PieSpinner&#39;&gt;)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, message=&#39;Running &#39;, spinnerType=&lt;class &#39;progress.spinner.Spinner&#39;&gt;)</p>
     </div>
     
 
@@ -1758,7 +1808,7 @@ some customizations.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.Spinner.__init__', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.Spinner.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Clock</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Running &#39;</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">SpinnerType</span><span class="o">.</span><span class="n">Classic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This will iniatialize a spinner class.</span>
 <span class="sd">    :param message: The message to display in front of spinner.  Default is &#39;Running &#39;</span>
@@ -1821,7 +1871,7 @@ console by completely removing the message and spinner character.
 <span class="sd">    console by completely removing the message and spinner character.</span>
 <span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1">&#39;</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spinnerMessage</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1"> &#39;</span><span class="p">)</span>
 </pre></div>
