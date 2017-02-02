@@ -1041,17 +1041,6 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#termlegos.ColorPrinter">ColorPrinter</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#termlegos.ColorPrinter.__init__">__init__</a></li>
-    <li class="mono"><a href="#termlegos.ColorPrinter.colorMessage">colorMessage</a></li>
-    <li class="mono"><a href="#termlegos.ColorPrinter.cprint">cprint</a></li>
-  </ul>
-
-        </li>
-        <li class="mono">
         <span class="class_name"><a href="#termlegos.ProgressBar">ProgressBar</a></span>
         
           
@@ -1080,11 +1069,21 @@ table {
         
         </li>
         <li class="mono">
+        <span class="class_name"><a href="#termlegos.TermColor">TermColor</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#termlegos.TermColor.__init__">__init__</a></li>
+    <li class="mono"><a href="#termlegos.TermColor.colorMessage">colorMessage</a></li>
+    <li class="mono"><a href="#termlegos.TermColor.cprint">cprint</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
         <span class="class_name"><a href="#termlegos.TermUI">TermUI</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#termlegos.TermUI.__init__">__init__</a></li>
     <li class="mono"><a href="#termlegos.TermUI.getUserInput">getUserInput</a></li>
   </ul>
 
@@ -1110,7 +1109,6 @@ table {
   <div id="source-termlegos" class="source">
     <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
 
 <span class="kn">from</span> <span class="nn">progress.spinner</span> <span class="kn">import</span> <span class="n">Spinner</span> <span class="k">as</span> <span class="n">ProgressSpinner</span>
 <span class="kn">from</span> <span class="nn">progress.spinner</span> <span class="kn">import</span> <span class="n">PieSpinner</span>
@@ -1209,7 +1207,7 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">ColorPrinter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TermColor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
@@ -1267,9 +1265,6 @@ table {
 
 <span class="k">class</span> <span class="nc">TermUI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
     <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1291,204 +1286,6 @@ table {
 
 
     <h2 class="section-title" id="header-classes">Classes</h2>
-      
-      <div class="item">
-      <p id="termlegos.ColorPrinter" class="name">class <span class="ident">ColorPrinter</span></p>
-      
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ColorPrinter', this);">Show source &equiv;</a></p>
-  <div id="source-termlegos.ColorPrinter" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ColorPrinter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
-
-    <span class="k">class</span> <span class="nc">Style</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="n">BOLD</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">DARK</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">UNDERLINE</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">BLINK</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">REVERSE</span> <span class="o">=</span> <span class="mi">7</span>
-        <span class="n">CONCEALED</span> <span class="o">=</span> <span class="mi">8</span>
-
-    <span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="n">GREY</span> <span class="o">=</span> <span class="mi">30</span>
-        <span class="n">RED</span> <span class="o">=</span> <span class="mi">31</span>
-        <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">32</span>
-        <span class="n">YELLOW</span> <span class="o">=</span> <span class="mi">33</span>
-        <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">34</span>
-        <span class="n">MAGENTA</span> <span class="o">=</span> <span class="mi">35</span>
-        <span class="n">CYAN</span> <span class="o">=</span> <span class="mi">36</span>
-        <span class="n">WHITE</span> <span class="o">=</span> <span class="mi">37</span>
-
-    <span class="k">class</span> <span class="nc">Background</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="n">GREY</span> <span class="o">=</span> <span class="mi">40</span>
-        <span class="n">RED</span> <span class="o">=</span> <span class="mi">41</span>
-        <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">42</span>
-        <span class="n">YELLOW</span> <span class="o">=</span> <span class="mi">43</span>
-        <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">44</span>
-        <span class="n">MAGENTA</span> <span class="o">=</span> <span class="mi">45</span>
-        <span class="n">CYAN</span> <span class="o">=</span> <span class="mi">46</span>
-        <span class="n">WHITE</span> <span class="o">=</span> <span class="mi">47</span>
-
-    <span class="k">def</span> <span class="nf">colorMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ANSI_COLORS_DISABLED&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">colorFormat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[</span><span class="si">%d</span><span class="s1">m</span><span class="si">%s</span><span class="s1">&#39;</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textColor</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">textBackground</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textBackground</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">textStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textStyle</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-            <span class="n">message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span>
-        <span class="k">return</span> <span class="n">message</span>
-
-    <span class="k">def</span> <span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">printNewLine</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="n">coloredMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colorMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
-                                          <span class="n">textColor</span><span class="o">=</span><span class="n">textColor</span><span class="p">,</span>
-                                          <span class="n">textBackground</span><span class="o">=</span><span class="n">textBackground</span><span class="p">,</span>
-                                          <span class="n">textStyle</span><span class="o">=</span><span class="n">textStyle</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">printNewLine</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#termlegos.ColorPrinter">ColorPrinter</a></li>
-          <li>__builtin__.object</li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="termlegos.ColorPrinter.Background" class="name">var <span class="ident">Background</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="termlegos.ColorPrinter.Color" class="name">var <span class="ident">Color</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="termlegos.ColorPrinter.Style" class="name">var <span class="ident">Style</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="termlegos.ColorPrinter.RESET" class="name">var <span class="ident">RESET</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="termlegos.ColorPrinter.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ColorPrinter.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-termlegos.ColorPrinter.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="termlegos.ColorPrinter.colorMessage">
-    <p>def <span class="ident">colorMessage</span>(</p><p>self, message, textColor, textBackground=None, textStyle=None)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ColorPrinter.colorMessage', this);">Show source &equiv;</a></p>
-  <div id="source-termlegos.ColorPrinter.colorMessage" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">colorMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ANSI_COLORS_DISABLED&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">colorFormat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[</span><span class="si">%d</span><span class="s1">m</span><span class="si">%s</span><span class="s1">&#39;</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textColor</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">textBackground</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textBackground</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">textStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textStyle</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-        <span class="n">message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span>
-    <span class="k">return</span> <span class="n">message</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="termlegos.ColorPrinter.cprint">
-    <p>def <span class="ident">cprint</span>(</p><p>self, message, textColor, textBackground=None, textStyle=None, printNewLine=True)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.ColorPrinter.cprint', this);">Show source &equiv;</a></p>
-  <div id="source-termlegos.ColorPrinter.cprint" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">printNewLine</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="n">coloredMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colorMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
-                                      <span class="n">textColor</span><span class="o">=</span><span class="n">textColor</span><span class="p">,</span>
-                                      <span class="n">textBackground</span><span class="o">=</span><span class="n">textBackground</span><span class="p">,</span>
-                                      <span class="n">textStyle</span><span class="o">=</span><span class="n">textStyle</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">printNewLine</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      </div>
-      </div>
       
       <div class="item">
       <p id="termlegos.ProgressBar" class="name">class <span class="ident">ProgressBar</span></p>
@@ -1949,6 +1746,204 @@ Options are: Clock (default), Cicle, and classic</p></div>
       </div>
       
       <div class="item">
+      <p id="termlegos.TermColor" class="name">class <span class="ident">TermColor</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermColor', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.TermColor" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">TermColor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+
+    <span class="k">class</span> <span class="nc">Style</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="n">BOLD</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">DARK</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">UNDERLINE</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">BLINK</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">REVERSE</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">CONCEALED</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="n">GREY</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="n">RED</span> <span class="o">=</span> <span class="mi">31</span>
+        <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">32</span>
+        <span class="n">YELLOW</span> <span class="o">=</span> <span class="mi">33</span>
+        <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">34</span>
+        <span class="n">MAGENTA</span> <span class="o">=</span> <span class="mi">35</span>
+        <span class="n">CYAN</span> <span class="o">=</span> <span class="mi">36</span>
+        <span class="n">WHITE</span> <span class="o">=</span> <span class="mi">37</span>
+
+    <span class="k">class</span> <span class="nc">Background</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="n">GREY</span> <span class="o">=</span> <span class="mi">40</span>
+        <span class="n">RED</span> <span class="o">=</span> <span class="mi">41</span>
+        <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">42</span>
+        <span class="n">YELLOW</span> <span class="o">=</span> <span class="mi">43</span>
+        <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">44</span>
+        <span class="n">MAGENTA</span> <span class="o">=</span> <span class="mi">45</span>
+        <span class="n">CYAN</span> <span class="o">=</span> <span class="mi">46</span>
+        <span class="n">WHITE</span> <span class="o">=</span> <span class="mi">47</span>
+
+    <span class="k">def</span> <span class="nf">colorMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ANSI_COLORS_DISABLED&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">colorFormat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[</span><span class="si">%d</span><span class="s1">m</span><span class="si">%s</span><span class="s1">&#39;</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textColor</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">textBackground</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textBackground</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">textStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textStyle</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span>
+        <span class="k">return</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">printNewLine</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">coloredMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colorMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+                                          <span class="n">textColor</span><span class="o">=</span><span class="n">textColor</span><span class="p">,</span>
+                                          <span class="n">textBackground</span><span class="o">=</span><span class="n">textBackground</span><span class="p">,</span>
+                                          <span class="n">textStyle</span><span class="o">=</span><span class="n">textStyle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">printNewLine</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#termlegos.TermColor">TermColor</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="termlegos.TermColor.Background" class="name">var <span class="ident">Background</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="termlegos.TermColor.Color" class="name">var <span class="ident">Color</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="termlegos.TermColor.Style" class="name">var <span class="ident">Style</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="termlegos.TermColor.RESET" class="name">var <span class="ident">RESET</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="termlegos.TermColor.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermColor.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.TermColor.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="termlegos.TermColor.colorMessage">
+    <p>def <span class="ident">colorMessage</span>(</p><p>self, message, textColor, textBackground=None, textStyle=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermColor.colorMessage', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.TermColor.colorMessage" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">colorMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ANSI_COLORS_DISABLED&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">colorFormat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[</span><span class="si">%d</span><span class="s1">m</span><span class="si">%s</span><span class="s1">&#39;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textColor</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">textBackground</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textBackground</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">textStyle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">colorFormat</span> <span class="o">%</span> <span class="p">(</span><span class="n">textStyle</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESET</span>
+    <span class="k">return</span> <span class="n">message</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="termlegos.TermColor.cprint">
+    <p>def <span class="ident">cprint</span>(</p><p>self, message, textColor, textBackground=None, textStyle=None, printNewLine=True)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermColor.cprint', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.TermColor.cprint" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">textColor</span><span class="p">,</span> <span class="n">textBackground</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">textStyle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">printNewLine</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">coloredMessage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colorMessage</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+                                      <span class="n">textColor</span><span class="o">=</span><span class="n">textColor</span><span class="p">,</span>
+                                      <span class="n">textBackground</span><span class="o">=</span><span class="n">textBackground</span><span class="p">,</span>
+                                      <span class="n">textStyle</span><span class="o">=</span><span class="n">textStyle</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">printNewLine</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coloredMessage</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
       <p id="termlegos.TermUI" class="name">class <span class="ident">TermUI</span></p>
       
   
@@ -1956,9 +1951,6 @@ Options are: Clock (default), Cicle, and classic</p></div>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.TermUI" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">TermUI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
@@ -1984,27 +1976,6 @@ Options are: Clock (default), Cicle, and classic</p></div>
           <li>__builtin__.object</li>
           </ul>
           <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="termlegos.TermUI.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-termlegos.TermUI.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
             
   <div class="item">
     <div class="name def" id="termlegos.TermUI.getUserInput">

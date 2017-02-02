@@ -1,7 +1,6 @@
 import sys
 import os
 
-
 from progress.spinner import Spinner as ProgressSpinner
 from progress.spinner import PieSpinner
 from progress.spinner import MoonSpinner
@@ -99,7 +98,7 @@ class ProgressBar(object):
         """
         self.bar.finish()
 
-class ColorPrinter(object):
+class TermColor(object):
 
     def __init__(self):
         self.RESET = '\033[0m'
@@ -156,9 +155,6 @@ class ColorPrinter(object):
 
 
 class TermUI(object):
-
-    def __init__(self):
-        pass
 
     def getUserInput(self, promptMessage, validChoices=[], secureMode=False):
         validInput = False
