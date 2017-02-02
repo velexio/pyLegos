@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-from velexio.pylegos.core.termlegos import ColorPrinter
+from velexio.pylegos.core.termlegos import TermColor
 
 
 def main():
@@ -9,15 +9,15 @@ def main():
     bold = " BOLD "
     status = " Running test: "
     result = " Passed "
-    cprinter = ColorPrinter()
-    cprinter.printInColor(message=fail, textColor=ColorPrinter.Color.YELLOW, textBackground=ColorPrinter.Background.RED, textStyle=ColorPrinter.Style.BLINK)
-    cprinter.printInColor(message=bold, textColor=ColorPrinter.Color.WHITE, textBackground=ColorPrinter.Background.BLUE, textStyle=ColorPrinter.Style.BOLD)
-    cprinter.printInColor(message=status, textColor=ColorPrinter.Color.WHITE, textBackground=ColorPrinter.Background.BLUE, printNewLine=False)
+    cprinter = TermColor()
+    cprinter.printInColor(message=fail, textColor=TermColor.Color.YELLOW, textBackground=TermColor.Background.RED, textStyle=TermColor.Style.BLINK)
+    cprinter.printInColor(message=bold, textColor=TermColor.Color.WHITE, textBackground=TermColor.Background.BLUE, textStyle=TermColor.Style.BOLD)
+    cprinter.printInColor(message=status, textColor=TermColor.Color.WHITE, textBackground=TermColor.Background.BLUE, printNewLine=False)
     time.sleep(5)
-    cprinter.printInColor(message=result, textColor=ColorPrinter.Color.WHITE, textBackground=ColorPrinter.Background.GREEN, textStyle=ColorPrinter.Style.BOLD)
-    cprinter.printInColor(message=status, textColor=ColorPrinter.Color.WHITE, textBackground=ColorPrinter.Background.BLUE,  printNewLine=False)
+    cprinter.printInColor(message=result, textColor=TermColor.Color.WHITE, textBackground=TermColor.Background.GREEN, textStyle=TermColor.Style.BOLD)
+    cprinter.printInColor(message=status, textColor=TermColor.Color.WHITE, textBackground=TermColor.Background.BLUE, printNewLine=False)
     time.sleep(3)
-    cprinter.printInColor(message=fail, textColor=ColorPrinter.Color.YELLOW, textBackground=ColorPrinter.Background.RED, textStyle=ColorPrinter.Style.BLINK)
+    cprinter.printInColor(message=fail, textColor=TermColor.Color.YELLOW, textBackground=TermColor.Background.RED, textStyle=TermColor.Style.BLINK)
 
 if __name__ == '__main__':
     main()

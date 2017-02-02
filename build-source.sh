@@ -1,9 +1,20 @@
 #!/bin/bash
-COMMIT_MESSAGE=$1
-if [ $# -ne 1 ]
-then
-  echo "Usage: ./build-source.sh <commit message>"
+COMMIT=$1
+COMMIT_MESSAGE=$2
+PUSH_ORIGIN=$3
+
+function showUsage {
+  echo "Usage: ./build-source.sh <commit y|n> [ <commit message> <push y|n> ]"
   exit 1
+}
+if [ $# -lt 1 ]
+then
+ showUsage
+fi
+
+if [ ${COMMIT} == 'y' ] && [ $# -ne 3 ]
+then
+ showUsage
 fi
 
 echo Building...
@@ -25,8 +36,14 @@ cd ..
 git add dist/vx_pylegos-source.tar.gz
 ./refreshDocs.sh
 git add docs/*
-git commit -m '$COMMIT_MESSAGE'
-git push origin develop
-echo Finished and pushed to origin
+if [ ${COMMIT} == 'y' ]
+then
+  git commit -m '${COMMIT_MESSAGE}'
+  if [ ${PUSH_ORIGIN} == 'y' ]
+  then
+    git push origin develop
+  fi
+fi
+echo Finished 
 
 
