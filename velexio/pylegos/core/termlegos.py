@@ -132,6 +132,7 @@ class TermColor(object):
         WHITE = 47
 
     def colorMessage(self, message, textColor, textBackground=None, textStyle=None):
+        message = ' '+message+' '
         if os.getenv('ANSI_COLORS_DISABLED') is None:
             colorFormat = '\033[%dm%s'
             message = colorFormat % (textColor, message)
