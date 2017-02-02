@@ -67,15 +67,36 @@ class Database(object):
         """
         if self.Connection is None:
             self.logger.debug('Connecting to database with connect string ['+connectString+']')
+            connectDsn = None
+            sidStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+'
+            sidStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)'
+            serviceStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+'
+            serviceStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)'
+
+            if re.match(sidStyleRegexMatch, connectString):
+                host = re.match(sidStyleExtractRegex, connectString).group(1)
+                port = re.match(sidStyleExtractRegex, connectString).group(2)
+                sid = re.match(sidStyleExtractRegex, connectString).group(3)
+                connectDsn = cx_Oracle.makedsn(host=host, port=port, sid=sid)
+            elif re.match(serviceStyleRegexMatch, connectString):
+                host = re.match(serviceStyleExtractRegex, connectString).group(1)
+                port = re.match(serviceStyleExtractRegex, connectString).group(2)
+                serviceName = re.match(serviceStyleExtractRegex, connectString).group(3)
+                connectDsn = cx_Oracle.makedsn(host=host, port=port, service_name=serviceName)
+            else:
+                raise DatabaseConnectionException('The format of the connection string passed [] cannot be parsed')
+
             try:
                 if asSysdba:
                     self.logger.debug('Connecting as sysdba')
                     self.Connection = cx_Oracle.connect(user=username,
                                                         password=password,
-                                                        dsn=connectString,
+                                                        dsn=connectDsn,
                                                         mode=cx_Oracle.SYSDBA)
                 else:
-                    self.Connection = cx_Oracle.connect(username, password, connectString)
+                    self.Connection = cx_Oracle.connect(user=username,
+                                                        password=password,
+                                                        dsn=connectDsn)
             except cx_Oracle.DatabaseError as e:
                 raise DatabaseConnectionException(e)
         else:
@@ -380,8 +401,11 @@ class DatabaseConnectionException(Exception):
     exception will have the following attributes that can be used
     """
 
-    def __init__(self, cxExceptionObj):
-        self.message = str(cxExceptionObj)
+    def __init__(self, message=None, cxExceptionObj=None):
+        if message is not None:
+            self.message = message
+        else:
+            self.message = str(cxExceptionObj)
         self.ErrCode = self.message.split(':')[0]
         self.__defineMessage()
 

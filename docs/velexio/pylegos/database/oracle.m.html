@@ -1208,15 +1208,36 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting to database with connect string [&#39;</span><span class="o">+</span><span class="n">connectString</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="n">connectDsn</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">sidStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+&#39;</span>
+            <span class="n">sidStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)&#39;</span>
+            <span class="n">serviceStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+&#39;</span>
+            <span class="n">serviceStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)&#39;</span>
+
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">sid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">sid</span><span class="o">=</span><span class="n">sid</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">serviceName</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="n">serviceName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="s1">&#39;The format of the connection string passed [] cannot be parsed&#39;</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting as sysdba&#39;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
                                                         <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
+                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">,</span>
                                                         <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                                                        <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1521,8 +1542,11 @@ table {
 <span class="sd">    exception will have the following attributes that can be used</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 
@@ -1848,15 +1872,36 @@ table {
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting to database with connect string [&#39;</span><span class="o">+</span><span class="n">connectString</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+            <span class="n">connectDsn</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">sidStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+&#39;</span>
+            <span class="n">sidStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)&#39;</span>
+            <span class="n">serviceStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+&#39;</span>
+            <span class="n">serviceStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)&#39;</span>
+
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">sid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">sid</span><span class="o">=</span><span class="n">sid</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">serviceName</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="n">serviceName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="s1">&#39;The format of the connection string passed [] cannot be parsed&#39;</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting as sysdba&#39;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
                                                         <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
+                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">,</span>
                                                         <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                                                        <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+                                                        <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2191,15 +2236,34 @@ table {
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting to database with connect string [&#39;</span><span class="o">+</span><span class="n">connectString</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        <span class="n">connectDsn</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">sidStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+&#39;</span>
+        <span class="n">sidStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)&#39;</span>
+        <span class="n">serviceStyleRegexMatch</span> <span class="o">=</span> <span class="s1">&#39;[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+&#39;</span>
+        <span class="n">serviceStyleExtractRegex</span> <span class="o">=</span> <span class="s1">&#39;([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)&#39;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">sid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">sidStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">sid</span><span class="o">=</span><span class="n">sid</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleRegexMatch</span><span class="p">,</span> <span class="n">connectString</span><span class="p">):</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">serviceName</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">serviceStyleExtractRegex</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">connectDsn</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">makedsn</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="n">serviceName</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="s1">&#39;The format of the connection string passed [] cannot be parsed&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">asSysdba</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Connecting as sysdba&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
                                                     <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                                                    <span class="n">dsn</span><span class="o">=</span><span class="n">connectString</span><span class="p">,</span>
+                                                    <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">,</span>
                                                     <span class="n">mode</span><span class="o">=</span><span class="n">cx_Oracle</span><span class="o">.</span><span class="n">SYSDBA</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">connectString</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Connection</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                                                    <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+                                                    <span class="n">dsn</span><span class="o">=</span><span class="n">connectDsn</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">DatabaseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">DatabaseConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -2640,8 +2704,11 @@ exception will have the following attributes that can be used</p></div>
 <span class="sd">    exception will have the following attributes that can be used</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 
@@ -2687,9 +2754,8 @@ exception will have the following attributes that can be used</p></div>
 </div>
 
             </div>
-          <h3>Instance variables</h3>
             <div class="item">
-            <p id="oracle.DatabaseConnectionException.ErrCode" class="name">var <span class="ident">ErrCode</span></p>
+            <p id="oracle.DatabaseConnectionException.message" class="name">var <span class="ident">message</span></p>
             
 
             
@@ -2698,8 +2764,9 @@ exception will have the following attributes that can be used</p></div>
 </div>
 
             </div>
+          <h3>Instance variables</h3>
             <div class="item">
-            <p id="oracle.DatabaseConnectionException.message" class="name">var <span class="ident">message</span></p>
+            <p id="oracle.DatabaseConnectionException.ErrCode" class="name">var <span class="ident">ErrCode</span></p>
             
 
             
@@ -2712,7 +2779,7 @@ exception will have the following attributes that can be used</p></div>
             
   <div class="item">
     <div class="name def" id="oracle.DatabaseConnectionException.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, cxExceptionObj)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, message=None, cxExceptionObj=None)</p>
     </div>
     
 
@@ -2721,8 +2788,11 @@ exception will have the following attributes that can be used</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.DatabaseConnectionException.__init__', this);">Show source &equiv;</a></p>
   <div id="source-oracle.DatabaseConnectionException.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cxExceptionObj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cxExceptionObj</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ErrCode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__defineMessage</span><span class="p">()</span>
 </pre></div>
