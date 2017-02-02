@@ -282,8 +282,8 @@ class Database(object):
         return res
 
     def getProperty(self, property=DatabaseProperty.NAME):
-        query = "select " + property.value + " from v$database"
-        res = self.queryForSingleValue(query=query, columnName=property.value)
+        query = "select " + property + " from v$database"
+        res = self.queryForSingleValue(query=query, columnName=property)
         return res
 
 

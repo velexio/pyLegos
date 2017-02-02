@@ -1423,8 +1423,8 @@ table {
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">getProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">DatabaseProperty</span><span class="o">.</span><span class="n">NAME</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
 
@@ -2087,8 +2087,8 @@ table {
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">getProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">DatabaseProperty</span><span class="o">.</span><span class="n">NAME</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
@@ -2547,8 +2547,8 @@ or function, use the executePL subtroutine</p></div>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-oracle.Database.getProperty', this);">Show source &equiv;</a></p>
   <div id="source-oracle.Database.getProperty" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">DatabaseProperty</span><span class="o">.</span><span class="n">NAME</span><span class="p">):</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;select &quot;</span> <span class="o">+</span> <span class="nb">property</span> <span class="o">+</span> <span class="s2">&quot; from v$database&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryForSingleValue</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">columnName</span><span class="o">=</span><span class="nb">property</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
