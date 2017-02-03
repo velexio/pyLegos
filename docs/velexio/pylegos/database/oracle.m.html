@@ -1189,8 +1189,63 @@ table {
         <span class="n">NUMBER</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">NUMBER</span>
 
     <span class="k">class</span> <span class="nc">DatabaseProperty</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span>
-        <span class="n">DBID</span> <span class="o">=</span> <span class="s1">&#39;dbid&#39;</span>
+        <span class="n">DBID</span> <span class="o">=</span> <span class="s1">&#39;DBID&#39;</span>
+        <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;NAME&#39;</span>
+        <span class="n">CREATED</span> <span class="o">=</span> <span class="s1">&#39;CREATED&#39;</span>
+        <span class="n">RESETLOGS_CHANGE</span>  <span class="o">=</span> <span class="s1">&#39;RESETLOGS_CHANGE#&#39;</span>
+        <span class="n">RESETLOGS_TIME</span> <span class="o">=</span> <span class="s1">&#39;RESETLOGS_TIME&#39;</span>
+        <span class="n">PRIOR_RESETLOGS_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;PRIOR_RESETLOGS_CHANGE#&#39;</span>
+        <span class="n">PRIOR_RESETLOGS_TIME</span> <span class="o">=</span> <span class="s1">&#39;PRIOR_RESETLOGS_TIME&#39;</span>
+        <span class="n">LOG_MODE</span> <span class="o">=</span> <span class="s1">&#39;LOG_MODE&#39;</span>
+        <span class="n">CHECKPOINT_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;CHECKPOINT_CHANGE#&#39;</span>
+        <span class="n">ARCHIVE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVE_CHANGE#&#39;</span>
+        <span class="n">CONTROLFILE_TYPE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_TYPE&#39;</span>
+        <span class="n">CONTROLFILE_CREATED</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CREATED&#39;</span>
+        <span class="n">CONTROLFILE_SEQUENCE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_SEQUENCE#&#39;</span>
+        <span class="n">CONTROLFILE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CHANGE#&#39;</span>
+        <span class="n">CONTROLFILE_TIME</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_TIME&#39;</span>
+        <span class="n">OPEN_RESETLOGS</span> <span class="o">=</span> <span class="s1">&#39;OPEN_RESETLOGS&#39;</span>
+        <span class="n">VERSION_TIME</span> <span class="o">=</span> <span class="s1">&#39;VERSION_TIME&#39;</span>
+        <span class="n">OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;OPEN_MODE&#39;</span>
+        <span class="n">PROTECTION_MODE</span> <span class="o">=</span> <span class="s1">&#39;PROTECTION_MODE&#39;</span>
+        <span class="n">PROTECTION_LEVEL</span> <span class="o">=</span> <span class="s1">&#39;PROTECTION_LEVEL&#39;</span>
+        <span class="n">REMOTE_ARCHIVE</span> <span class="o">=</span> <span class="s1">&#39;REMOTE_ARCHIVE&#39;</span>
+        <span class="n">ACTIVATION</span> <span class="o">=</span> <span class="s1">&#39;ACTIVATION#&#39;</span>
+        <span class="n">SWITCHOVER</span> <span class="o">=</span> <span class="s1">&#39;SWITCHOVER#&#39;</span>
+        <span class="n">DATABASE_ROLE</span> <span class="o">=</span> <span class="s1">&#39;DATABASE_ROLE&#39;</span>
+        <span class="n">ARCHIVELOG_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVELOG_CHANGE#&#39;</span>
+        <span class="n">ARCHIVELOG_COMPRESSION</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVELOG_COMPRESSION&#39;</span>
+        <span class="n">SWITCHOVER_STATUS</span> <span class="o">=</span> <span class="s1">&#39;SWITCHOVER_STATUS&#39;</span>
+        <span class="n">DATAGUARD_BROKER</span> <span class="o">=</span> <span class="s1">&#39;DATAGUARD_BROKER&#39;</span>
+        <span class="n">GUARD_STATUS</span> <span class="o">=</span> <span class="s1">&#39;GUARD_STATUS&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_MIN</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_MIN&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_PK</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_PK&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_UI</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_UI&#39;</span>
+        <span class="n">FORCE_LOGGING</span> <span class="o">=</span> <span class="s1">&#39;FORCE_LOGGING&#39;</span>
+        <span class="n">PLATFORM_ID</span> <span class="o">=</span> <span class="s1">&#39;PLATFORM_ID&#39;</span>
+        <span class="n">PLATFORM_NAME</span> <span class="o">=</span> <span class="s1">&#39;PLATFORM_NAME&#39;</span>
+        <span class="n">RECOVERY_TARGET_INCARNATION</span> <span class="o">=</span> <span class="s1">&#39;RECOVERY_TARGET_INCARNATION#&#39;</span>
+        <span class="n">LAST_OPEN_INCARNATION</span> <span class="o">=</span> <span class="s1">&#39;LAST_OPEN_INCARNATION#&#39;</span>
+        <span class="n">CURRENT_SCN</span> <span class="o">=</span> <span class="s1">&#39;CURRENT_SCN&#39;</span>
+        <span class="n">FLASHBACK_ON</span> <span class="o">=</span> <span class="s1">&#39;FLASHBACK_ON&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_FK</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_FK&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_ALL</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_ALL&#39;</span>
+        <span class="n">DB_UNIQUE_NAME</span> <span class="o">=</span> <span class="s1">&#39;DB_UNIQUE_NAME&#39;</span>
+        <span class="n">STANDBY_BECAME_PRIMARY_SCN</span> <span class="o">=</span> <span class="s1">&#39;STANDBY_BECAME_PRIMARY_SCN&#39;</span>
+        <span class="n">FS_FAILOVER_STATUS</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_STATUS&#39;</span>
+        <span class="n">FS_FAILOVER_CURRENT_TARGET</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_CURRENT_TARGET&#39;</span>
+        <span class="n">FS_FAILOVER_THRESHOLD</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_THRESHOLD&#39;</span>
+        <span class="n">FS_FAILOVER_OBSERVER_PRESENT</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_OBSERVER_PRESENT&#39;</span>
+        <span class="n">FS_FAILOVER_OBSERVER_HOST</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_OBSERVER_HOST&#39;</span>
+        <span class="n">CONTROLFILE_CONVERTED</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CONVERTED&#39;</span>
+        <span class="n">PRIMARY_DB_UNIQUE_NAME</span> <span class="o">=</span> <span class="s1">&#39;PRIMARY_DB_UNIQUE_NAME&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_PL</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_PL&#39;</span>
+        <span class="n">MIN_REQUIRED_CAPTURE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;MIN_REQUIRED_CAPTURE_CHANGE#&#39;</span>
+        <span class="n">CDB</span> <span class="o">=</span> <span class="s1">&#39;CDB&#39;</span>
+        <span class="n">CON_ID</span> <span class="o">=</span> <span class="s1">&#39;CON_ID&#39;</span>
+        <span class="n">PENDING_ROLE_CHANGE_TASKS</span> <span class="o">=</span> <span class="s1">&#39;PENDING_ROLE_CHANGE_TASKS&#39;</span>
+        <span class="n">CON_DBID</span> <span class="o">=</span> <span class="s1">&#39;CON_DBID&#39;</span>
+        <span class="n">FORCE_FULL_DB_CACHING</span> <span class="o">=</span> <span class="s1">&#39;FORCE_FULL_DB_CACHING&#39;</span>
 
     <span class="k">class</span> <span class="nc">TablespaceContentType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
         <span class="n">Permanent</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1853,8 +1908,63 @@ table {
         <span class="n">NUMBER</span> <span class="o">=</span> <span class="n">cx_Oracle</span><span class="o">.</span><span class="n">NUMBER</span>
 
     <span class="k">class</span> <span class="nc">DatabaseProperty</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span>
-        <span class="n">DBID</span> <span class="o">=</span> <span class="s1">&#39;dbid&#39;</span>
+        <span class="n">DBID</span> <span class="o">=</span> <span class="s1">&#39;DBID&#39;</span>
+        <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;NAME&#39;</span>
+        <span class="n">CREATED</span> <span class="o">=</span> <span class="s1">&#39;CREATED&#39;</span>
+        <span class="n">RESETLOGS_CHANGE</span>  <span class="o">=</span> <span class="s1">&#39;RESETLOGS_CHANGE#&#39;</span>
+        <span class="n">RESETLOGS_TIME</span> <span class="o">=</span> <span class="s1">&#39;RESETLOGS_TIME&#39;</span>
+        <span class="n">PRIOR_RESETLOGS_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;PRIOR_RESETLOGS_CHANGE#&#39;</span>
+        <span class="n">PRIOR_RESETLOGS_TIME</span> <span class="o">=</span> <span class="s1">&#39;PRIOR_RESETLOGS_TIME&#39;</span>
+        <span class="n">LOG_MODE</span> <span class="o">=</span> <span class="s1">&#39;LOG_MODE&#39;</span>
+        <span class="n">CHECKPOINT_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;CHECKPOINT_CHANGE#&#39;</span>
+        <span class="n">ARCHIVE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVE_CHANGE#&#39;</span>
+        <span class="n">CONTROLFILE_TYPE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_TYPE&#39;</span>
+        <span class="n">CONTROLFILE_CREATED</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CREATED&#39;</span>
+        <span class="n">CONTROLFILE_SEQUENCE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_SEQUENCE#&#39;</span>
+        <span class="n">CONTROLFILE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CHANGE#&#39;</span>
+        <span class="n">CONTROLFILE_TIME</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_TIME&#39;</span>
+        <span class="n">OPEN_RESETLOGS</span> <span class="o">=</span> <span class="s1">&#39;OPEN_RESETLOGS&#39;</span>
+        <span class="n">VERSION_TIME</span> <span class="o">=</span> <span class="s1">&#39;VERSION_TIME&#39;</span>
+        <span class="n">OPEN_MODE</span> <span class="o">=</span> <span class="s1">&#39;OPEN_MODE&#39;</span>
+        <span class="n">PROTECTION_MODE</span> <span class="o">=</span> <span class="s1">&#39;PROTECTION_MODE&#39;</span>
+        <span class="n">PROTECTION_LEVEL</span> <span class="o">=</span> <span class="s1">&#39;PROTECTION_LEVEL&#39;</span>
+        <span class="n">REMOTE_ARCHIVE</span> <span class="o">=</span> <span class="s1">&#39;REMOTE_ARCHIVE&#39;</span>
+        <span class="n">ACTIVATION</span> <span class="o">=</span> <span class="s1">&#39;ACTIVATION#&#39;</span>
+        <span class="n">SWITCHOVER</span> <span class="o">=</span> <span class="s1">&#39;SWITCHOVER#&#39;</span>
+        <span class="n">DATABASE_ROLE</span> <span class="o">=</span> <span class="s1">&#39;DATABASE_ROLE&#39;</span>
+        <span class="n">ARCHIVELOG_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVELOG_CHANGE#&#39;</span>
+        <span class="n">ARCHIVELOG_COMPRESSION</span> <span class="o">=</span> <span class="s1">&#39;ARCHIVELOG_COMPRESSION&#39;</span>
+        <span class="n">SWITCHOVER_STATUS</span> <span class="o">=</span> <span class="s1">&#39;SWITCHOVER_STATUS&#39;</span>
+        <span class="n">DATAGUARD_BROKER</span> <span class="o">=</span> <span class="s1">&#39;DATAGUARD_BROKER&#39;</span>
+        <span class="n">GUARD_STATUS</span> <span class="o">=</span> <span class="s1">&#39;GUARD_STATUS&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_MIN</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_MIN&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_PK</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_PK&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_UI</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_UI&#39;</span>
+        <span class="n">FORCE_LOGGING</span> <span class="o">=</span> <span class="s1">&#39;FORCE_LOGGING&#39;</span>
+        <span class="n">PLATFORM_ID</span> <span class="o">=</span> <span class="s1">&#39;PLATFORM_ID&#39;</span>
+        <span class="n">PLATFORM_NAME</span> <span class="o">=</span> <span class="s1">&#39;PLATFORM_NAME&#39;</span>
+        <span class="n">RECOVERY_TARGET_INCARNATION</span> <span class="o">=</span> <span class="s1">&#39;RECOVERY_TARGET_INCARNATION#&#39;</span>
+        <span class="n">LAST_OPEN_INCARNATION</span> <span class="o">=</span> <span class="s1">&#39;LAST_OPEN_INCARNATION#&#39;</span>
+        <span class="n">CURRENT_SCN</span> <span class="o">=</span> <span class="s1">&#39;CURRENT_SCN&#39;</span>
+        <span class="n">FLASHBACK_ON</span> <span class="o">=</span> <span class="s1">&#39;FLASHBACK_ON&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_FK</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_FK&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_ALL</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_ALL&#39;</span>
+        <span class="n">DB_UNIQUE_NAME</span> <span class="o">=</span> <span class="s1">&#39;DB_UNIQUE_NAME&#39;</span>
+        <span class="n">STANDBY_BECAME_PRIMARY_SCN</span> <span class="o">=</span> <span class="s1">&#39;STANDBY_BECAME_PRIMARY_SCN&#39;</span>
+        <span class="n">FS_FAILOVER_STATUS</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_STATUS&#39;</span>
+        <span class="n">FS_FAILOVER_CURRENT_TARGET</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_CURRENT_TARGET&#39;</span>
+        <span class="n">FS_FAILOVER_THRESHOLD</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_THRESHOLD&#39;</span>
+        <span class="n">FS_FAILOVER_OBSERVER_PRESENT</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_OBSERVER_PRESENT&#39;</span>
+        <span class="n">FS_FAILOVER_OBSERVER_HOST</span> <span class="o">=</span> <span class="s1">&#39;FS_FAILOVER_OBSERVER_HOST&#39;</span>
+        <span class="n">CONTROLFILE_CONVERTED</span> <span class="o">=</span> <span class="s1">&#39;CONTROLFILE_CONVERTED&#39;</span>
+        <span class="n">PRIMARY_DB_UNIQUE_NAME</span> <span class="o">=</span> <span class="s1">&#39;PRIMARY_DB_UNIQUE_NAME&#39;</span>
+        <span class="n">SUPPLEMENTAL_LOG_DATA_PL</span> <span class="o">=</span> <span class="s1">&#39;SUPPLEMENTAL_LOG_DATA_PL&#39;</span>
+        <span class="n">MIN_REQUIRED_CAPTURE_CHANGE</span> <span class="o">=</span> <span class="s1">&#39;MIN_REQUIRED_CAPTURE_CHANGE#&#39;</span>
+        <span class="n">CDB</span> <span class="o">=</span> <span class="s1">&#39;CDB&#39;</span>
+        <span class="n">CON_ID</span> <span class="o">=</span> <span class="s1">&#39;CON_ID&#39;</span>
+        <span class="n">PENDING_ROLE_CHANGE_TASKS</span> <span class="o">=</span> <span class="s1">&#39;PENDING_ROLE_CHANGE_TASKS&#39;</span>
+        <span class="n">CON_DBID</span> <span class="o">=</span> <span class="s1">&#39;CON_DBID&#39;</span>
+        <span class="n">FORCE_FULL_DB_CACHING</span> <span class="o">=</span> <span class="s1">&#39;FORCE_FULL_DB_CACHING&#39;</span>
 
     <span class="k">class</span> <span class="nc">TablespaceContentType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
         <span class="n">Permanent</span> <span class="o">=</span> <span class="mi">1</span>
@@ -2537,7 +2647,7 @@ or function, use the executePL subtroutine</p></div>
             
   <div class="item">
     <div class="name def" id="oracle.Database.getProperty">
-    <p>def <span class="ident">getProperty</span>(</p><p>self, property=&#39;name&#39;)</p>
+    <p>def <span class="ident">getProperty</span>(</p><p>self, property=&#39;NAME&#39;)</p>
     </div>
     
 
