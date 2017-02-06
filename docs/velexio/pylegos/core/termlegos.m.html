@@ -1084,6 +1084,7 @@ table {
         
           
   <ul>
+    <li class="mono"><a href="#termlegos.TermUI.__init__">__init__</a></li>
     <li class="mono"><a href="#termlegos.TermUI.getUserInput">getUserInput</a></li>
   </ul>
 
@@ -1115,6 +1116,7 @@ table {
 <span class="kn">from</span> <span class="nn">progress.spinner</span> <span class="kn">import</span> <span class="n">MoonSpinner</span>
 <span class="kn">from</span> <span class="nn">progress.bar</span> <span class="kn">import</span> <span class="n">IncrementalBar</span>
 <span class="kn">from</span> <span class="nn">progress.bar</span> <span class="kn">import</span> <span class="n">Bar</span>
+<span class="kn">from</span> <span class="nn">velexio.pylegos.core.framework</span> <span class="kn">import</span> <span class="n">LogFactory</span>
 
 <span class="k">class</span> <span class="nc">SpinnerType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Used as a enum type of class, used to set the type of spinner to use</span>
@@ -1265,18 +1267,53 @@ table {
 
 
 <span class="k">class</span> <span class="nc">TermUI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to aide in UI operations at the console/terminal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will capture user input at the terminal.</span>
+<span class="sd">        :param promptMessage: The message to display to the user &lt;BR&gt;</span>
+<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">        :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
+<span class="sd">                              will be the value returned. Default: None</span>
+<span class="sd">        :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
+<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">        :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
+<span class="sd">                           sensitive data.  Default: False</span>
+<span class="sd">        :return: Users Input as String value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">promptMessage</span> <span class="o">+=</span> <span class="n">promptMessage</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
-                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
+                <span class="k">elif</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; [&#39;</span><span class="o">+</span><span class="n">defaultChoice</span><span class="o">+</span><span class="s1">&#39;]: &#39;</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
+                <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">secureMode</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">getpass</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">userInput</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1950,22 +1987,58 @@ Options are: Clock (default), Cicle, and classic</p></div>
       <p id="termlegos.TermUI" class="name">class <span class="ident">TermUI</span></p>
       
   
+    <div class="desc"><p>Class to aide in UI operations at the console/terminal</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.TermUI" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">TermUI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to aide in UI operations at the console/terminal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will capture user input at the terminal.</span>
+<span class="sd">        :param promptMessage: The message to display to the user &lt;BR&gt;</span>
+<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">        :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
+<span class="sd">                              will be the value returned. Default: None</span>
+<span class="sd">        :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
+<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">        :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
+<span class="sd">                           sensitive data.  Default: False</span>
+<span class="sd">        :return: Users Input as String value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">promptMessage</span> <span class="o">+=</span> <span class="n">promptMessage</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
-                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
+                <span class="k">elif</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; [&#39;</span><span class="o">+</span><span class="n">defaultChoice</span><span class="o">+</span><span class="s1">&#39;]: &#39;</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
+                <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">secureMode</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">getpass</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">userInput</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1978,29 +2051,100 @@ Options are: Clock (default), Cicle, and classic</p></div>
           <li><a href="#termlegos.TermUI">TermUI</a></li>
           <li>__builtin__.object</li>
           </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="termlegos.TermUI.logger" class="name">var <span class="ident">logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="termlegos.TermUI.getUserInput">
-    <p>def <span class="ident">getUserInput</span>(</p><p>self, promptMessage, validChoices=[], secureMode=False)</p>
+    <div class="name def" id="termlegos.TermUI.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
     </div>
     
 
     
   
   <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-termlegos.TermUI.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="termlegos.TermUI.getUserInput">
+    <p>def <span class="ident">getUserInput</span>(</p><p>self, promptMessage, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will capture user input at the terminal.
+:param promptMessage: The message to display to the user <BR>
+:param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []
+:param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this <br>
+                      will be the value returned. Default: None
+:param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value <br>
+                    that is not in the list of validChoices.  Helpful if you have many options. Default: False
+:param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other<br>
+                   sensitive data.  Default: False
+:return: Users Input as String value</p></div>
+  <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI.getUserInput', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.TermUI.getUserInput" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This will capture user input at the terminal.</span>
+<span class="sd">    :param promptMessage: The message to display to the user &lt;BR&gt;</span>
+<span class="sd">    :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">    :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
+<span class="sd">                          will be the value returned. Default: None</span>
+<span class="sd">    :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
+<span class="sd">                        that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">    :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
+<span class="sd">                       sensitive data.  Default: False</span>
+<span class="sd">    :return: Users Input as String value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">promptMessage</span> <span class="o">+=</span> <span class="n">promptMessage</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
-            <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span>
+            <span class="k">elif</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">displayMessage</span> <span class="o">=</span> <span class="n">promptMessage</span> <span class="o">+</span> <span class="s1">&#39; [&#39;</span><span class="o">+</span><span class="n">defaultChoice</span><span class="o">+</span><span class="s1">&#39;]: &#39;</span>
+            <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
+            <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">validChoices</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">userInput</span>
+        <span class="k">if</span> <span class="n">secureMode</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">getpass</span>
+            <span class="n">userInput</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">promptMessage</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span>
 </pre></div>
 
   </div>

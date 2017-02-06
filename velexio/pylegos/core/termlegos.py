@@ -6,6 +6,7 @@ from progress.spinner import PieSpinner
 from progress.spinner import MoonSpinner
 from progress.bar import IncrementalBar
 from progress.bar import Bar
+from velexio.pylegos.core.framework import LogFactory
 
 class SpinnerType(object):
     """ Used as a enum type of class, used to set the type of spinner to use
@@ -156,17 +157,52 @@ class TermColor(object):
 
 
 class TermUI(object):
+    """
+    Class to aide in UI operations at the console/terminal
+    """
 
-    def getUserInput(self, promptMessage, validChoices=[], secureMode=False):
+    def __init__(self):
+        self.logger = LogFactory().getLibLogger()
+
+    def getUserInput(self, promptMessage, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False):
+        """
+        This will capture user input at the terminal.
+        :param promptMessage: The message to display to the user <BR>
+        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []
+        :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this <br>
+                              will be the value returned. Default: None
+        :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value <br>
+                            that is not in the list of validChoices.  Helpful if you have many options. Default: False
+        :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other<br>
+                           sensitive data.  Default: False
+        :return: Users Input as String value
+        """
         validInput = False
         if len(validChoices) > 0:
             while not validInput:
-                if len(validChoices) <= 3:
-                    promptMessage += promptMessage.replace(':',str(validChoices))+': '
-                userInput = raw_input(promptMessage)
+                if len(validChoices) <= 3 and defaultChoice is None:
+                    displayMessage = promptMessage + ' '+str(validChoices)+': '
+                elif defaultChoice is not None:
+                    displayMessage = promptMessage + ' ['+defaultChoice+']: '
+                userInput = raw_input(displayMessage)
+                if len(userInput) == 0 and defaultChoice is not None:
+                    userInput = defaultChoice
+                if userInput in validChoices:
+                    validInput = True
+                else:
+                    if listChoices:
+                        self.logger.info('You must supply one of the following choices:')
+                        for c in validChoices:
+                            self.logger.info(str(c))
+                    else:
+                        self.logger.info('You must supply one of the following choices: '+str(validChoices))
         else:
-            userInput = raw_input(promptMessage)
+            if secureMode:
+                import getpass
+                userInput = getpass.getpass(promptMessage)
+            else:
+                userInput = raw_input(promptMessage)
 
-        return userInput
+        return str(userInput)
 
 
