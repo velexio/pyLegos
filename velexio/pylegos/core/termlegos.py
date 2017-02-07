@@ -164,18 +164,19 @@ class TermUI(object):
     def __init__(self):
         self.logger = LogFactory().getLibLogger()
 
-    def getUserInput(self, promptMessage, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False):
+    def getUserInput(self, promptMessage, caseSenstiveMatching=False, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False):
         """
         This will capture user input at the terminal.
         :param promptMessage: The message to display to the user <BR>
-        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []
+        :param caseSenstiveMatching: Optional. Boolean to indicate if the user input must match in case sensitive manner to validChoices. Default: False<br>
+        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []<br>
         :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this <br>
-                              will be the value returned. Default: None
+                              will be the value returned. Default: None<br>
         :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value <br>
-                            that is not in the list of validChoices.  Helpful if you have many options. Default: False
+                            that is not in the list of validChoices.  Helpful if you have many options. Default: False<br>
         :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other<br>
-                           sensitive data.  Default: False
-        :return: Users Input as String value
+                           sensitive data.  Default: False<br>
+        :return: Users Input as String value<br>
         """
         validInput = False
         if len(validChoices) > 0:
@@ -187,9 +188,13 @@ class TermUI(object):
                 userInput = raw_input(displayMessage)
                 if len(userInput) == 0 and defaultChoice is not None:
                     userInput = defaultChoice
-                if userInput in validChoices:
-                    validInput = True
+                if caseSenstiveMatching:
+                    if userInput in validChoices:
+                        validInput = True
                 else:
+                    if userInput.upper() in validChoices or userInput.lower() in validChoices:
+                        validInput = True
+                if not validInput:
                     if listChoices:
                         self.logger.info('You must supply one of the following choices:')
                         for c in validChoices:

@@ -1274,18 +1274,19 @@ table {
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">caseSenstiveMatching</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This will capture user input at the terminal.</span>
 <span class="sd">        :param promptMessage: The message to display to the user &lt;BR&gt;</span>
-<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">        :param caseSenstiveMatching: Optional. Boolean to indicate if the user input must match in case sensitive manner to validChoices. Default: False&lt;br&gt;</span>
+<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []&lt;br&gt;</span>
 <span class="sd">        :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
-<span class="sd">                              will be the value returned. Default: None</span>
+<span class="sd">                              will be the value returned. Default: None&lt;br&gt;</span>
 <span class="sd">        :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
-<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False&lt;br&gt;</span>
 <span class="sd">        :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
-<span class="sd">                           sensitive data.  Default: False</span>
-<span class="sd">        :return: Users Input as String value</span>
+<span class="sd">                           sensitive data.  Default: False&lt;br&gt;</span>
+<span class="sd">        :return: Users Input as String value&lt;br&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1297,9 +1298,13 @@ table {
                 <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
-                <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
-                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">if</span> <span class="n">caseSenstiveMatching</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                        <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">userInput</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span> <span class="ow">or</span> <span class="n">userInput</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                        <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
@@ -1999,18 +2004,19 @@ Options are: Clock (default), Cicle, and classic</p></div>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getLibLogger</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">caseSenstiveMatching</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This will capture user input at the terminal.</span>
 <span class="sd">        :param promptMessage: The message to display to the user &lt;BR&gt;</span>
-<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">        :param caseSenstiveMatching: Optional. Boolean to indicate if the user input must match in case sensitive manner to validChoices. Default: False&lt;br&gt;</span>
+<span class="sd">        :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []&lt;br&gt;</span>
 <span class="sd">        :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
-<span class="sd">                              will be the value returned. Default: None</span>
+<span class="sd">                              will be the value returned. Default: None&lt;br&gt;</span>
 <span class="sd">        :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
-<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">                            that is not in the list of validChoices.  Helpful if you have many options. Default: False&lt;br&gt;</span>
 <span class="sd">        :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
-<span class="sd">                           sensitive data.  Default: False</span>
-<span class="sd">        :return: Users Input as String value</span>
+<span class="sd">                           sensitive data.  Default: False&lt;br&gt;</span>
+<span class="sd">        :return: Users Input as String value&lt;br&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -2022,9 +2028,13 @@ Options are: Clock (default), Cicle, and classic</p></div>
                 <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
-                <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
-                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">if</span> <span class="n">caseSenstiveMatching</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                        <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">userInput</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span> <span class="ow">or</span> <span class="n">userInput</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                        <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
@@ -2087,7 +2097,7 @@ Options are: Clock (default), Cicle, and classic</p></div>
             
   <div class="item">
     <div class="name def" id="termlegos.TermUI.getUserInput">
-    <p>def <span class="ident">getUserInput</span>(</p><p>self, promptMessage, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False)</p>
+    <p>def <span class="ident">getUserInput</span>(</p><p>self, promptMessage, caseSenstiveMatching=False, validChoices=[], defaultChoice=None, listChoices=False, secureMode=False)</p>
     </div>
     
 
@@ -2095,29 +2105,31 @@ Options are: Clock (default), Cicle, and classic</p></div>
   
     <div class="desc"><p>This will capture user input at the terminal.
 :param promptMessage: The message to display to the user <BR>
-:param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []
+:param caseSenstiveMatching: Optional. Boolean to indicate if the user input must match in case sensitive manner to validChoices. Default: False<br>
+:param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []<br>
 :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this <br>
-                      will be the value returned. Default: None
+                      will be the value returned. Default: None<br>
 :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value <br>
-                    that is not in the list of validChoices.  Helpful if you have many options. Default: False
+                    that is not in the list of validChoices.  Helpful if you have many options. Default: False<br>
 :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other<br>
-                   sensitive data.  Default: False
-:return: Users Input as String value</p></div>
+                   sensitive data.  Default: False<br>
+:return: Users Input as String value<br></p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-termlegos.TermUI.getUserInput', this);">Show source &equiv;</a></p>
   <div id="source-termlegos.TermUI.getUserInput" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getUserInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">promptMessage</span><span class="p">,</span> <span class="n">caseSenstiveMatching</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">validChoices</span><span class="o">=</span><span class="p">[],</span> <span class="n">defaultChoice</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">listChoices</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">secureMode</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This will capture user input at the terminal.</span>
 <span class="sd">    :param promptMessage: The message to display to the user &lt;BR&gt;</span>
-<span class="sd">    :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []</span>
+<span class="sd">    :param caseSenstiveMatching: Optional. Boolean to indicate if the user input must match in case sensitive manner to validChoices. Default: False&lt;br&gt;</span>
+<span class="sd">    :param validChoices: Optional.  A list of valid choices that will be validated against user input. Default: EmptyList []&lt;br&gt;</span>
 <span class="sd">    :param defaultChoice: Optional. If there is a default value, supply this and if the user just hits enter, this &lt;br&gt;</span>
-<span class="sd">                          will be the value returned. Default: None</span>
+<span class="sd">                          will be the value returned. Default: None&lt;br&gt;</span>
 <span class="sd">    :param listChoices: Optional. Boolean value to indicate you would like each choice printed on one line if the user inputs a value &lt;br&gt;</span>
-<span class="sd">                        that is not in the list of validChoices.  Helpful if you have many options. Default: False</span>
+<span class="sd">                        that is not in the list of validChoices.  Helpful if you have many options. Default: False&lt;br&gt;</span>
 <span class="sd">    :param secureMode: Optional.  This will cause the input to not be echoed to the terminal.  Use this if gathering password or other&lt;br&gt;</span>
-<span class="sd">                       sensitive data.  Default: False</span>
-<span class="sd">    :return: Users Input as String value</span>
+<span class="sd">                       sensitive data.  Default: False&lt;br&gt;</span>
+<span class="sd">    :return: Users Input as String value&lt;br&gt;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">validInput</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validChoices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -2129,9 +2141,13 @@ Options are: Clock (default), Cicle, and classic</p></div>
             <span class="n">userInput</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">displayMessage</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">defaultChoice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">userInput</span> <span class="o">=</span> <span class="n">defaultChoice</span>
-            <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
-                <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">caseSenstiveMatching</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">userInput</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">userInput</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span> <span class="ow">or</span> <span class="n">userInput</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
+                    <span class="n">validInput</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">validInput</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">listChoices</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;You must supply one of the following choices:&#39;</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">validChoices</span><span class="p">:</span>
