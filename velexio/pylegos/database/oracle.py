@@ -238,7 +238,7 @@ class Database(object):
             self.logger.debug('Hit cx_oracle DatabaseError: '+str(e))
             raise DatabaseQueryException(e)
 
-    def getColumnMungedResultset(self, query, bindValues=[], colDelimiter='', secureLog=False):
+    def getColumnMungedResultset(self, query, bindValues=[], colDelimiter='|::|', secureLog=False):
         queryResult = self.getQueryResult(query=query, bindValues=bindValues, secureLog=secureLog)
         rsMeta = queryResult[0]
         resultSet = []
