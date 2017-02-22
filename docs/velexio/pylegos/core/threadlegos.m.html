@@ -1106,12 +1106,18 @@ table {
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Hit error: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">raise</span>
+
 
     <span class="k">def</span> <span class="nf">runAndShowProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobMap</span><span class="p">,</span> <span class="n">initMesg</span><span class="o">=</span><span class="s1">&#39;Initializing&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1200,12 +1206,18 @@ table {
         <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Hit error: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">raise</span>
+
 
     <span class="k">def</span> <span class="nf">runAndShowProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobMap</span><span class="p">,</span> <span class="n">initMesg</span><span class="o">=</span><span class="s1">&#39;Initializing&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1440,12 +1452,17 @@ This procedure will run the named function in a seperate thread so that async op
     <span class="sd">&#39;&#39;&#39;ToDo, check if thread name already exists, if so throw exception&#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">threadName</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__runThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">runFunc</span><span class="p">,</span> <span class="n">funcNamedParams</span><span class="p">,))</span>
-    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
-    <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">waitMessage</span><span class="p">,</span> <span class="n">spinnerType</span><span class="o">=</span><span class="n">spinnerType</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">unfinished_tasks</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">spinner</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">25</span><span class="p">)</span>
+        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Hit error: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">raise</span>
 </pre></div>
 
   </div>

@@ -33,12 +33,18 @@ class Thread(object):
         '''ToDo, check if thread name already exists, if so throw exception'''
         self.queue.put(item=threadName)
         t = threading.Thread(target=self.__runThread, args=(runFunc, funcNamedParams,))
-        t.start()
-        spinner = Spinner(message=waitMessage, spinnerType=spinnerType)
-        while self.queue.unfinished_tasks > 0:
-            spinner.spin()
-            time.sleep(.25)
-        spinner.stop()
+        try:
+            t.start()
+            spinner = Spinner(message=waitMessage, spinnerType=spinnerType)
+            while self.queue.unfinished_tasks > 0:
+                spinner.spin()
+                time.sleep(.25)
+            spinner.stop()
+        except Exception as e:
+            self.logger.debug('Hit error: '+str(e))
+            spinner.stop()
+            raise
+
 
     def runAndShowProgress(self, jobMap, initMesg='Initializing'):
         """
