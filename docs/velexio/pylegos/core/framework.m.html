@@ -2032,6 +2032,11 @@ table {
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">getAppLogFilename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logDir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AppBase</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="s1">&#39;logs&#39;</span>
+        <span class="k">return</span> <span class="n">logDir</span><span class="o">+</span><span class="n">PlatformProps</span><span class="o">.</span><span class="n">FilePathSeparator</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">AppName</span><span class="o">+</span><span class="s1">&#39;.log&#39;</span>
+
+
     <span class="k">def</span> <span class="nf">appendToLog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messageObj</span><span class="p">):</span>
         <span class="n">logUtil</span> <span class="o">=</span> <span class="n">LogUtil</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
         <span class="n">logUtil</span><span class="o">.</span><span class="n">appendToLog</span><span class="p">(</span><span class="n">messageObj</span><span class="o">=</span><span class="n">messageObj</span><span class="p">)</span>

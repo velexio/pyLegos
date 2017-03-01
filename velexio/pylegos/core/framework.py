@@ -816,6 +816,11 @@ class App(object):
         finally:
             f.close()
 
+    def getAppLogFilename(self):
+        logDir = self.AppBase+PlatformProps.FilePathSeparator+'logs'
+        return logDir+PlatformProps.FilePathSeparator+self.AppName+'.log'
+
+
     def appendToLog(self, messageObj):
         logUtil = LogUtil(logger=self.log)
         logUtil.appendToLog(messageObj=messageObj)

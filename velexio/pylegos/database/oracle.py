@@ -110,6 +110,37 @@ class Database(object):
         Permanent = 1
         Temporary = 2
 
+    def __buildConnectString(self, connectString):
+        connectDsn = None
+        sidStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+'
+        sidStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)'
+        serviceStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+'
+        serviceStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)'
+
+        if re.match(sidStyleRegexMatch, connectString):
+            host = re.match(sidStyleExtractRegex, connectString).group(1)
+            port = re.match(sidStyleExtractRegex, connectString).group(2)
+            sid = re.match(sidStyleExtractRegex, connectString).group(3)
+            connectDsn = cx_Oracle.makedsn(host=host, port=port, sid=sid)
+        elif re.match(serviceStyleRegexMatch, connectString):
+            host = re.match(serviceStyleExtractRegex, connectString).group(1)
+            port = re.match(serviceStyleExtractRegex, connectString).group(2)
+            serviceName = re.match(serviceStyleExtractRegex, connectString).group(3)
+            connectDsn = cx_Oracle.makedsn(host=host, port=port, service_name=serviceName)
+        else:
+            raise DatabaseConnectionException('The format of the connection string passed [] cannot be parsed')
+        return connectDsn
+
+    def sessionPool(self, username, password, connectString, min=5, max=50, increment=5):
+        connectDsn = self.__buildConnectString(connectString=connectString)
+        pool = cx_Oracle.SessionPool(user=username,
+                                     password=password,
+                                     database=connectDsn,
+                                     min=min,
+                                     max=max,
+                                     increment=increment)
+        return pool
+
     def connect(self, username, password, connectString, asSysdba=False):
         """
         This method will create a connection to the database. Before you can call any other method, a connection must be established
@@ -122,25 +153,7 @@ class Database(object):
         """
         if self.Connection is None:
             self.logger.debug('Connecting to database with connect string ['+connectString+']')
-            connectDsn = None
-            sidStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+:[a-zA-Z\d._#$]+'
-            sidStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+):([a-zA-Z0-9-_.]+)'
-            serviceStyleRegexMatch = '[a-zA-Z0-9-_.]+:\d+/[a-zA-Z\d._#$]+'
-            serviceStyleExtractRegex = '([a-zA-Z0-9-_.]+):(\d+)/([a-zA-Z0-9-_.]+)'
-
-            if re.match(sidStyleRegexMatch, connectString):
-                host = re.match(sidStyleExtractRegex, connectString).group(1)
-                port = re.match(sidStyleExtractRegex, connectString).group(2)
-                sid = re.match(sidStyleExtractRegex, connectString).group(3)
-                connectDsn = cx_Oracle.makedsn(host=host, port=port, sid=sid)
-            elif re.match(serviceStyleRegexMatch, connectString):
-                host = re.match(serviceStyleExtractRegex, connectString).group(1)
-                port = re.match(serviceStyleExtractRegex, connectString).group(2)
-                serviceName = re.match(serviceStyleExtractRegex, connectString).group(3)
-                connectDsn = cx_Oracle.makedsn(host=host, port=port, service_name=serviceName)
-            else:
-                raise DatabaseConnectionException('The format of the connection string passed [] cannot be parsed')
-
+            connectDsn = self.__buildConnectString(connectString=connectString)
             try:
                 if asSysdba:
                     self.logger.debug('Connecting as sysdba')
