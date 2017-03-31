@@ -38,7 +38,7 @@ git add dist/vx_pylegos-source.tar.gz
 git add docs/*
 if [ ${COMMIT} == 'y' ]
 then
-  git commit -m ${COMMIT_MESSAGE}
+  git commit -m "${COMMIT_MESSAGE}"
   if [ ${PUSH_ORIGIN} == 'y' ]
   then
     git push origin develop
