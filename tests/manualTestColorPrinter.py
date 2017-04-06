@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-from velexio.pylegos.core.termlegos import TermColor
+from velexio.pylegos.core.term import TermColor
 
 
 def main():

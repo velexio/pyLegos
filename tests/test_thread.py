@@ -1,6 +1,6 @@
 import time
 from unittest import TestCase
-from velexio.pylegos.core.threadlegos import Thread
+from velexio.pylegos.core.threading import Thread
 
 
 class TestThread(TestCase):

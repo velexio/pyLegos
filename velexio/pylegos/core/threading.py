@@ -3,9 +3,9 @@ import threading
 import time
 from Queue import Queue
 from velexio.pylegos.core.framework import LogFactory
-from velexio.pylegos.core.termlegos import Spinner
-from velexio.pylegos.core.termlegos import SpinnerType
-from velexio.pylegos.core.termlegos import ProgressBar
+from velexio.pylegos.core.term import Spinner
+from velexio.pylegos.core.term import SpinnerType
+from velexio.pylegos.core.term import ProgressBar
 
 
 class Thread(object):

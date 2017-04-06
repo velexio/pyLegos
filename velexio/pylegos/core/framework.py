@@ -9,10 +9,11 @@ import os
 import fcntl
 
 from collections import OrderedDict
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 from fnmatch import fnmatch
-from subprocess import check_output,CalledProcessError,STDOUT
+from subprocess import check_output, CalledProcessError, STDOUT
 from datetime import datetime
+
 
 class Singleton:
     """
@@ -51,6 +52,7 @@ class Singleton:
 
     def __instancecheck__(self, inst):
         return isinstance(inst, self._decorated)
+
 
 @Singleton
 class Inspector(object):
@@ -854,7 +856,7 @@ class QuoteMachine(object):
 
 
 class AppNotInitializedException(Exception):
-    def __int__(self,errorMessage='This feature cannot be used unless you have used the pylegos.app_legos.App.init() call at the start of your program'):
+    def __int__(self, errorMessage='This feature cannot be used unless you have used the pylegos.app_legos.App.init() call at the start of your program'):
         self.message = errorMessage
 
 
