@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
 
-from velexio.pylegos.core.class_legos import UnixOSHelper
-from velexio.pylegos.core.class_legos import OSRunException
+from src.velexio.pylegos.core import OSRunException
+from src.velexio.pylegos.core import UnixOSHelper
+
 
 def errorCatchTest():
     cmd='/tmp/foo/script.sh'

@@ -1,6 +1,8 @@
 from unittest import TestCase
 from unittest import main
-from velexio.pylegos.core.class_legos import Inspector
+
+from src.velexio.pylegos.core import Inspector
+
 
 #USE CASE 1:  Called from the different types of methods that can be contained inside a class
 class sut1(object):

@@ -1,5 +1,6 @@
-from unittest import TestCase,main
-from velexio.pylegos.core.framework import DictionaryUtil
+from unittest import TestCase
+
+from src.velexio.pylegos.core import DictionaryUtil
 
 
 # noinspection PyDictCreation

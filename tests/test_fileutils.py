@@ -1,5 +1,6 @@
 from unittest import TestCase
-from velexio.pylegos.core.framework import FileUtils
+
+from src.velexio.pylegos.core import FileUtils
 
 
 class TestFileUtils(TestCase):

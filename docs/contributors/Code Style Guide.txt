@@ -1,0 +1,14 @@
+This project strives to follow the Google Python Style Guide
+
+https://google.github.io/styleguide/pyguide.html
+
+
+Exceptions
+
+ 1. Naming
+   Class Variables  -->  CapWord.  This is easier to identify as a class variable as it follows the same convention
+                                   as for a class name.
+
+   Functions --> camelCase.  I hate functions with "_" as a separator eg get_caller_func.  Should be getCallerFunc like
+                             99% of all language convention.
+

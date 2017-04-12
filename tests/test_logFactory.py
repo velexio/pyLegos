@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest import main
-from velexio.pylegos import LogFactory
+
+from src.velexio.pylegos import LogFactory
 
 
 class TestLogFactory(TestCase):

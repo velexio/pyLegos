@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import time
 
-from velexio.pylegos.core.threading import Thread
+from src.velexio.pylegos.core import Thread
 
 def worker(sleepSec):
     time.sleep(sleepSec)
