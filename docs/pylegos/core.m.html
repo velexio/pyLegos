@@ -1,0 +1,5542 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>pylegos.core API documentation</title>
+    <meta name="description" content="" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#pylegos.core.STDOUT">STDOUT</a></li>
+  </ul>
+
+    </li>
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.App">App</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.App.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.App.appendToLog">appendToLog</a></li>
+    <li class="mono"><a href="#pylegos.core.App.getAppBase">getAppBase</a></li>
+    <li class="mono"><a href="#pylegos.core.App.getAppLogFilename">getAppLogFilename</a></li>
+    <li class="mono"><a href="#pylegos.core.App.getAppName">getAppName</a></li>
+    <li class="mono"><a href="#pylegos.core.App.getAppVersion">getAppVersion</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.AppNotInitializedException">AppNotInitializedException</a></span>
+        
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.ConfigManager">ConfigManager</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.getConfigMap">getConfigMap</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.getKeys">getKeys</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.getValue">getValue</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.save">save</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.setValue">setValue</a></li>
+    <li class="mono"><a href="#pylegos.core.ConfigManager.writeConfigMap">writeConfigMap</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.DeprecationUtil">DeprecationUtil</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.DeprecationUtil.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.DeprecationUtil.deprecate">deprecate</a></li>
+    <li class="mono"><a href="#pylegos.core.DeprecationUtil.initFile">initFile</a></li>
+    <li class="mono"><a href="#pylegos.core.DeprecationUtil.printUsage">printUsage</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.DictionaryUtil">DictionaryUtil</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.DictionaryUtil.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.DictionaryUtil.formatToString">formatToString</a></li>
+    <li class="mono"><a href="#pylegos.core.DictionaryUtil.toFormattedString">toFormattedString</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.ExceptionHelper">ExceptionHelper</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.ExceptionHelper.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.ExceptionHelper.getOffender">getOffender</a></li>
+    <li class="mono"><a href="#pylegos.core.ExceptionHelper.handleError">handleError</a></li>
+    <li class="mono"><a href="#pylegos.core.ExceptionHelper.handleInputError">handleInputError</a></li>
+    <li class="mono"><a href="#pylegos.core.ExceptionHelper.printSimpleStacktrace">printSimpleStacktrace</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.FileUtils">FileUtils</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.FileUtils.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.copyFile">copyFile</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.createDirectory">createDirectory</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.deleteFiles">deleteFiles</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.dirExists">dirExists</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.dirMatchExist">dirMatchExist</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.fileExists">fileExists</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.fileMatchExist">fileMatchExist</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.getAppBase">getAppBase</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.getDirMatches">getDirMatches</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.getFileMatches">getFileMatches</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.getParentDir">getParentDir</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.removeDirMatch">removeDirMatch</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.removeDirectory">removeDirectory</a></li>
+    <li class="mono"><a href="#pylegos.core.FileUtils.touchFile">touchFile</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.Inspector">Inspector</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.Inspector.getCallerFQN">getCallerFQN</a></li>
+    <li class="mono"><a href="#pylegos.core.Inspector.getCallerFilePath">getCallerFilePath</a></li>
+    <li class="mono"><a href="#pylegos.core.Inspector.getCallerFunc">getCallerFunc</a></li>
+    <li class="mono"><a href="#pylegos.core.Inspector.getCallerMod">getCallerMod</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.LogFactory">LogFactory</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.LogFactory.changeLoggingLevel">changeLoggingLevel</a></li>
+    <li class="mono"><a href="#pylegos.core.LogFactory.getConsoleLogger">getConsoleLogger</a></li>
+    <li class="mono"><a href="#pylegos.core.LogFactory.getFileLogger">getFileLogger</a></li>
+    <li class="mono"><a href="#pylegos.core.LogFactory.getLibLogger">getLibLogger</a></li>
+    <li class="mono"><a href="#pylegos.core.LogFactory.getLogger">getLogger</a></li>
+    <li class="mono"><a href="#pylegos.core.LogFactory.getTimedRotateFileLogger">getTimedRotateFileLogger</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.LogUtil">LogUtil</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.LogUtil.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.LogUtil.appendToLog">appendToLog</a></li>
+    <li class="mono"><a href="#pylegos.core.LogUtil.getLogfileList">getLogfileList</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.OSRunException">OSRunException</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.OSRunException.__init__">__init__</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.PlatformProps">PlatformProps</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.PlatformProps.getPythonVersion">getPythonVersion</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.PyLegosFrameworkException">PyLegosFrameworkException</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.PyLegosFrameworkException.__init__">__init__</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.QuoteMachine">QuoteMachine</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.QuoteMachine.getErrorMessage">getErrorMessage</a></li>
+    <li class="mono"><a href="#pylegos.core.QuoteMachine.getFinishSuccessMessage">getFinishSuccessMessage</a></li>
+    <li class="mono"><a href="#pylegos.core.QuoteMachine.getInvalidInputMessage">getInvalidInputMessage</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.Singleton">Singleton</a></span>
+        
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#pylegos.core.UnixOSHelper">UnixOSHelper</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.__init__">__init__</a></li>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.checkFile4Errors">checkFile4Errors</a></li>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.getHostname">getHostname</a></li>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.getOSName">getOSName</a></li>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.getOSVersion">getOSVersion</a></li>
+    <li class="mono"><a href="#pylegos.core.UnixOSHelper.run">run</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">pylegos.core</span> module</h1>
+  
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core" class="source">
+    <pre><code>import inspect
+import logging
+import platform
+import traceback
+import random
+import sys
+import os
+import fcntl
+import shutil
+import json
+
+from ast import literal_eval
+from collections import OrderedDict
+from configparser import RawConfigParser
+from fnmatch import fnmatch
+from subprocess import check_output, CalledProcessError, STDOUT
+from datetime import datetime
+
+
+class Singleton(object):
+    __instance = None
+
+    def __new__(cls):
+        if Singleton.__instance is None:
+            Singleton.__instance = object.__new__(cls)
+        return Singleton.__instance
+
+
+class DeprecationUtil:
+
+    def __init__(self):
+        self.logger = LogFactory().getLibLogger()
+
+    @staticmethod
+    def initFile():
+        fsep = os.path.sep
+        datFile = open(FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat', 'w')
+        map = {'DEPRECATED_METHODS': {'TestClass': {'TIMES_CALLED': 1,
+                                                    'LAST_CALLED': str(datetime.now())}
+                                      }
+               }
+        json.dump(map, datFile, indent=4)
+        #datFile.write('\n')
+        datFile.close()
+
+    @staticmethod
+    def __logUsage(className, depMethodName):
+        fsep = os.path.sep
+        datFilename = FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat'
+        datFile = open(datFilename, 'r')
+        frameWorkUsage = json.load(datFile)
+        datFile.close()
+        methodUsage = frameWorkUsage['DEPRECATED_METHODS']
+        keyName = className+'.'+depMethodName
+        try:
+            usageMap = methodUsage[keyName]
+            usageMap['TIMES_CALLED'] += 1
+            usageMap['LAST_CALLED'] = str(datetime.now())
+            methodUsage[keyName] = usageMap
+        except KeyError:
+            usageMap = {'TIMES_CALLED': 1,
+                        'LAST_CALLED': str(datetime.now())}
+            methodUsage[keyName] = usageMap
+
+        frameWorkUsage['DEPRECATED_METHODS'] = methodUsage
+        datFile = open(datFilename, 'w')
+        json.dump(frameWorkUsage, datFile, indent=4)
+        datFile.close()
+
+    def deprecate(self, className, methodName, newMethodName):
+        self.logger.warning('Called deprecated method ['+className+'.'+methodName+']. Replace with ['+className+'.'+newMethodName+']')
+        self.__logUsage(className, methodName)
+
+    @staticmethod
+    def printUsage():
+        fsep = os.path.sep
+        datFilename = FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat'
+        datFile = open(datFilename, 'r')
+        frameWorkUsage = json.load(datFile)
+        datFile.close()
+        methodUsage = frameWorkUsage['DEPRECATED_METHODS']
+        print(json.dumps(methodUsage, indent=4))
+
+
+class Inspector(object):
+
+    def getCallerFilePath(self, callLevel=2):
+        return inspect.stack()[callLevel][1]
+
+
+    def getCallerMod(self, callLevel=2):
+        fileName = inspect.stack()[callLevel][1]
+        modName = inspect.getmodulename(fileName)
+        return modName
+
+
+    def getCallerFunc(self, callLevel=2):
+        iStack = inspect.stack()
+        func = str(inspect.stack()[callLevel][3]).strip("'")
+        return func
+
+
+    '''
+    def getCallerClass(self, callLevel=2):
+        iStack = inspect.stack()
+        callingClass = None
+        fullClassName = None
+        try:
+            fullClassName = str(inspect.stack()[callLevel][0].f_locals["self"].__class__)
+        except KeyError:
+            try:
+                fullClassName = str(inspect.stack()[callLevel][0].f_locals["cls"])
+            except KeyError:
+                pass
+
+        callingClass = re.match(r"(<class ')([\w.]+)\.([\w]+)('>)", fullClassName).group(3)
+        return callingClass
+     '''
+
+
+    def getCallerFQN(self, callLevel=2):
+        ''' Function to get the FQN of caller (FQN = module.class.function or module.function)
+
+        :return: The name of the calling function
+        '''
+
+        moduleName = str(self.getCallerMod(callLevel=callLevel + 1)) + '.'
+        # className = str(str(self.getCallerClass(callLevel=callLevel + 1)) + '.').replace("None.", '')
+        funcName = self.getCallerFunc(callLevel=callLevel + 1)
+
+        # caller = moduleName + className + funcName
+        caller = moduleName+funcName
+        return caller
+
+
+class DictionaryUtil(object):
+
+    def __init__(self):
+        self.KeyLevel = 0
+        self.RootKey = None
+        self.ParentKey = None
+        self.PrevParent = None
+
+    def toFormattedString(self, dictObj):
+        return RuntimeError('Not yet implemented')
+        '''
+        formattedString=''
+        for k,v in dictObj.iteritems():
+            if self.KeyLevel == 0:
+                self.RootKey = str(k)
+            else:
+                self.KeyLevel += 1
+            formattedString += ('\t' * self.KeyLevel)+str(k)#+' : '
+            if type(v) is dict:
+                formattedString += ' :\n'
+                #formattedString += '\n'+('\t' * self.KeyLevel)
+                formattedString += self.toFormattedString(dictObj=v)
+            else:
+                #formattedString += str(v)+'\n'+('\t'*self.KeyLevel)
+                formattedString += ' = '+str(v)+'\n'
+            if self.RootKey == str(k):
+                self.KeyLevel = 0
+                # formattedString = formattedString[:len(formattedString)-1]
+        return formattedString
+        '''
+
+    def formatToString(self, dictObj):
+        return RuntimeError('Not yet implemented')
+        '''
+        formattedString = ''
+        for k,v in dictObj.iteritems():
+            if self.ParentKey is None:
+                formattedString = str(k)
+            else:
+                formattedString += ('\t' * self.KeyLevel)+str(k)
+            if type(v) is dict:
+                self.PrevParent = self.ParentKey
+                self.ParentKey = str(k)
+                self.KeyLevel += 1
+                formattedString += ' :\n'
+                formattedString += self.formatToString(dictObj=v)
+            else:
+                formattedString += ' = '+str(v)+'\n'
+            if self.ParentKey == str(k):
+                self.KeyLevel -= 1
+
+        return formattedString
+        '''
+
+
+class LogUtil(object):
+
+    Logger = None
+
+    def __init__(self, logger):
+        self.Logger = logger
+
+    def getLogfileList(self):
+        filelist = []
+        for h in self.Logger.handlers:
+            if type(h) is logging.FileHandler:
+                filelist.append(h.baseFilename)
+        return filelist
+
+
+    def appendToLog(self, messageObj):
+        headerLine = ('*'*120)+'\n'
+        footerLine = ('-'*120)+'\n\n'
+        logTimeMessage = '| '+str(datetime.now())+' |\n'
+        logHeader = '\n'+headerLine+logTimeMessage+headerLine
+        logMessage = str(messageObj)
+        '''
+        if type(messageObj) is str or type(messageObj) is int:
+            logMessage = str(messageObj)
+        elif type(messageObj) is dict:
+            # Need to format , for now until DictionaryUtil is complete, just convert to string
+            logMessage = str(messageObj)
+        elif type(messageObj) is list:
+            print('process list')
+        '''
+        for fn in self.getLogfileList():
+            lf = open(fn,'a')
+            fcntl.flock(lf, fcntl.LOCK_EX)
+            lf.write(logHeader)
+            lf.write(logMessage+'\n')
+            lf.write(footerLine)
+            lf.flush()
+            fcntl.flock(lf, fcntl.LOCK_UN)
+            lf.close()
+
+
+class LogFactory(object):
+    """ Singleton class that will return a logger with the name of the caller
+
+    This class will retrieve a number of different loggers for you.  It can also be used safely
+    by library type classes that want to log safely. Simply, if the calling application to a
+    library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+    can call the "addNullHandler" routine to prevent this as it will create a "/cli/null" type logger so
+    the library logging statements run without a logger.
+    """
+
+    CodeInspector = Inspector()
+
+    class LogLevel(object):
+
+        CRITICAL = logging.CRITICAL
+        ERROR = logging.ERROR
+        WARNING = logging.WARNING
+        INFO = logging.INFO
+        DEBUG = logging.DEBUG
+
+        def convert(self, levelString):
+            if levelString.upper() == 'DEBUG':
+                return self.DEBUG
+            elif levelString.upper() == 'INFO':
+                return self.INFO
+            elif levelString.upper() == 'WARNING':
+                return self.WARNING
+            elif levelString.upper() == 'ERROR':
+                return self.ERROR
+            elif levelString.upper() == 'CRITICAL':
+                return self.CRITICAL
+            else:
+                return self.DEBUG
+
+    def __getDefaultFileFormatter(self):
+        return logging.Formatter('%(levelname)-8s|%(name)-15s|%(lineno)-3d|%(asctime)s.%(msecs)-3d| %(message)s', '%m.%d.%y %H:%M:%S')
+
+    def __getDefaultConsoleFormatter(self):
+        return logging.Formatter('::| %(message)s')
+
+    def __getBaseLogger(self, logLevel=LogLevel.DEBUG):
+        logger = logging.getLogger()
+        logger.setLevel(logLevel)
+        return logger
+
+    def __setHandleFormat(self, logHandler, formatterString=None, defaultFunc=None):
+        if formatterString is None:
+            handleFormat = defaultFunc
+        else:
+            handleFormat = logging.Formatter(formatterString)
+        logHandler.setFormatter(handleFormat)
+        return logHandler
+
+    def __addConsoleHandler(self,logger, formatString=None):
+        defaultFormatFunc = self.__getDefaultConsoleFormatter()
+        consoleHandler = logging.StreamHandler()
+        consoleHandler.setLevel(level=logging.INFO)
+        self.__setHandleFormat(logHandler=consoleHandler, formatterString=formatString, defaultFunc=defaultFormatFunc)
+        logger.addHandler(consoleHandler)
+        return logger
+
+    def __addTimeRotatedFileHandler(self, logger, logFile, logLevel=LogLevel.DEBUG, formatString=None, whenRotate='D', interval=1, keepCount=10):
+        h = logging
+        handler = logging.handlers.TimedRotatingFileHandler(filename=logFile,
+                                                                  when=whenRotate,
+                                                                  interval=interval,
+                                                                  backupCount=keepCount)
+        self.__setHandleFormat(logHandler=handler, formatterString=formatString, defaultFunc=self.__getDefaultFileFormatter())
+        logger.setLevel(level=logLevel)
+        logger.addHandler(handler)
+        return logger
+
+    def __addFileHandler(self,logger,logFile, logLevel=LogLevel.DEBUG, formatString=None):
+        fileHandler = logging.FileHandler(logFile)
+        fileHandler.setLevel(level=logLevel)
+        self.__setHandleFormat(logHandler=fileHandler, formatterString=formatString, defaultFunc=self.__getDefaultFileFormatter())
+        logger.addHandler(fileHandler)
+        return logger
+
+    def getLibLogger(self):
+        return logging.getLogger(self.CodeInspector.getCallerMod())
+
+    def getLogger(self, appName, appBase, logLevel=None):
+        '''
+        This class is meant to initialize a set of default loggers for an application.
+        :param logFile:
+        :param logLevel:
+        :return:
+        '''
+        calledLogLevel = logLevel
+        appConfig = ConfigManager().getConfigMap(appBase + PlatformProps.FilePathSep + 'conf' + PlatformProps.FilePathSep + appName + '.ini')
+        logFilename = appBase + PlatformProps.FilePathSep + 'logs' + PlatformProps.FilePathSep + appName + '.log'
+        if calledLogLevel is None:
+            configValue = appConfig['LOGGING']['LogLevel']
+            calledLogLevel = self.LogLevel().convert(configValue)
+        logger = self.__getBaseLogger(logLevel=calledLogLevel)
+        logger = self.__addConsoleHandler(logger=logger)
+        # logger = self.__addTimeRotatedFileHandler(logger=logger, logFile=logFilename, logLevel=logLevel)
+        logger = self.__addFileHandler(logger=logger, logFile=logFilename)
+        appLogger = logging.getLogger(appName)
+        appLogger.setLevel(calledLogLevel)
+        return appLogger
+
+    def changeLoggingLevel(self,logLevel,logger=None):
+        '''
+        This module is for changing the logging level on the fly.  For example, changing the logging level
+        via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger
+        will be looked up dynamically.
+        :param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel
+        :param logger: The logger object that the program is using to log.
+        :return: None
+        '''
+        modLogger = logger
+        if logger is None:
+            callerMod = self.Inspector.getCallerMod()
+            modLogger = logging.getLogger(callerMod)
+
+        handlers = modLogger.handlers
+
+        for h in handlers:
+            h.setLevel(level=logLevel)
+
+    def getConsoleLogger(self,loggerName=None,logLevel=LogLevel.INFO,formatString=None):
+        '''
+        This will return a logger for logging messages to the console.
+        :param logLevel:
+        :param formatString:
+        :return:
+        '''
+        logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+        logger = self.__addConsoleHandler(logger=logger,logLevel=logLevel,formatString=formatString)
+        return logger
+
+    def getFileLogger(self, logFile=None, loggerName=None, logLevel=LogLevel.DEBUG, formatString=None):
+        ''' Use this routine to get a standard file logger, non-rotating
+
+        :param logFile: the path the the logfile where the logger will write
+        :param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO
+        :return: python standard logging object
+        '''
+        logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+        logger = self.__addFileHandler(logger=logger,logFile=logFile,logLevel=logLevel,formatString=formatString)
+        return logger
+
+    def getTimedRotateFileLogger(self,loggerName=None,logFile=None,logLevel=LogLevel.DEBUG,formatString=None,whenRotate='D',interval=1,keepCount=10):
+        '''
+        This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate
+        the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.
+        Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python
+        logging library documentation.
+
+        :param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.
+        :param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()
+        :param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO
+        :param formatString: Custom format string.  If left to default value of None, the framework default will be used.
+        :param whenRotate: When should rotation occur.  Default is 'D' for daily.
+        :param interval: How often to rotate.  Default is 1.
+        :param keepCount: How many files to keep after file is rotated.  Default is 10
+        :return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.
+        '''
+        logger = self.__getBaseLogger(logLevel=logLevel,loggerName=loggerName)
+        logger = self.__addTimeRotatedFileHandler(logger=logger,
+                                                  logFile=logFile,
+                                                  logLevel=logLevel,
+                                                  formatString=formatString,
+                                                  whenRotate=whenRotate,
+                                                  interval=interval,
+                                                  keepCount=keepCount)
+        return logger
+
+
+class FileUtils(object):
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+        self.Inspector = Inspector()
+
+    @staticmethod
+    def getParentDir(filePath):
+        return os.path.dirname(os.path.realpath(filePath))
+
+    def getAppBase(self):
+        callingFile = self.Inspector.getCallerFilePath()
+        basePath = os.path.dirname(self.getParentDir(filePath=callingFile))
+        return basePath
+
+    @staticmethod
+    def dirExists(directoryPath):
+        '''
+        Use to check if a directory exists.  This will only return true
+        if it exists and is also a directory (as opposed to a file)
+        :param directoryPath: The full path to the directory
+        :return: Boolean (True|False)
+        '''
+        return os.path.isdir(directoryPath)
+
+    @staticmethod
+    def fileExists(filePath):
+        """
+        Used to check if file exists.  It will return true if the file
+        exists and it is a file, not a directory
+        :param filePath: Full path to the file
+        :return: Boolean (True|False)
+        """
+        return os.path.isfile(filePath)
+
+    def fileMatchExist(self, baseDir, pattern, strictCheck=True):
+        """
+        Use to check if a file exists based on a pattern. The pattern that is used is
+        simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).
+        It will only return True if the file is a file, not a directory.  If do not care if
+        it is a file or directory, set optional parameter useStrictCheck to False
+        :param baseDir: The directory to look in
+        :param pattern: The pattern to use for match
+        :param strictCheck: Indicates if it should make sure the match is a file Default is True
+        :return: Boolean
+        """
+        matchExists = False
+        fileMatches = []
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                fileMatches.append(file)
+
+        if strictCheck:
+            for match in fileMatches:
+                if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                    matchExists = True
+                    break
+        else:
+            if len(fileMatches) > 0:
+                matchExists = True
+
+        return matchExists
+
+    def dirMatchExist(self, baseDir, pattern, strictCheck=True):
+        """
+        Used to check to see if a directory that matches a pattern exists.  The pattern is
+        a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)
+        It will only return true if the object that matches is a directory, not a file.  If you
+        do not care if match is a directory, but also want to return if a file is found that matches
+        the pattern, set the optional parameter strict check to False.
+        :param baseDir:  The base directory to look in
+        :param pattern: The unix style pattern to check
+        :param strictCheck: Indicates if only a directory will be considered a match. Default is True
+        :return: Boolean
+        """
+        matchFound = False
+        matchedDirs = []
+        for dir in os.listdir(baseDir):
+            if fnmatch(dir, pattern):
+                matchedDirs.append(dir)
+
+        if strictCheck:
+            for match in matchedDirs:
+                if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                    matchFound = True
+                    break
+        else:
+            if len(matchedDirs) > 0:
+                matchFound = True
+
+        return matchFound
+
+    def getFileMatches(self, baseDir, pattern, strictCheck=True):
+        """
+        This will return true if a list of files that match the pattern.  If there are
+        no matching files, then an empty list is returned
+        :param baseDir: The directory to search in.
+        :param pattern: Pattern to search for (ie conf*)
+        :param strictCheck: Indicates to only include file objects (not directories) that match
+        :return: List<String>
+        """
+        matches = []
+        fileMatches = []
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                matches.append(file)
+        if strictCheck:
+            for match in matches:
+                if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                    fileMatches.append(match)
+        else:
+            fileMatches = matches
+
+        return fileMatches
+
+    @staticmethod
+    def deleteFiles(baseDir, pattern):
+        sep = PlatformProps.FilePathSep
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                os.remove(baseDir+sep+file)
+
+    def getDirMatches(self, baseDir, pattern, strictCheck=True):
+        """
+        This will return true if a list of directories that match the pattern.  If there are
+        no matching directories, then an empty list is returned
+        :param baseDir: The directory to search in.
+        :param pattern: Pattern to search for (ie conf*)
+        :param strictCheck: Indicates to only include directory objects (not files) that match
+        :return: List<String>
+        """
+        matches = []
+        dirsFound = []
+        for dir in os.listdir(baseDir):
+            if fnmatch(dir, pattern):
+                matches.append(dir)
+        if strictCheck:
+            for match in matches:
+                if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                    dirsFound.append(match)
+        else:
+            dirsFound = matches
+
+        return dirsFound
+
+    @staticmethod
+    def createDirectory(dirPath):
+        """
+        Simple wrapper to os.mkdir
+        :param dirPath: Full path of directory to create
+        :return: None
+        """
+        os.mkdir(dirPath)
+
+    @staticmethod
+    def removeDirectory(dirPath):
+        os.rmdir(dirPath)
+
+    def removeDirMatch(self, dirPath, pattern):
+        dirMatches = []
+        for d in os.listdir(dirPath):
+            if fnmatch(d, pattern):
+                dirMatches.append(d)
+
+        for match in dirMatches:
+            self.removeDirectory(dirPath=dirPath + PlatformProps.FilePathSep + match)
+
+    @staticmethod
+    def copyFile(sourceFile, targetFile):
+        shutil.copy2(sourceFile, targetFile)
+
+    @staticmethod
+    def touchFile(filename):
+        open(filename, 'a').close()
+
+
+class UnixOSHelper(object):
+    Logger = None
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+
+    def getHostname(self,shortName=False):
+        hostname = platform.node()
+        if shortName:
+            hostname=platform.node().split('.')[0]
+        return hostname
+
+    def getOSName(self):
+        osName=None
+        systemName = platform.system()
+        if systemName == 'Linux':
+            osName = platform.linux_distribution()[0]
+        elif systemName == 'Darwin':
+            osName = 'MacOS'
+        return osName
+
+    def getOSVersion(self):
+        osName = self.getOSName()
+        osVer = None
+        if osName == 'Linux':
+            osVer = platform.linux_distribution()[1]
+        elif osName == 'Darwin':
+            osVer = platform.mac_ver()[0]
+        return osVer
+
+    def checkFile4Errors(self, filename, errorMatchPattern='ERROR:'):
+        self.Logger.debug('Checking output file ['+filename+'] for error match ['+errorMatchPattern+']')
+        errLines = self.run('egrep '+errorMatchPattern+' '+filename)
+        return errLines
+
+    def run(self, command, useReturnCode=True, simMode=False, secureLog=False):
+        """
+        Use this to run an os command.  If the command itself is secure in nature or it could
+        output data that is considered secure (i.e. passwords), make sure to turn the secureLog
+        parameter to True.
+        :param command: The full command that is to be run
+        :param useReturnCode: Boolean flag to indicate if non-zero return value of command dictates failure
+        :param simMode: Boolean flag to only simulate the run.
+        :param secureLog: Boolean flag to turn logging off for any command references or logging output
+        :return: None
+        """
+        if not secureLog:
+            self.Logger.debug('Running command: ' + command)
+        if not simMode:
+            try:
+                stdout = check_output(command, stderr=STDOUT)
+                if not secureLog:
+                    self.Logger.debug('Returned: ' + str(stdout))
+                return stdout
+            except CalledProcessError as e:
+                self.Logger.error('Caught a non-zero return from running command')
+                if not secureLog:
+                    self.Logger.debug('Command was ['+command+']')
+                if useReturnCode:
+                    raise OSRunException(command=command, stderr=e.output)
+            except OSError as e:
+                raise OSRunException(command=command, stderr=str(e))
+        else:
+            print('If live run, the following command would have been run on host ['+self.getHostname()+']')
+            print(command)
+
+
+class PlatformProps(object):
+    FilePathSep = os.path.sep
+    EnvPathSep = os.pathsep
+
+    @staticmethod
+    def getPythonVersion():
+        return str(sys.version_info[0])+'.'+str(sys.version_info[1])
+
+
+class ConfigManager(object):
+
+    def __init__(self, configFile):
+        self.ConfigFile = configFile
+        self.Config = RawConfigParser()
+        self.Config.optionxform = str
+        self.Config.read(configFile)
+
+    def getValue(self, sectionName, propertyName):
+        return self.Config.get(sectionName, propertyName)
+
+    def getKeys(self, sectionName):
+        return self.Config.options(sectionName)
+
+    def getConfigMap(self):
+        configMap = OrderedDict()
+
+        for s in self.Config.sections():
+            sectionMap = {}
+            for k in self.Config.options(s):
+                sectionMap[k] = self.Config.get(s, k)
+
+            configMap[s] = sectionMap
+
+        return configMap
+
+    def setValue(self, section, key, value):
+        self.Config.set(section, key, value)
+
+    def writeConfigMap(self, configMap):
+
+        for s in configMap:
+            if not self.Config.has_section(s):
+                self.Config.add_section(s)
+            for k in configMap[s]:
+                self.Config.set(s, k, configMap[s][k])
+
+    def save(self):
+        file = open(self.ConfigFile, 'w')
+        self.Config.write(file)
+        file.close()
+
+
+class App(Singleton):
+    '''
+    This class has methods to setup an application.
+       The standard application setup is based on the following file structure
+        AppBase
+          |
+           -- bin
+           -- conf
+           -- logs
+           -- lib
+           -- libexec
+
+        AppBase - Where app is installed
+          bin:  Where the main application file(s) are stored
+          conf: This is where configuration files are stored
+          logs: Where log files are placed
+          lib: Location for all libraries used by application that are not part of python installation
+          libexec: optional directory for placing executable libraries
+
+    The primary purpose of this class is to populate the AppContext class variable.  This varialbe is
+    a "shareable" memory context that can be used in various parts of th pylegos libraries as well as
+    the program that is using the framework.  It is an in memory representation of the App.ini configuration
+    file.  Anything that is defined in the ini file will be available to any process via calls to
+    the AppContext. The app context is a dictionary object, with two dimensions
+
+    The pattern of the call is app.AppContext['SECTION NAME']['PropertyName'], where "app" is the instance
+    of this class.
+
+    Example:
+
+    from pylegos.app_legos import App
+
+    app = App()
+    logFile = app.AppContext['LOGGING']['LogFile']
+    or
+    logFile = App().AppContext['LOGGING']['LogFile']
+
+    This will load from the following example ini file
+
+    [LOGGING]
+    LogLevel=DEBUG
+    LogFile=MyApp.log
+'''
+
+    def __init__(self):
+        """
+        This will do the following:
+           - Create any required directories missing from app base
+           - Build application configuration file if it is missing
+           - Load the AppContext class
+        :return: None
+        """
+        Singleton.__init__(self)
+        self.AppName = self.getAppName()
+        self.AppBase = self.getAppBase()
+        confDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='conf')
+        logDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='logs')
+        '''
+          We first check to see if there is an application ini file that has base level settings.  Which currently
+          is just that it has a minimal logging configuration.  If no file or conf(ig) directory exists, then a
+          default configuration will be created.
+
+          In addition, if a log(s) directory is not present in the "AppBase", then a directory will be created
+          so that a log file can be created.
+        '''
+        confDir = self.AppBase+PlatformProps.FilePathSep + 'conf'
+        logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+        appConfFile=confDir+PlatformProps.FilePathSep + self.AppName + '.ini'
+        if len(confDirs) < 1:
+            FileUtils().createDirectory(confDir)
+        if not FileUtils().fileExists(appConfFile):
+            self.__createStarterConfigFile(appBase=self.AppBase, appName=self.AppName, confFile=appConfFile)
+        if len(logDirs) < 1:
+            FileUtils().createDirectory(logDir)
+        self.AppContext = ConfigManager().getConfigMap(configFile=appConfFile)
+        self.log = LogFactory().getLogger(appName=self.AppName, appBase=self.AppBase)
+        logUtil = LogUtil(logger=self.log)
+        sys.path.append(self.AppBase+'/lib')
+        self.AppVersion = self.getAppVersion()
+        appInitMessage = """
+         Application Initialized Successfully
+                Name: %s
+             Version: %s
+            BasePath: %s
+         """ % (self.AppName, self.AppVersion, self.AppBase)
+        logUtil.appendToLog(appInitMessage)
+
+
+
+    def __createStarterConfigFile(self, appName, appBase, confFile):
+        defaultConfig={}
+        defaultConfig['LOGGING'] = {'LogLevel': 'DEBUG', 'LogFile': appName+'.log'}
+        defaultConfig['APP_INFO'] = {'AppName': appName, 'AppBasePath': appBase}
+        ConfigManager().writeConfigMap(configMap=defaultConfig, fileName=confFile)
+
+    def getAppBase(self):
+        inspector = Inspector()
+        callingFile = inspector.getCallerFilePath(callLevel=4)
+        basePath = FileUtils().getParentDir(FileUtils().getParentDir(filePath=callingFile))
+        return basePath
+
+    def getAppName(self):
+        inspector = Inspector()
+        callerMod = inspector.getCallerMod(callLevel=4)
+        return callerMod
+
+    def getAppVersion(self):
+        modName = self.AppName+'_manifest'
+        raise RuntimeError('App.getAppVersion not yet implemented')
+
+    def getAppLogFilename(self):
+        logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+        return logDir+PlatformProps.FilePathSep + self.AppName + '.log'
+
+    def appendToLog(self, messageObj):
+        logUtil = LogUtil(logger=self.log)
+        logUtil.appendToLog(messageObj=messageObj)
+
+
+class QuoteMachine(object):
+    ErrorQuotes = [
+       'I blame this error on you!',
+       'One of these days this will work...just not today!'
+    ]
+    SuccessFinishPhrases = [
+        'Nice work, donuts on me!',
+        'Good job, I knew you had it in you!'
+    ]
+    InvalidInputSayings = [
+        'Hmm, are your fingers tired? That input is incorrect',
+        'Is it Monday, or do you just like giving invalid input?'
+    ]
+
+    def getErrorMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return 'Awe SNAP! '+self.ErrorQuotes[randNum]
+
+    def getFinishSuccessMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return self.SuccessFinishPhrases[randNum]
+
+    def getInvalidInputMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return self.InvalidInputSayings[randNum]
+
+
+class AppNotInitializedException(Exception):
+    def __int__(self, errorMessage='This feature cannot be used unless you have used the pylegos.app_legos.App.init() call at the start of your program'):
+        self.message = errorMessage
+
+
+class PyLegosFrameworkException(Exception):
+    def __init__(self,msg):
+        self.message = msg
+
+
+class ExceptionHelper(object):
+   # __metaclass__ = Singleton
+
+    ###############################################
+    # Class Vars
+    ###############################################
+    Logger = None
+
+    ###############################################
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+
+    def handleInputError(self, errorMessage):
+        ieQuote = QuoteMachine().getRandonQuote(quoteType='INPUT_ERROR')
+        self.Logger.info(ieQuote)
+        raise ValueError(errorMessage)
+
+    def handleError(self, errorMessage):
+        errorQuote = QuoteMachine().getRandomQuote(quoteType='ERROR')
+        self.Logger.info(errorQuote)
+        self.Logger.error(errorMessage)
+        raise RuntimeError(errorMessage)
+
+    def getOffender(self, sysExecptionInfo):
+        eType, eObj, eTable = sys.exc_info()
+        eFrame = eTable.tb_frame
+        eLine = str(eTable.tb_lineno)
+        eFileName = eFrame.f_code.co_filename
+        eFileName = str(eFileName).strip('.').strip('/')
+        return '[' + eFileName + '][' + eLine + ']'
+
+    def printSimpleStacktrace(self):
+        stack = traceback.format_exc().split('\n')
+        for line in stack:
+            if line.strip(' ').startswith('File'):
+                rawName = line.strip('File ').split(',')[0].strip('"').split('/')
+                modName = rawName[len(rawName) - 1].strip('.py')
+                lineNum = line.strip('File ').split(',')[1].strip('line ')
+                print('[' + modName + '][' + lineNum + ']')
+
+
+class OSRunException(Exception):
+    def __init__(self, command, stderr):
+        errMsg = 'The following command return a non-zero return value, indicating an error.\n'
+        errMsg += 'Command: ' + str(command) + '\n'
+        errMsg += 'Here is the error output \n'
+        if len(stderr) == 0:
+            errMsg += 'Command wrote no error message'
+        else:
+            for line in stderr:
+                errMsg += line
+        self.message = errMsg
+
+
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="pylegos.core.STDOUT" class="name">var <span class="ident">STDOUT</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="pylegos.core.App" class="name">class <span class="ident">App</span></p>
+      
+  
+    <div class="desc"><p>This class has methods to setup an application.
+   The standard application setup is based on the following file structure
+    AppBase
+      |
+       -- bin
+       -- conf
+       -- logs
+       -- lib
+       -- libexec</p>
+<pre><code>AppBase - Where app is installed
+  bin:  Where the main application file(s) are stored
+  conf: This is where configuration files are stored
+  logs: Where log files are placed
+  lib: Location for all libraries used by application that are not part of python installation
+  libexec: optional directory for placing executable libraries
+</code></pre>
+<p>The primary purpose of this class is to populate the AppContext class variable.  This varialbe is
+a "shareable" memory context that can be used in various parts of th pylegos libraries as well as
+the program that is using the framework.  It is an in memory representation of the App.ini configuration
+file.  Anything that is defined in the ini file will be available to any process via calls to
+the AppContext. The app context is a dictionary object, with two dimensions</p>
+<p>The pattern of the call is app.AppContext['SECTION NAME']['PropertyName'], where "app" is the instance
+of this class.</p>
+<p>Example:</p>
+<p>from pylegos.app_legos import App</p>
+<p>app = App()
+logFile = app.AppContext['LOGGING']['LogFile']
+or
+logFile = App().AppContext['LOGGING']['LogFile']</p>
+<p>This will load from the following example ini file</p>
+<p>[LOGGING]
+LogLevel=DEBUG
+LogFile=MyApp.log</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App" class="source">
+    <pre><code>class App(Singleton):
+    '''
+    This class has methods to setup an application.
+       The standard application setup is based on the following file structure
+        AppBase
+          |
+           -- bin
+           -- conf
+           -- logs
+           -- lib
+           -- libexec
+
+        AppBase - Where app is installed
+          bin:  Where the main application file(s) are stored
+          conf: This is where configuration files are stored
+          logs: Where log files are placed
+          lib: Location for all libraries used by application that are not part of python installation
+          libexec: optional directory for placing executable libraries
+
+    The primary purpose of this class is to populate the AppContext class variable.  This varialbe is
+    a "shareable" memory context that can be used in various parts of th pylegos libraries as well as
+    the program that is using the framework.  It is an in memory representation of the App.ini configuration
+    file.  Anything that is defined in the ini file will be available to any process via calls to
+    the AppContext. The app context is a dictionary object, with two dimensions
+
+    The pattern of the call is app.AppContext['SECTION NAME']['PropertyName'], where "app" is the instance
+    of this class.
+
+    Example:
+
+    from pylegos.app_legos import App
+
+    app = App()
+    logFile = app.AppContext['LOGGING']['LogFile']
+    or
+    logFile = App().AppContext['LOGGING']['LogFile']
+
+    This will load from the following example ini file
+
+    [LOGGING]
+    LogLevel=DEBUG
+    LogFile=MyApp.log
+'''
+
+    def __init__(self):
+        """
+        This will do the following:
+           - Create any required directories missing from app base
+           - Build application configuration file if it is missing
+           - Load the AppContext class
+        :return: None
+        """
+        Singleton.__init__(self)
+        self.AppName = self.getAppName()
+        self.AppBase = self.getAppBase()
+        confDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='conf')
+        logDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='logs')
+        '''
+          We first check to see if there is an application ini file that has base level settings.  Which currently
+          is just that it has a minimal logging configuration.  If no file or conf(ig) directory exists, then a
+          default configuration will be created.
+
+          In addition, if a log(s) directory is not present in the "AppBase", then a directory will be created
+          so that a log file can be created.
+        '''
+        confDir = self.AppBase+PlatformProps.FilePathSep + 'conf'
+        logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+        appConfFile=confDir+PlatformProps.FilePathSep + self.AppName + '.ini'
+        if len(confDirs) < 1:
+            FileUtils().createDirectory(confDir)
+        if not FileUtils().fileExists(appConfFile):
+            self.__createStarterConfigFile(appBase=self.AppBase, appName=self.AppName, confFile=appConfFile)
+        if len(logDirs) < 1:
+            FileUtils().createDirectory(logDir)
+        self.AppContext = ConfigManager().getConfigMap(configFile=appConfFile)
+        self.log = LogFactory().getLogger(appName=self.AppName, appBase=self.AppBase)
+        logUtil = LogUtil(logger=self.log)
+        sys.path.append(self.AppBase+'/lib')
+        self.AppVersion = self.getAppVersion()
+        appInitMessage = """
+         Application Initialized Successfully
+                Name: %s
+             Version: %s
+            BasePath: %s
+         """ % (self.AppName, self.AppVersion, self.AppBase)
+        logUtil.appendToLog(appInitMessage)
+
+
+
+    def __createStarterConfigFile(self, appName, appBase, confFile):
+        defaultConfig={}
+        defaultConfig['LOGGING'] = {'LogLevel': 'DEBUG', 'LogFile': appName+'.log'}
+        defaultConfig['APP_INFO'] = {'AppName': appName, 'AppBasePath': appBase}
+        ConfigManager().writeConfigMap(configMap=defaultConfig, fileName=confFile)
+
+    def getAppBase(self):
+        inspector = Inspector()
+        callingFile = inspector.getCallerFilePath(callLevel=4)
+        basePath = FileUtils().getParentDir(FileUtils().getParentDir(filePath=callingFile))
+        return basePath
+
+    def getAppName(self):
+        inspector = Inspector()
+        callerMod = inspector.getCallerMod(callLevel=4)
+        return callerMod
+
+    def getAppVersion(self):
+        modName = self.AppName+'_manifest'
+        raise RuntimeError('App.getAppVersion not yet implemented')
+
+    def getAppLogFilename(self):
+        logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+        return logDir+PlatformProps.FilePathSep + self.AppName + '.log'
+
+    def appendToLog(self, messageObj):
+        logUtil = LogUtil(logger=self.log)
+        logUtil.appendToLog(messageObj=messageObj)
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.App">App</a></li>
+          <li><a href="#pylegos.core.Singleton">Singleton</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will do the following:
+   - Create any required directories missing from app base
+   - Build application configuration file if it is missing
+   - Load the AppContext class
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.__init__" class="source">
+    <pre><code>def __init__(self):
+    """
+    This will do the following:
+       - Create any required directories missing from app base
+       - Build application configuration file if it is missing
+       - Load the AppContext class
+    :return: None
+    """
+    Singleton.__init__(self)
+    self.AppName = self.getAppName()
+    self.AppBase = self.getAppBase()
+    confDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='conf')
+    logDirs = FileUtils().getDirMatches(baseDir=self.AppBase, pattern='logs')
+    '''
+      We first check to see if there is an application ini file that has base level settings.  Which currently
+      is just that it has a minimal logging configuration.  If no file or conf(ig) directory exists, then a
+      default configuration will be created.
+      In addition, if a log(s) directory is not present in the "AppBase", then a directory will be created
+      so that a log file can be created.
+    '''
+    confDir = self.AppBase+PlatformProps.FilePathSep + 'conf'
+    logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+    appConfFile=confDir+PlatformProps.FilePathSep + self.AppName + '.ini'
+    if len(confDirs) < 1:
+        FileUtils().createDirectory(confDir)
+    if not FileUtils().fileExists(appConfFile):
+        self.__createStarterConfigFile(appBase=self.AppBase, appName=self.AppName, confFile=appConfFile)
+    if len(logDirs) < 1:
+        FileUtils().createDirectory(logDir)
+    self.AppContext = ConfigManager().getConfigMap(configFile=appConfFile)
+    self.log = LogFactory().getLogger(appName=self.AppName, appBase=self.AppBase)
+    logUtil = LogUtil(logger=self.log)
+    sys.path.append(self.AppBase+'/lib')
+    self.AppVersion = self.getAppVersion()
+    appInitMessage = """
+     Application Initialized Successfully
+            Name: %s
+         Version: %s
+        BasePath: %s
+     """ % (self.AppName, self.AppVersion, self.AppBase)
+    logUtil.appendToLog(appInitMessage)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.appendToLog">
+    <p>def <span class="ident">appendToLog</span>(</p><p>self, messageObj)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.appendToLog', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.appendToLog" class="source">
+    <pre><code>def appendToLog(self, messageObj):
+    logUtil = LogUtil(logger=self.log)
+    logUtil.appendToLog(messageObj=messageObj)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.getAppBase">
+    <p>def <span class="ident">getAppBase</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.getAppBase', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.getAppBase" class="source">
+    <pre><code>def getAppBase(self):
+    inspector = Inspector()
+    callingFile = inspector.getCallerFilePath(callLevel=4)
+    basePath = FileUtils().getParentDir(FileUtils().getParentDir(filePath=callingFile))
+    return basePath
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.getAppLogFilename">
+    <p>def <span class="ident">getAppLogFilename</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.getAppLogFilename', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.getAppLogFilename" class="source">
+    <pre><code>def getAppLogFilename(self):
+    logDir = self.AppBase+PlatformProps.FilePathSep + 'logs'
+    return logDir+PlatformProps.FilePathSep + self.AppName + '.log'
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.getAppName">
+    <p>def <span class="ident">getAppName</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.getAppName', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.getAppName" class="source">
+    <pre><code>def getAppName(self):
+    inspector = Inspector()
+    callerMod = inspector.getCallerMod(callLevel=4)
+    return callerMod
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.App.getAppVersion">
+    <p>def <span class="ident">getAppVersion</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.App.getAppVersion', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.App.getAppVersion" class="source">
+    <pre><code>def getAppVersion(self):
+    modName = self.AppName+'_manifest'
+    raise RuntimeError('App.getAppVersion not yet implemented')
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.App.AppBase" class="name">var <span class="ident">AppBase</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.App.AppContext" class="name">var <span class="ident">AppContext</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.App.AppName" class="name">var <span class="ident">AppName</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.App.AppVersion" class="name">var <span class="ident">AppVersion</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.App.log" class="name">var <span class="ident">log</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.AppNotInitializedException" class="name">class <span class="ident">AppNotInitializedException</span></p>
+      
+  
+    <div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.AppNotInitializedException', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.AppNotInitializedException" class="source">
+    <pre><code>class AppNotInitializedException(Exception):
+    def __int__(self, errorMessage='This feature cannot be used unless you have used the pylegos.app_legos.App.init() call at the start of your program'):
+        self.message = errorMessage
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.AppNotInitializedException">AppNotInitializedException</a></li>
+          <li>builtins.Exception</li>
+          <li>builtins.BaseException</li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.AppNotInitializedException.args" class="name">var <span class="ident">args</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.ConfigManager" class="name">class <span class="ident">ConfigManager</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager" class="source">
+    <pre><code>class ConfigManager(object):
+
+    def __init__(self, configFile):
+        self.ConfigFile = configFile
+        self.Config = RawConfigParser()
+        self.Config.optionxform = str
+        self.Config.read(configFile)
+
+    def getValue(self, sectionName, propertyName):
+        return self.Config.get(sectionName, propertyName)
+
+    def getKeys(self, sectionName):
+        return self.Config.options(sectionName)
+
+    def getConfigMap(self):
+        configMap = OrderedDict()
+
+        for s in self.Config.sections():
+            sectionMap = {}
+            for k in self.Config.options(s):
+                sectionMap[k] = self.Config.get(s, k)
+
+            configMap[s] = sectionMap
+
+        return configMap
+
+    def setValue(self, section, key, value):
+        self.Config.set(section, key, value)
+
+    def writeConfigMap(self, configMap):
+
+        for s in configMap:
+            if not self.Config.has_section(s):
+                self.Config.add_section(s)
+            for k in configMap[s]:
+                self.Config.set(s, k, configMap[s][k])
+
+    def save(self):
+        file = open(self.ConfigFile, 'w')
+        self.Config.write(file)
+        file.close()
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.ConfigManager">ConfigManager</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, configFile)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.__init__" class="source">
+    <pre><code>def __init__(self, configFile):
+    self.ConfigFile = configFile
+    self.Config = RawConfigParser()
+    self.Config.optionxform = str
+    self.Config.read(configFile)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.getConfigMap">
+    <p>def <span class="ident">getConfigMap</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.getConfigMap', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.getConfigMap" class="source">
+    <pre><code>def getConfigMap(self):
+    configMap = OrderedDict()
+    for s in self.Config.sections():
+        sectionMap = {}
+        for k in self.Config.options(s):
+            sectionMap[k] = self.Config.get(s, k)
+        configMap[s] = sectionMap
+    return configMap
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.getKeys">
+    <p>def <span class="ident">getKeys</span>(</p><p>self, sectionName)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.getKeys', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.getKeys" class="source">
+    <pre><code>def getKeys(self, sectionName):
+    return self.Config.options(sectionName)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.getValue">
+    <p>def <span class="ident">getValue</span>(</p><p>self, sectionName, propertyName)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.getValue', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.getValue" class="source">
+    <pre><code>def getValue(self, sectionName, propertyName):
+    return self.Config.get(sectionName, propertyName)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.save">
+    <p>def <span class="ident">save</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.save', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.save" class="source">
+    <pre><code>def save(self):
+    file = open(self.ConfigFile, 'w')
+    self.Config.write(file)
+    file.close()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.setValue">
+    <p>def <span class="ident">setValue</span>(</p><p>self, section, key, value)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.setValue', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.setValue" class="source">
+    <pre><code>def setValue(self, section, key, value):
+    self.Config.set(section, key, value)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ConfigManager.writeConfigMap">
+    <p>def <span class="ident">writeConfigMap</span>(</p><p>self, configMap)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ConfigManager.writeConfigMap', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ConfigManager.writeConfigMap" class="source">
+    <pre><code>def writeConfigMap(self, configMap):
+    for s in configMap:
+        if not self.Config.has_section(s):
+            self.Config.add_section(s)
+        for k in configMap[s]:
+            self.Config.set(s, k, configMap[s][k])
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.ConfigManager.Config" class="name">var <span class="ident">Config</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.ConfigManager.ConfigFile" class="name">var <span class="ident">ConfigFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.DeprecationUtil" class="name">class <span class="ident">DeprecationUtil</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DeprecationUtil', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DeprecationUtil" class="source">
+    <pre><code>class DeprecationUtil:
+
+    def __init__(self):
+        self.logger = LogFactory().getLibLogger()
+
+    @staticmethod
+    def initFile():
+        fsep = os.path.sep
+        datFile = open(FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat', 'w')
+        map = {'DEPRECATED_METHODS': {'TestClass': {'TIMES_CALLED': 1,
+                                                    'LAST_CALLED': str(datetime.now())}
+                                      }
+               }
+        json.dump(map, datFile, indent=4)
+        #datFile.write('\n')
+        datFile.close()
+
+    @staticmethod
+    def __logUsage(className, depMethodName):
+        fsep = os.path.sep
+        datFilename = FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat'
+        datFile = open(datFilename, 'r')
+        frameWorkUsage = json.load(datFile)
+        datFile.close()
+        methodUsage = frameWorkUsage['DEPRECATED_METHODS']
+        keyName = className+'.'+depMethodName
+        try:
+            usageMap = methodUsage[keyName]
+            usageMap['TIMES_CALLED'] += 1
+            usageMap['LAST_CALLED'] = str(datetime.now())
+            methodUsage[keyName] = usageMap
+        except KeyError:
+            usageMap = {'TIMES_CALLED': 1,
+                        'LAST_CALLED': str(datetime.now())}
+            methodUsage[keyName] = usageMap
+
+        frameWorkUsage['DEPRECATED_METHODS'] = methodUsage
+        datFile = open(datFilename, 'w')
+        json.dump(frameWorkUsage, datFile, indent=4)
+        datFile.close()
+
+    def deprecate(self, className, methodName, newMethodName):
+        self.logger.warning('Called deprecated method ['+className+'.'+methodName+']. Replace with ['+className+'.'+newMethodName+']')
+        self.__logUsage(className, methodName)
+
+    @staticmethod
+    def printUsage():
+        fsep = os.path.sep
+        datFilename = FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat'
+        datFile = open(datFilename, 'r')
+        frameWorkUsage = json.load(datFile)
+        datFile.close()
+        methodUsage = frameWorkUsage['DEPRECATED_METHODS']
+        print(json.dumps(methodUsage, indent=4))
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.DeprecationUtil">DeprecationUtil</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DeprecationUtil.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DeprecationUtil.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DeprecationUtil.__init__" class="source">
+    <pre><code>def __init__(self):
+    self.logger = LogFactory().getLibLogger()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DeprecationUtil.deprecate">
+    <p>def <span class="ident">deprecate</span>(</p><p>self, className, methodName, newMethodName)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DeprecationUtil.deprecate', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DeprecationUtil.deprecate" class="source">
+    <pre><code>def deprecate(self, className, methodName, newMethodName):
+    self.logger.warning('Called deprecated method ['+className+'.'+methodName+']. Replace with ['+className+'.'+newMethodName+']')
+    self.__logUsage(className, methodName)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DeprecationUtil.initFile">
+    <p>def <span class="ident">initFile</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DeprecationUtil.initFile', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DeprecationUtil.initFile" class="source">
+    <pre><code>@staticmethod
+def initFile():
+    fsep = os.path.sep
+    datFile = open(FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat', 'w')
+    map = {'DEPRECATED_METHODS': {'TestClass': {'TIMES_CALLED': 1,
+                                                'LAST_CALLED': str(datetime.now())}
+                                  }
+           }
+    json.dump(map, datFile, indent=4)
+    #datFile.write('\n')
+    datFile.close()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DeprecationUtil.printUsage">
+    <p>def <span class="ident">printUsage</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DeprecationUtil.printUsage', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DeprecationUtil.printUsage" class="source">
+    <pre><code>@staticmethod
+def printUsage():
+    fsep = os.path.sep
+    datFilename = FileUtils().getParentDir(__file__)+fsep+'framework_usage.dat'
+    datFile = open(datFilename, 'r')
+    frameWorkUsage = json.load(datFile)
+    datFile.close()
+    methodUsage = frameWorkUsage['DEPRECATED_METHODS']
+    print(json.dumps(methodUsage, indent=4))
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.DeprecationUtil.logger" class="name">var <span class="ident">logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.DictionaryUtil" class="name">class <span class="ident">DictionaryUtil</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DictionaryUtil', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DictionaryUtil" class="source">
+    <pre><code>class DictionaryUtil(object):
+
+    def __init__(self):
+        self.KeyLevel = 0
+        self.RootKey = None
+        self.ParentKey = None
+        self.PrevParent = None
+
+    def toFormattedString(self, dictObj):
+        return RuntimeError('Not yet implemented')
+        '''
+        formattedString=''
+        for k,v in dictObj.iteritems():
+            if self.KeyLevel == 0:
+                self.RootKey = str(k)
+            else:
+                self.KeyLevel += 1
+            formattedString += ('\t' * self.KeyLevel)+str(k)#+' : '
+            if type(v) is dict:
+                formattedString += ' :\n'
+                #formattedString += '\n'+('\t' * self.KeyLevel)
+                formattedString += self.toFormattedString(dictObj=v)
+            else:
+                #formattedString += str(v)+'\n'+('\t'*self.KeyLevel)
+                formattedString += ' = '+str(v)+'\n'
+            if self.RootKey == str(k):
+                self.KeyLevel = 0
+                # formattedString = formattedString[:len(formattedString)-1]
+        return formattedString
+        '''
+
+    def formatToString(self, dictObj):
+        return RuntimeError('Not yet implemented')
+        '''
+        formattedString = ''
+        for k,v in dictObj.iteritems():
+            if self.ParentKey is None:
+                formattedString = str(k)
+            else:
+                formattedString += ('\t' * self.KeyLevel)+str(k)
+            if type(v) is dict:
+                self.PrevParent = self.ParentKey
+                self.ParentKey = str(k)
+                self.KeyLevel += 1
+                formattedString += ' :\n'
+                formattedString += self.formatToString(dictObj=v)
+            else:
+                formattedString += ' = '+str(v)+'\n'
+            if self.ParentKey == str(k):
+                self.KeyLevel -= 1
+
+        return formattedString
+        '''
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.DictionaryUtil">DictionaryUtil</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DictionaryUtil.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DictionaryUtil.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DictionaryUtil.__init__" class="source">
+    <pre><code>def __init__(self):
+    self.KeyLevel = 0
+    self.RootKey = None
+    self.ParentKey = None
+    self.PrevParent = None
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DictionaryUtil.formatToString">
+    <p>def <span class="ident">formatToString</span>(</p><p>self, dictObj)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DictionaryUtil.formatToString', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DictionaryUtil.formatToString" class="source">
+    <pre><code>def formatToString(self, dictObj):
+    return RuntimeError('Not yet implemented')
+    '''
+    formattedString = ''
+    for k,v in dictObj.iteritems():
+        if self.ParentKey is None:
+            formattedString = str(k)
+        else:
+            formattedString += ('\t' * self.KeyLevel)+str(k)
+        if type(v) is dict:
+            self.PrevParent = self.ParentKey
+            self.ParentKey = str(k)
+            self.KeyLevel += 1
+            formattedString += ' :\n'
+            formattedString += self.formatToString(dictObj=v)
+        else:
+            formattedString += ' = '+str(v)+'\n'
+        if self.ParentKey == str(k):
+            self.KeyLevel -= 1
+    return formattedString
+    '''
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.DictionaryUtil.toFormattedString">
+    <p>def <span class="ident">toFormattedString</span>(</p><p>self, dictObj)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.DictionaryUtil.toFormattedString', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.DictionaryUtil.toFormattedString" class="source">
+    <pre><code>def toFormattedString(self, dictObj):
+    return RuntimeError('Not yet implemented')
+    '''
+    formattedString=''
+    for k,v in dictObj.iteritems():
+        if self.KeyLevel == 0:
+            self.RootKey = str(k)
+        else:
+            self.KeyLevel += 1
+        formattedString += ('\t' * self.KeyLevel)+str(k)#+' : '
+        if type(v) is dict:
+            formattedString += ' :\n'
+            #formattedString += '\n'+('\t' * self.KeyLevel)
+            formattedString += self.toFormattedString(dictObj=v)
+        else:
+            #formattedString += str(v)+'\n'+('\t'*self.KeyLevel)
+            formattedString += ' = '+str(v)+'\n'
+        if self.RootKey == str(k):
+            self.KeyLevel = 0
+            # formattedString = formattedString[:len(formattedString)-1]
+    return formattedString
+    '''
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.DictionaryUtil.KeyLevel" class="name">var <span class="ident">KeyLevel</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.DictionaryUtil.ParentKey" class="name">var <span class="ident">ParentKey</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.DictionaryUtil.PrevParent" class="name">var <span class="ident">PrevParent</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.DictionaryUtil.RootKey" class="name">var <span class="ident">RootKey</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.ExceptionHelper" class="name">class <span class="ident">ExceptionHelper</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper" class="source">
+    <pre><code>class ExceptionHelper(object):
+   # __metaclass__ = Singleton
+
+    ###############################################
+    # Class Vars
+    ###############################################
+    Logger = None
+
+    ###############################################
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+
+    def handleInputError(self, errorMessage):
+        ieQuote = QuoteMachine().getRandonQuote(quoteType='INPUT_ERROR')
+        self.Logger.info(ieQuote)
+        raise ValueError(errorMessage)
+
+    def handleError(self, errorMessage):
+        errorQuote = QuoteMachine().getRandomQuote(quoteType='ERROR')
+        self.Logger.info(errorQuote)
+        self.Logger.error(errorMessage)
+        raise RuntimeError(errorMessage)
+
+    def getOffender(self, sysExecptionInfo):
+        eType, eObj, eTable = sys.exc_info()
+        eFrame = eTable.tb_frame
+        eLine = str(eTable.tb_lineno)
+        eFileName = eFrame.f_code.co_filename
+        eFileName = str(eFileName).strip('.').strip('/')
+        return '[' + eFileName + '][' + eLine + ']'
+
+    def printSimpleStacktrace(self):
+        stack = traceback.format_exc().split('\n')
+        for line in stack:
+            if line.strip(' ').startswith('File'):
+                rawName = line.strip('File ').split(',')[0].strip('"').split('/')
+                modName = rawName[len(rawName) - 1].strip('.py')
+                lineNum = line.strip('File ').split(',')[1].strip('line ')
+                print('[' + modName + '][' + lineNum + ']')
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.ExceptionHelper">ExceptionHelper</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.ExceptionHelper.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ExceptionHelper.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper.__init__" class="source">
+    <pre><code>def __init__(self):
+    self.Logger = LogFactory().getLibLogger()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ExceptionHelper.getOffender">
+    <p>def <span class="ident">getOffender</span>(</p><p>self, sysExecptionInfo)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper.getOffender', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper.getOffender" class="source">
+    <pre><code>def getOffender(self, sysExecptionInfo):
+    eType, eObj, eTable = sys.exc_info()
+    eFrame = eTable.tb_frame
+    eLine = str(eTable.tb_lineno)
+    eFileName = eFrame.f_code.co_filename
+    eFileName = str(eFileName).strip('.').strip('/')
+    return '[' + eFileName + '][' + eLine + ']'
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ExceptionHelper.handleError">
+    <p>def <span class="ident">handleError</span>(</p><p>self, errorMessage)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper.handleError', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper.handleError" class="source">
+    <pre><code>def handleError(self, errorMessage):
+    errorQuote = QuoteMachine().getRandomQuote(quoteType='ERROR')
+    self.Logger.info(errorQuote)
+    self.Logger.error(errorMessage)
+    raise RuntimeError(errorMessage)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ExceptionHelper.handleInputError">
+    <p>def <span class="ident">handleInputError</span>(</p><p>self, errorMessage)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper.handleInputError', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper.handleInputError" class="source">
+    <pre><code>def handleInputError(self, errorMessage):
+    ieQuote = QuoteMachine().getRandonQuote(quoteType='INPUT_ERROR')
+    self.Logger.info(ieQuote)
+    raise ValueError(errorMessage)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.ExceptionHelper.printSimpleStacktrace">
+    <p>def <span class="ident">printSimpleStacktrace</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.ExceptionHelper.printSimpleStacktrace', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.ExceptionHelper.printSimpleStacktrace" class="source">
+    <pre><code>def printSimpleStacktrace(self):
+    stack = traceback.format_exc().split('\n')
+    for line in stack:
+        if line.strip(' ').startswith('File'):
+            rawName = line.strip('File ').split(',')[0].strip('"').split('/')
+            modName = rawName[len(rawName) - 1].strip('.py')
+            lineNum = line.strip('File ').split(',')[1].strip('line ')
+            print('[' + modName + '][' + lineNum + ']')
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.ExceptionHelper.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.FileUtils" class="name">class <span class="ident">FileUtils</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils" class="source">
+    <pre><code>class FileUtils(object):
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+        self.Inspector = Inspector()
+
+    @staticmethod
+    def getParentDir(filePath):
+        return os.path.dirname(os.path.realpath(filePath))
+
+    def getAppBase(self):
+        callingFile = self.Inspector.getCallerFilePath()
+        basePath = os.path.dirname(self.getParentDir(filePath=callingFile))
+        return basePath
+
+    @staticmethod
+    def dirExists(directoryPath):
+        '''
+        Use to check if a directory exists.  This will only return true
+        if it exists and is also a directory (as opposed to a file)
+        :param directoryPath: The full path to the directory
+        :return: Boolean (True|False)
+        '''
+        return os.path.isdir(directoryPath)
+
+    @staticmethod
+    def fileExists(filePath):
+        """
+        Used to check if file exists.  It will return true if the file
+        exists and it is a file, not a directory
+        :param filePath: Full path to the file
+        :return: Boolean (True|False)
+        """
+        return os.path.isfile(filePath)
+
+    def fileMatchExist(self, baseDir, pattern, strictCheck=True):
+        """
+        Use to check if a file exists based on a pattern. The pattern that is used is
+        simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).
+        It will only return True if the file is a file, not a directory.  If do not care if
+        it is a file or directory, set optional parameter useStrictCheck to False
+        :param baseDir: The directory to look in
+        :param pattern: The pattern to use for match
+        :param strictCheck: Indicates if it should make sure the match is a file Default is True
+        :return: Boolean
+        """
+        matchExists = False
+        fileMatches = []
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                fileMatches.append(file)
+
+        if strictCheck:
+            for match in fileMatches:
+                if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                    matchExists = True
+                    break
+        else:
+            if len(fileMatches) > 0:
+                matchExists = True
+
+        return matchExists
+
+    def dirMatchExist(self, baseDir, pattern, strictCheck=True):
+        """
+        Used to check to see if a directory that matches a pattern exists.  The pattern is
+        a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)
+        It will only return true if the object that matches is a directory, not a file.  If you
+        do not care if match is a directory, but also want to return if a file is found that matches
+        the pattern, set the optional parameter strict check to False.
+        :param baseDir:  The base directory to look in
+        :param pattern: The unix style pattern to check
+        :param strictCheck: Indicates if only a directory will be considered a match. Default is True
+        :return: Boolean
+        """
+        matchFound = False
+        matchedDirs = []
+        for dir in os.listdir(baseDir):
+            if fnmatch(dir, pattern):
+                matchedDirs.append(dir)
+
+        if strictCheck:
+            for match in matchedDirs:
+                if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                    matchFound = True
+                    break
+        else:
+            if len(matchedDirs) > 0:
+                matchFound = True
+
+        return matchFound
+
+    def getFileMatches(self, baseDir, pattern, strictCheck=True):
+        """
+        This will return true if a list of files that match the pattern.  If there are
+        no matching files, then an empty list is returned
+        :param baseDir: The directory to search in.
+        :param pattern: Pattern to search for (ie conf*)
+        :param strictCheck: Indicates to only include file objects (not directories) that match
+        :return: List<String>
+        """
+        matches = []
+        fileMatches = []
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                matches.append(file)
+        if strictCheck:
+            for match in matches:
+                if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                    fileMatches.append(match)
+        else:
+            fileMatches = matches
+
+        return fileMatches
+
+    @staticmethod
+    def deleteFiles(baseDir, pattern):
+        sep = PlatformProps.FilePathSep
+        for file in os.listdir(baseDir):
+            if fnmatch(file, pattern):
+                os.remove(baseDir+sep+file)
+
+    def getDirMatches(self, baseDir, pattern, strictCheck=True):
+        """
+        This will return true if a list of directories that match the pattern.  If there are
+        no matching directories, then an empty list is returned
+        :param baseDir: The directory to search in.
+        :param pattern: Pattern to search for (ie conf*)
+        :param strictCheck: Indicates to only include directory objects (not files) that match
+        :return: List<String>
+        """
+        matches = []
+        dirsFound = []
+        for dir in os.listdir(baseDir):
+            if fnmatch(dir, pattern):
+                matches.append(dir)
+        if strictCheck:
+            for match in matches:
+                if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                    dirsFound.append(match)
+        else:
+            dirsFound = matches
+
+        return dirsFound
+
+    @staticmethod
+    def createDirectory(dirPath):
+        """
+        Simple wrapper to os.mkdir
+        :param dirPath: Full path of directory to create
+        :return: None
+        """
+        os.mkdir(dirPath)
+
+    @staticmethod
+    def removeDirectory(dirPath):
+        os.rmdir(dirPath)
+
+    def removeDirMatch(self, dirPath, pattern):
+        dirMatches = []
+        for d in os.listdir(dirPath):
+            if fnmatch(d, pattern):
+                dirMatches.append(d)
+
+        for match in dirMatches:
+            self.removeDirectory(dirPath=dirPath + PlatformProps.FilePathSep + match)
+
+    @staticmethod
+    def copyFile(sourceFile, targetFile):
+        shutil.copy2(sourceFile, targetFile)
+
+    @staticmethod
+    def touchFile(filename):
+        open(filename, 'a').close()
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.FileUtils">FileUtils</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.__init__" class="source">
+    <pre><code>def __init__(self):
+    self.Logger = LogFactory().getLibLogger()
+    self.Inspector = Inspector()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.copyFile">
+    <p>def <span class="ident">copyFile</span>(</p><p>sourceFile, targetFile)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.copyFile', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.copyFile" class="source">
+    <pre><code>@staticmethod
+def copyFile(sourceFile, targetFile):
+    shutil.copy2(sourceFile, targetFile)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.createDirectory">
+    <p>def <span class="ident">createDirectory</span>(</p><p>dirPath)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Simple wrapper to os.mkdir
+:param dirPath: Full path of directory to create
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.createDirectory', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.createDirectory" class="source">
+    <pre><code>@staticmethod
+def createDirectory(dirPath):
+    """
+    Simple wrapper to os.mkdir
+    :param dirPath: Full path of directory to create
+    :return: None
+    """
+    os.mkdir(dirPath)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.deleteFiles">
+    <p>def <span class="ident">deleteFiles</span>(</p><p>baseDir, pattern)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.deleteFiles', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.deleteFiles" class="source">
+    <pre><code>@staticmethod
+def deleteFiles(baseDir, pattern):
+    sep = PlatformProps.FilePathSep
+    for file in os.listdir(baseDir):
+        if fnmatch(file, pattern):
+            os.remove(baseDir+sep+file)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.dirExists">
+    <p>def <span class="ident">dirExists</span>(</p><p>directoryPath)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Use to check if a directory exists.  This will only return true
+if it exists and is also a directory (as opposed to a file)
+:param directoryPath: The full path to the directory
+:return: Boolean (True|False)</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.dirExists', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.dirExists" class="source">
+    <pre><code>@staticmethod
+def dirExists(directoryPath):
+    '''
+    Use to check if a directory exists.  This will only return true
+    if it exists and is also a directory (as opposed to a file)
+    :param directoryPath: The full path to the directory
+    :return: Boolean (True|False)
+    '''
+    return os.path.isdir(directoryPath)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.dirMatchExist">
+    <p>def <span class="ident">dirMatchExist</span>(</p><p>self, baseDir, pattern, strictCheck=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Used to check to see if a directory that matches a pattern exists.  The pattern is
+a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)
+It will only return true if the object that matches is a directory, not a file.  If you
+do not care if match is a directory, but also want to return if a file is found that matches
+the pattern, set the optional parameter strict check to False.
+:param baseDir:  The base directory to look in
+:param pattern: The unix style pattern to check
+:param strictCheck: Indicates if only a directory will be considered a match. Default is True
+:return: Boolean</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.dirMatchExist', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.dirMatchExist" class="source">
+    <pre><code>def dirMatchExist(self, baseDir, pattern, strictCheck=True):
+    """
+    Used to check to see if a directory that matches a pattern exists.  The pattern is
+    a unix style directory match pattern. (i.e. Conf* will match Conf,Config,Configuration,etc)
+    It will only return true if the object that matches is a directory, not a file.  If you
+    do not care if match is a directory, but also want to return if a file is found that matches
+    the pattern, set the optional parameter strict check to False.
+    :param baseDir:  The base directory to look in
+    :param pattern: The unix style pattern to check
+    :param strictCheck: Indicates if only a directory will be considered a match. Default is True
+    :return: Boolean
+    """
+    matchFound = False
+    matchedDirs = []
+    for dir in os.listdir(baseDir):
+        if fnmatch(dir, pattern):
+            matchedDirs.append(dir)
+    if strictCheck:
+        for match in matchedDirs:
+            if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                matchFound = True
+                break
+    else:
+        if len(matchedDirs) > 0:
+            matchFound = True
+    return matchFound
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.fileExists">
+    <p>def <span class="ident">fileExists</span>(</p><p>filePath)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Used to check if file exists.  It will return true if the file
+exists and it is a file, not a directory
+:param filePath: Full path to the file
+:return: Boolean (True|False)</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.fileExists', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.fileExists" class="source">
+    <pre><code>@staticmethod
+def fileExists(filePath):
+    """
+    Used to check if file exists.  It will return true if the file
+    exists and it is a file, not a directory
+    :param filePath: Full path to the file
+    :return: Boolean (True|False)
+    """
+    return os.path.isfile(filePath)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.fileMatchExist">
+    <p>def <span class="ident">fileMatchExist</span>(</p><p>self, baseDir, pattern, strictCheck=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Use to check if a file exists based on a pattern. The pattern that is used is
+simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).
+It will only return True if the file is a file, not a directory.  If do not care if
+it is a file or directory, set optional parameter useStrictCheck to False
+:param baseDir: The directory to look in
+:param pattern: The pattern to use for match
+:param strictCheck: Indicates if it should make sure the match is a file Default is True
+:return: Boolean</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.fileMatchExist', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.fileMatchExist" class="source">
+    <pre><code>def fileMatchExist(self, baseDir, pattern, strictCheck=True):
+    """
+    Use to check if a file exists based on a pattern. The pattern that is used is
+    simple unix style wildcard. (i.e. conf* will batch config, configs, configuration).
+    It will only return True if the file is a file, not a directory.  If do not care if
+    it is a file or directory, set optional parameter useStrictCheck to False
+    :param baseDir: The directory to look in
+    :param pattern: The pattern to use for match
+    :param strictCheck: Indicates if it should make sure the match is a file Default is True
+    :return: Boolean
+    """
+    matchExists = False
+    fileMatches = []
+    for file in os.listdir(baseDir):
+        if fnmatch(file, pattern):
+            fileMatches.append(file)
+    if strictCheck:
+        for match in fileMatches:
+            if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                matchExists = True
+                break
+    else:
+        if len(fileMatches) > 0:
+            matchExists = True
+    return matchExists
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.getAppBase">
+    <p>def <span class="ident">getAppBase</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.getAppBase', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.getAppBase" class="source">
+    <pre><code>def getAppBase(self):
+    callingFile = self.Inspector.getCallerFilePath()
+    basePath = os.path.dirname(self.getParentDir(filePath=callingFile))
+    return basePath
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.getDirMatches">
+    <p>def <span class="ident">getDirMatches</span>(</p><p>self, baseDir, pattern, strictCheck=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will return true if a list of directories that match the pattern.  If there are
+no matching directories, then an empty list is returned
+:param baseDir: The directory to search in.
+:param pattern: Pattern to search for (ie conf*)
+:param strictCheck: Indicates to only include directory objects (not files) that match
+:return: List<String></p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.getDirMatches', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.getDirMatches" class="source">
+    <pre><code>def getDirMatches(self, baseDir, pattern, strictCheck=True):
+    """
+    This will return true if a list of directories that match the pattern.  If there are
+    no matching directories, then an empty list is returned
+    :param baseDir: The directory to search in.
+    :param pattern: Pattern to search for (ie conf*)
+    :param strictCheck: Indicates to only include directory objects (not files) that match
+    :return: List<String>
+    """
+    matches = []
+    dirsFound = []
+    for dir in os.listdir(baseDir):
+        if fnmatch(dir, pattern):
+            matches.append(dir)
+    if strictCheck:
+        for match in matches:
+            if self.dirExists(directoryPath=baseDir+PlatformProps.FilePathSep+match):
+                dirsFound.append(match)
+    else:
+        dirsFound = matches
+    return dirsFound
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.getFileMatches">
+    <p>def <span class="ident">getFileMatches</span>(</p><p>self, baseDir, pattern, strictCheck=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will return true if a list of files that match the pattern.  If there are
+no matching files, then an empty list is returned
+:param baseDir: The directory to search in.
+:param pattern: Pattern to search for (ie conf*)
+:param strictCheck: Indicates to only include file objects (not directories) that match
+:return: List<String></p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.getFileMatches', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.getFileMatches" class="source">
+    <pre><code>def getFileMatches(self, baseDir, pattern, strictCheck=True):
+    """
+    This will return true if a list of files that match the pattern.  If there are
+    no matching files, then an empty list is returned
+    :param baseDir: The directory to search in.
+    :param pattern: Pattern to search for (ie conf*)
+    :param strictCheck: Indicates to only include file objects (not directories) that match
+    :return: List<String>
+    """
+    matches = []
+    fileMatches = []
+    for file in os.listdir(baseDir):
+        if fnmatch(file, pattern):
+            matches.append(file)
+    if strictCheck:
+        for match in matches:
+            if self.fileExists(filePath=baseDir+PlatformProps.FilePathSep+match):
+                fileMatches.append(match)
+    else:
+        fileMatches = matches
+    return fileMatches
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.getParentDir">
+    <p>def <span class="ident">getParentDir</span>(</p><p>filePath)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.getParentDir', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.getParentDir" class="source">
+    <pre><code>@staticmethod
+def getParentDir(filePath):
+    return os.path.dirname(os.path.realpath(filePath))
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.removeDirMatch">
+    <p>def <span class="ident">removeDirMatch</span>(</p><p>self, dirPath, pattern)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.removeDirMatch', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.removeDirMatch" class="source">
+    <pre><code>def removeDirMatch(self, dirPath, pattern):
+    dirMatches = []
+    for d in os.listdir(dirPath):
+        if fnmatch(d, pattern):
+            dirMatches.append(d)
+    for match in dirMatches:
+        self.removeDirectory(dirPath=dirPath + PlatformProps.FilePathSep + match)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.removeDirectory">
+    <p>def <span class="ident">removeDirectory</span>(</p><p>dirPath)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.removeDirectory', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.removeDirectory" class="source">
+    <pre><code>@staticmethod
+def removeDirectory(dirPath):
+    os.rmdir(dirPath)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.FileUtils.touchFile">
+    <p>def <span class="ident">touchFile</span>(</p><p>filename)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.FileUtils.touchFile', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.FileUtils.touchFile" class="source">
+    <pre><code>@staticmethod
+def touchFile(filename):
+    open(filename, 'a').close()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.FileUtils.Inspector" class="name">var <span class="ident">Inspector</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.FileUtils.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.Inspector" class="name">class <span class="ident">Inspector</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Inspector', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Inspector" class="source">
+    <pre><code>class Inspector(object):
+
+    def getCallerFilePath(self, callLevel=2):
+        return inspect.stack()[callLevel][1]
+
+
+    def getCallerMod(self, callLevel=2):
+        fileName = inspect.stack()[callLevel][1]
+        modName = inspect.getmodulename(fileName)
+        return modName
+
+
+    def getCallerFunc(self, callLevel=2):
+        iStack = inspect.stack()
+        func = str(inspect.stack()[callLevel][3]).strip("'")
+        return func
+
+
+    '''
+    def getCallerClass(self, callLevel=2):
+        iStack = inspect.stack()
+        callingClass = None
+        fullClassName = None
+        try:
+            fullClassName = str(inspect.stack()[callLevel][0].f_locals["self"].__class__)
+        except KeyError:
+            try:
+                fullClassName = str(inspect.stack()[callLevel][0].f_locals["cls"])
+            except KeyError:
+                pass
+
+        callingClass = re.match(r"(<class ')([\w.]+)\.([\w]+)('>)", fullClassName).group(3)
+        return callingClass
+     '''
+
+
+    def getCallerFQN(self, callLevel=2):
+        ''' Function to get the FQN of caller (FQN = module.class.function or module.function)
+
+        :return: The name of the calling function
+        '''
+
+        moduleName = str(self.getCallerMod(callLevel=callLevel + 1)) + '.'
+        # className = str(str(self.getCallerClass(callLevel=callLevel + 1)) + '.').replace("None.", '')
+        funcName = self.getCallerFunc(callLevel=callLevel + 1)
+
+        # caller = moduleName + className + funcName
+        caller = moduleName+funcName
+        return caller
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.Inspector">Inspector</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.Inspector.getCallerFQN">
+    <p>def <span class="ident">getCallerFQN</span>(</p><p>self, callLevel=2)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Function to get the FQN of caller (FQN = module.class.function or module.function)</p>
+<p>:return: The name of the calling function</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Inspector.getCallerFQN', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Inspector.getCallerFQN" class="source">
+    <pre><code>def getCallerFQN(self, callLevel=2):
+    ''' Function to get the FQN of caller (FQN = module.class.function or module.function)
+    :return: The name of the calling function
+    '''
+    moduleName = str(self.getCallerMod(callLevel=callLevel + 1)) + '.'
+    # className = str(str(self.getCallerClass(callLevel=callLevel + 1)) + '.').replace("None.", '')
+    funcName = self.getCallerFunc(callLevel=callLevel + 1)
+    # caller = moduleName + className + funcName
+    caller = moduleName+funcName
+    return caller
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.Inspector.getCallerFilePath">
+    <p>def <span class="ident">getCallerFilePath</span>(</p><p>self, callLevel=2)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Inspector.getCallerFilePath', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Inspector.getCallerFilePath" class="source">
+    <pre><code>def getCallerFilePath(self, callLevel=2):
+    return inspect.stack()[callLevel][1]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.Inspector.getCallerFunc">
+    <p>def <span class="ident">getCallerFunc</span>(</p><p>self, callLevel=2)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Inspector.getCallerFunc', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Inspector.getCallerFunc" class="source">
+    <pre><code>def getCallerFunc(self, callLevel=2):
+    iStack = inspect.stack()
+    func = str(inspect.stack()[callLevel][3]).strip("'")
+    return func
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.Inspector.getCallerMod">
+    <p>def <span class="ident">getCallerMod</span>(</p><p>self, callLevel=2)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Inspector.getCallerMod', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Inspector.getCallerMod" class="source">
+    <pre><code>def getCallerMod(self, callLevel=2):
+    fileName = inspect.stack()[callLevel][1]
+    modName = inspect.getmodulename(fileName)
+    return modName
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.LogFactory" class="name">class <span class="ident">LogFactory</span></p>
+      
+  
+    <div class="desc"><p>Singleton class that will return a logger with the name of the caller</p>
+<p>This class will retrieve a number of different loggers for you.  It can also be used safely
+by library type classes that want to log safely. Simply, if the calling application to a
+library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+can call the "addNullHandler" routine to prevent this as it will create a "/cli/null" type logger so
+the library logging statements run without a logger.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory" class="source">
+    <pre><code>class LogFactory(object):
+    """ Singleton class that will return a logger with the name of the caller
+
+    This class will retrieve a number of different loggers for you.  It can also be used safely
+    by library type classes that want to log safely. Simply, if the calling application to a
+    library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
+    can call the "addNullHandler" routine to prevent this as it will create a "/cli/null" type logger so
+    the library logging statements run without a logger.
+    """
+
+    CodeInspector = Inspector()
+
+    class LogLevel(object):
+
+        CRITICAL = logging.CRITICAL
+        ERROR = logging.ERROR
+        WARNING = logging.WARNING
+        INFO = logging.INFO
+        DEBUG = logging.DEBUG
+
+        def convert(self, levelString):
+            if levelString.upper() == 'DEBUG':
+                return self.DEBUG
+            elif levelString.upper() == 'INFO':
+                return self.INFO
+            elif levelString.upper() == 'WARNING':
+                return self.WARNING
+            elif levelString.upper() == 'ERROR':
+                return self.ERROR
+            elif levelString.upper() == 'CRITICAL':
+                return self.CRITICAL
+            else:
+                return self.DEBUG
+
+    def __getDefaultFileFormatter(self):
+        return logging.Formatter('%(levelname)-8s|%(name)-15s|%(lineno)-3d|%(asctime)s.%(msecs)-3d| %(message)s', '%m.%d.%y %H:%M:%S')
+
+    def __getDefaultConsoleFormatter(self):
+        return logging.Formatter('::| %(message)s')
+
+    def __getBaseLogger(self, logLevel=LogLevel.DEBUG):
+        logger = logging.getLogger()
+        logger.setLevel(logLevel)
+        return logger
+
+    def __setHandleFormat(self, logHandler, formatterString=None, defaultFunc=None):
+        if formatterString is None:
+            handleFormat = defaultFunc
+        else:
+            handleFormat = logging.Formatter(formatterString)
+        logHandler.setFormatter(handleFormat)
+        return logHandler
+
+    def __addConsoleHandler(self,logger, formatString=None):
+        defaultFormatFunc = self.__getDefaultConsoleFormatter()
+        consoleHandler = logging.StreamHandler()
+        consoleHandler.setLevel(level=logging.INFO)
+        self.__setHandleFormat(logHandler=consoleHandler, formatterString=formatString, defaultFunc=defaultFormatFunc)
+        logger.addHandler(consoleHandler)
+        return logger
+
+    def __addTimeRotatedFileHandler(self, logger, logFile, logLevel=LogLevel.DEBUG, formatString=None, whenRotate='D', interval=1, keepCount=10):
+        h = logging
+        handler = logging.handlers.TimedRotatingFileHandler(filename=logFile,
+                                                                  when=whenRotate,
+                                                                  interval=interval,
+                                                                  backupCount=keepCount)
+        self.__setHandleFormat(logHandler=handler, formatterString=formatString, defaultFunc=self.__getDefaultFileFormatter())
+        logger.setLevel(level=logLevel)
+        logger.addHandler(handler)
+        return logger
+
+    def __addFileHandler(self,logger,logFile, logLevel=LogLevel.DEBUG, formatString=None):
+        fileHandler = logging.FileHandler(logFile)
+        fileHandler.setLevel(level=logLevel)
+        self.__setHandleFormat(logHandler=fileHandler, formatterString=formatString, defaultFunc=self.__getDefaultFileFormatter())
+        logger.addHandler(fileHandler)
+        return logger
+
+    def getLibLogger(self):
+        return logging.getLogger(self.CodeInspector.getCallerMod())
+
+    def getLogger(self, appName, appBase, logLevel=None):
+        '''
+        This class is meant to initialize a set of default loggers for an application.
+        :param logFile:
+        :param logLevel:
+        :return:
+        '''
+        calledLogLevel = logLevel
+        appConfig = ConfigManager().getConfigMap(appBase + PlatformProps.FilePathSep + 'conf' + PlatformProps.FilePathSep + appName + '.ini')
+        logFilename = appBase + PlatformProps.FilePathSep + 'logs' + PlatformProps.FilePathSep + appName + '.log'
+        if calledLogLevel is None:
+            configValue = appConfig['LOGGING']['LogLevel']
+            calledLogLevel = self.LogLevel().convert(configValue)
+        logger = self.__getBaseLogger(logLevel=calledLogLevel)
+        logger = self.__addConsoleHandler(logger=logger)
+        # logger = self.__addTimeRotatedFileHandler(logger=logger, logFile=logFilename, logLevel=logLevel)
+        logger = self.__addFileHandler(logger=logger, logFile=logFilename)
+        appLogger = logging.getLogger(appName)
+        appLogger.setLevel(calledLogLevel)
+        return appLogger
+
+    def changeLoggingLevel(self,logLevel,logger=None):
+        '''
+        This module is for changing the logging level on the fly.  For example, changing the logging level
+        via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger
+        will be looked up dynamically.
+        :param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel
+        :param logger: The logger object that the program is using to log.
+        :return: None
+        '''
+        modLogger = logger
+        if logger is None:
+            callerMod = self.Inspector.getCallerMod()
+            modLogger = logging.getLogger(callerMod)
+
+        handlers = modLogger.handlers
+
+        for h in handlers:
+            h.setLevel(level=logLevel)
+
+    def getConsoleLogger(self,loggerName=None,logLevel=LogLevel.INFO,formatString=None):
+        '''
+        This will return a logger for logging messages to the console.
+        :param logLevel:
+        :param formatString:
+        :return:
+        '''
+        logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+        logger = self.__addConsoleHandler(logger=logger,logLevel=logLevel,formatString=formatString)
+        return logger
+
+    def getFileLogger(self, logFile=None, loggerName=None, logLevel=LogLevel.DEBUG, formatString=None):
+        ''' Use this routine to get a standard file logger, non-rotating
+
+        :param logFile: the path the the logfile where the logger will write
+        :param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO
+        :return: python standard logging object
+        '''
+        logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+        logger = self.__addFileHandler(logger=logger,logFile=logFile,logLevel=logLevel,formatString=formatString)
+        return logger
+
+    def getTimedRotateFileLogger(self,loggerName=None,logFile=None,logLevel=LogLevel.DEBUG,formatString=None,whenRotate='D',interval=1,keepCount=10):
+        '''
+        This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate
+        the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.
+        Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python
+        logging library documentation.
+
+        :param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.
+        :param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()
+        :param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO
+        :param formatString: Custom format string.  If left to default value of None, the framework default will be used.
+        :param whenRotate: When should rotation occur.  Default is 'D' for daily.
+        :param interval: How often to rotate.  Default is 1.
+        :param keepCount: How many files to keep after file is rotated.  Default is 10
+        :return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.
+        '''
+        logger = self.__getBaseLogger(logLevel=logLevel,loggerName=loggerName)
+        logger = self.__addTimeRotatedFileHandler(logger=logger,
+                                                  logFile=logFile,
+                                                  logLevel=logLevel,
+                                                  formatString=formatString,
+                                                  whenRotate=whenRotate,
+                                                  interval=interval,
+                                                  keepCount=keepCount)
+        return logger
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.LogFactory">LogFactory</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.LogFactory.CodeInspector" class="name">var <span class="ident">CodeInspector</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.LogFactory.LogLevel" class="name">var <span class="ident">LogLevel</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.changeLoggingLevel">
+    <p>def <span class="ident">changeLoggingLevel</span>(</p><p>self, logLevel, logger=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This module is for changing the logging level on the fly.  For example, changing the logging level
+via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger
+will be looked up dynamically.
+:param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel
+:param logger: The logger object that the program is using to log.
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.changeLoggingLevel', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.changeLoggingLevel" class="source">
+    <pre><code>def changeLoggingLevel(self,logLevel,logger=None):
+    '''
+    This module is for changing the logging level on the fly.  For example, changing the logging level
+    via  a command line switch.  For vx_pylegos programs, the logger argument is optional as the logger
+    will be looked up dynamically.
+    :param logLevel: Level as specified with a value from pylegos.logging.LogFactory.LogLevel
+    :param logger: The logger object that the program is using to log.
+    :return: None
+    '''
+    modLogger = logger
+    if logger is None:
+        callerMod = self.Inspector.getCallerMod()
+        modLogger = logging.getLogger(callerMod)
+    handlers = modLogger.handlers
+    for h in handlers:
+        h.setLevel(level=logLevel)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.getConsoleLogger">
+    <p>def <span class="ident">getConsoleLogger</span>(</p><p>self, loggerName=None, logLevel=20, formatString=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will return a logger for logging messages to the console.
+:param logLevel:
+:param formatString:
+:return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.getConsoleLogger', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.getConsoleLogger" class="source">
+    <pre><code>def getConsoleLogger(self,loggerName=None,logLevel=LogLevel.INFO,formatString=None):
+    '''
+    This will return a logger for logging messages to the console.
+    :param logLevel:
+    :param formatString:
+    :return:
+    '''
+    logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+    logger = self.__addConsoleHandler(logger=logger,logLevel=logLevel,formatString=formatString)
+    return logger
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.getFileLogger">
+    <p>def <span class="ident">getFileLogger</span>(</p><p>self, logFile=None, loggerName=None, logLevel=10, formatString=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Use this routine to get a standard file logger, non-rotating</p>
+<p>:param logFile: the path the the logfile where the logger will write
+:param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO
+:return: python standard logging object</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.getFileLogger', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.getFileLogger" class="source">
+    <pre><code>def getFileLogger(self, logFile=None, loggerName=None, logLevel=LogLevel.DEBUG, formatString=None):
+    ''' Use this routine to get a standard file logger, non-rotating
+    :param logFile: the path the the logfile where the logger will write
+    :param logLevel: the level of logging you want to be logged.  Default is LogLevel.INFO
+    :return: python standard logging object
+    '''
+    logger = self.__getBaseLogger(loggerName=loggerName,logLevel=logLevel)
+    logger = self.__addFileHandler(logger=logger,logFile=logFile,logLevel=logLevel,formatString=formatString)
+    return logger
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.getLibLogger">
+    <p>def <span class="ident">getLibLogger</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.getLibLogger', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.getLibLogger" class="source">
+    <pre><code>def getLibLogger(self):
+    return logging.getLogger(self.CodeInspector.getCallerMod())
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.getLogger">
+    <p>def <span class="ident">getLogger</span>(</p><p>self, appName, appBase, logLevel=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This class is meant to initialize a set of default loggers for an application.
+:param logFile:
+:param logLevel:
+:return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.getLogger', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.getLogger" class="source">
+    <pre><code>def getLogger(self, appName, appBase, logLevel=None):
+    '''
+    This class is meant to initialize a set of default loggers for an application.
+    :param logFile:
+    :param logLevel:
+    :return:
+    '''
+    calledLogLevel = logLevel
+    appConfig = ConfigManager().getConfigMap(appBase + PlatformProps.FilePathSep + 'conf' + PlatformProps.FilePathSep + appName + '.ini')
+    logFilename = appBase + PlatformProps.FilePathSep + 'logs' + PlatformProps.FilePathSep + appName + '.log'
+    if calledLogLevel is None:
+        configValue = appConfig['LOGGING']['LogLevel']
+        calledLogLevel = self.LogLevel().convert(configValue)
+    logger = self.__getBaseLogger(logLevel=calledLogLevel)
+    logger = self.__addConsoleHandler(logger=logger)
+    # logger = self.__addTimeRotatedFileHandler(logger=logger, logFile=logFilename, logLevel=logLevel)
+    logger = self.__addFileHandler(logger=logger, logFile=logFilename)
+    appLogger = logging.getLogger(appName)
+    appLogger.setLevel(calledLogLevel)
+    return appLogger
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogFactory.getTimedRotateFileLogger">
+    <p>def <span class="ident">getTimedRotateFileLogger</span>(</p><p>self, loggerName=None, logFile=None, logLevel=10, formatString=None, whenRotate=&#39;D&#39;, interval=1, keepCount=10)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate
+the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.
+Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python
+logging library documentation.</p>
+<p>:param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.
+:param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()
+:param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO
+:param formatString: Custom format string.  If left to default value of None, the framework default will be used.
+:param whenRotate: When should rotation occur.  Default is 'D' for daily.
+:param interval: How often to rotate.  Default is 1.
+:param keepCount: How many files to keep after file is rotated.  Default is 10
+:return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogFactory.getTimedRotateFileLogger', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogFactory.getTimedRotateFileLogger" class="source">
+    <pre><code>def getTimedRotateFileLogger(self,loggerName=None,logFile=None,logLevel=LogLevel.DEBUG,formatString=None,whenRotate='D',interval=1,keepCount=10):
+    '''
+    This will return a logger with a time based rotating file handler.  This will log to the specified file and will rotate
+    the file on the specified schedule.  The default schedule for rotation is every day and keep previous 10 days of logs.
+    Use the optional parameters to change the schedule.  The values to pass are the same values found in the standard python
+    logging library documentation.
+    :param loggerName: The name of the logger.  If left at None (Recommended) the name of the logger will be the app name or calling module.
+    :param logFile: The full path to the log file.  No need to pass if using pylegos.app_legos.App.init()
+    :param logLevel: The pylegos.logging.LogFactory.LogLevel value to set for what messages to log.  Default LogLevel.INFO
+    :param formatString: Custom format string.  If left to default value of None, the framework default will be used.
+    :param whenRotate: When should rotation occur.  Default is 'D' for daily.
+    :param interval: How often to rotate.  Default is 1.
+    :param keepCount: How many files to keep after file is rotated.  Default is 10
+    :return: Returns a standard python logger with the logging.handlers.TimedRotatingFileHandler configured.
+    '''
+    logger = self.__getBaseLogger(logLevel=logLevel,loggerName=loggerName)
+    logger = self.__addTimeRotatedFileHandler(logger=logger,
+                                              logFile=logFile,
+                                              logLevel=logLevel,
+                                              formatString=formatString,
+                                              whenRotate=whenRotate,
+                                              interval=interval,
+                                              keepCount=keepCount)
+    return logger
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.LogUtil" class="name">class <span class="ident">LogUtil</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogUtil', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogUtil" class="source">
+    <pre><code>class LogUtil(object):
+
+    Logger = None
+
+    def __init__(self, logger):
+        self.Logger = logger
+
+    def getLogfileList(self):
+        filelist = []
+        for h in self.Logger.handlers:
+            if type(h) is logging.FileHandler:
+                filelist.append(h.baseFilename)
+        return filelist
+
+
+    def appendToLog(self, messageObj):
+        headerLine = ('*'*120)+'\n'
+        footerLine = ('-'*120)+'\n\n'
+        logTimeMessage = '| '+str(datetime.now())+' |\n'
+        logHeader = '\n'+headerLine+logTimeMessage+headerLine
+        logMessage = str(messageObj)
+        '''
+        if type(messageObj) is str or type(messageObj) is int:
+            logMessage = str(messageObj)
+        elif type(messageObj) is dict:
+            # Need to format , for now until DictionaryUtil is complete, just convert to string
+            logMessage = str(messageObj)
+        elif type(messageObj) is list:
+            print('process list')
+        '''
+        for fn in self.getLogfileList():
+            lf = open(fn,'a')
+            fcntl.flock(lf, fcntl.LOCK_EX)
+            lf.write(logHeader)
+            lf.write(logMessage+'\n')
+            lf.write(footerLine)
+            lf.flush()
+            fcntl.flock(lf, fcntl.LOCK_UN)
+            lf.close()
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.LogUtil">LogUtil</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.LogUtil.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogUtil.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, logger)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogUtil.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogUtil.__init__" class="source">
+    <pre><code>def __init__(self, logger):
+    self.Logger = logger
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogUtil.appendToLog">
+    <p>def <span class="ident">appendToLog</span>(</p><p>self, messageObj)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogUtil.appendToLog', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogUtil.appendToLog" class="source">
+    <pre><code>def appendToLog(self, messageObj):
+    headerLine = ('*'*120)+'\n'
+    footerLine = ('-'*120)+'\n\n'
+    logTimeMessage = '| '+str(datetime.now())+' |\n'
+    logHeader = '\n'+headerLine+logTimeMessage+headerLine
+    logMessage = str(messageObj)
+    '''
+    if type(messageObj) is str or type(messageObj) is int:
+        logMessage = str(messageObj)
+    elif type(messageObj) is dict:
+        # Need to format , for now until DictionaryUtil is complete, just convert to string
+        logMessage = str(messageObj)
+    elif type(messageObj) is list:
+        print('process list')
+    '''
+    for fn in self.getLogfileList():
+        lf = open(fn,'a')
+        fcntl.flock(lf, fcntl.LOCK_EX)
+        lf.write(logHeader)
+        lf.write(logMessage+'\n')
+        lf.write(footerLine)
+        lf.flush()
+        fcntl.flock(lf, fcntl.LOCK_UN)
+        lf.close()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.LogUtil.getLogfileList">
+    <p>def <span class="ident">getLogfileList</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.LogUtil.getLogfileList', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.LogUtil.getLogfileList" class="source">
+    <pre><code>def getLogfileList(self):
+    filelist = []
+    for h in self.Logger.handlers:
+        if type(h) is logging.FileHandler:
+            filelist.append(h.baseFilename)
+    return filelist
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.LogUtil.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.OSRunException" class="name">class <span class="ident">OSRunException</span></p>
+      
+  
+    <div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.OSRunException', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.OSRunException" class="source">
+    <pre><code>class OSRunException(Exception):
+    def __init__(self, command, stderr):
+        errMsg = 'The following command return a non-zero return value, indicating an error.\n'
+        errMsg += 'Command: ' + str(command) + '\n'
+        errMsg += 'Here is the error output \n'
+        if len(stderr) == 0:
+            errMsg += 'Command wrote no error message'
+        else:
+            for line in stderr:
+                errMsg += line
+        self.message = errMsg
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.OSRunException">OSRunException</a></li>
+          <li>builtins.Exception</li>
+          <li>builtins.BaseException</li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.OSRunException.args" class="name">var <span class="ident">args</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.OSRunException.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, command, stderr)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.OSRunException.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.OSRunException.__init__" class="source">
+    <pre><code>def __init__(self, command, stderr):
+    errMsg = 'The following command return a non-zero return value, indicating an error.\n'
+    errMsg += 'Command: ' + str(command) + '\n'
+    errMsg += 'Here is the error output \n'
+    if len(stderr) == 0:
+        errMsg += 'Command wrote no error message'
+    else:
+        for line in stderr:
+            errMsg += line
+    self.message = errMsg
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.OSRunException.message" class="name">var <span class="ident">message</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.PlatformProps" class="name">class <span class="ident">PlatformProps</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.PlatformProps', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.PlatformProps" class="source">
+    <pre><code>class PlatformProps(object):
+    FilePathSep = os.path.sep
+    EnvPathSep = os.pathsep
+
+    @staticmethod
+    def getPythonVersion():
+        return str(sys.version_info[0])+'.'+str(sys.version_info[1])
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.PlatformProps">PlatformProps</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.PlatformProps.EnvPathSep" class="name">var <span class="ident">EnvPathSep</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.PlatformProps.FilePathSep" class="name">var <span class="ident">FilePathSep</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.PlatformProps.getPythonVersion">
+    <p>def <span class="ident">getPythonVersion</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.PlatformProps.getPythonVersion', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.PlatformProps.getPythonVersion" class="source">
+    <pre><code>@staticmethod
+def getPythonVersion():
+    return str(sys.version_info[0])+'.'+str(sys.version_info[1])
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.PyLegosFrameworkException" class="name">class <span class="ident">PyLegosFrameworkException</span></p>
+      
+  
+    <div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.PyLegosFrameworkException', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.PyLegosFrameworkException" class="source">
+    <pre><code>class PyLegosFrameworkException(Exception):
+    def __init__(self,msg):
+        self.message = msg
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.PyLegosFrameworkException">PyLegosFrameworkException</a></li>
+          <li>builtins.Exception</li>
+          <li>builtins.BaseException</li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.PyLegosFrameworkException.args" class="name">var <span class="ident">args</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.PyLegosFrameworkException.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, msg)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.PyLegosFrameworkException.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.PyLegosFrameworkException.__init__" class="source">
+    <pre><code>def __init__(self,msg):
+    self.message = msg
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.PyLegosFrameworkException.message" class="name">var <span class="ident">message</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.QuoteMachine" class="name">class <span class="ident">QuoteMachine</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.QuoteMachine', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.QuoteMachine" class="source">
+    <pre><code>class QuoteMachine(object):
+    ErrorQuotes = [
+       'I blame this error on you!',
+       'One of these days this will work...just not today!'
+    ]
+    SuccessFinishPhrases = [
+        'Nice work, donuts on me!',
+        'Good job, I knew you had it in you!'
+    ]
+    InvalidInputSayings = [
+        'Hmm, are your fingers tired? That input is incorrect',
+        'Is it Monday, or do you just like giving invalid input?'
+    ]
+
+    def getErrorMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return 'Awe SNAP! '+self.ErrorQuotes[randNum]
+
+    def getFinishSuccessMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return self.SuccessFinishPhrases[randNum]
+
+    def getInvalidInputMessage(self):
+        randNum = random.randint(0,len(self.ErrorQuotes)-1)
+        return self.InvalidInputSayings[randNum]
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.QuoteMachine">QuoteMachine</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.QuoteMachine.ErrorQuotes" class="name">var <span class="ident">ErrorQuotes</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.QuoteMachine.InvalidInputSayings" class="name">var <span class="ident">InvalidInputSayings</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="pylegos.core.QuoteMachine.SuccessFinishPhrases" class="name">var <span class="ident">SuccessFinishPhrases</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.QuoteMachine.getErrorMessage">
+    <p>def <span class="ident">getErrorMessage</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.QuoteMachine.getErrorMessage', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.QuoteMachine.getErrorMessage" class="source">
+    <pre><code>def getErrorMessage(self):
+    randNum = random.randint(0,len(self.ErrorQuotes)-1)
+    return 'Awe SNAP! '+self.ErrorQuotes[randNum]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.QuoteMachine.getFinishSuccessMessage">
+    <p>def <span class="ident">getFinishSuccessMessage</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.QuoteMachine.getFinishSuccessMessage', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.QuoteMachine.getFinishSuccessMessage" class="source">
+    <pre><code>def getFinishSuccessMessage(self):
+    randNum = random.randint(0,len(self.ErrorQuotes)-1)
+    return self.SuccessFinishPhrases[randNum]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.QuoteMachine.getInvalidInputMessage">
+    <p>def <span class="ident">getInvalidInputMessage</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.QuoteMachine.getInvalidInputMessage', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.QuoteMachine.getInvalidInputMessage" class="source">
+    <pre><code>def getInvalidInputMessage(self):
+    randNum = random.randint(0,len(self.ErrorQuotes)-1)
+    return self.InvalidInputSayings[randNum]
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.Singleton" class="name">class <span class="ident">Singleton</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.Singleton', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.Singleton" class="source">
+    <pre><code>class Singleton(object):
+    __instance = None
+
+    def __new__(cls):
+        if Singleton.__instance is None:
+            Singleton.__instance = object.__new__(cls)
+        return Singleton.__instance
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.Singleton">Singleton</a></li>
+          <li>builtins.object</li>
+          </ul>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="pylegos.core.UnixOSHelper" class="name">class <span class="ident">UnixOSHelper</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper" class="source">
+    <pre><code>class UnixOSHelper(object):
+    Logger = None
+
+    def __init__(self):
+        self.Logger = LogFactory().getLibLogger()
+
+    def getHostname(self,shortName=False):
+        hostname = platform.node()
+        if shortName:
+            hostname=platform.node().split('.')[0]
+        return hostname
+
+    def getOSName(self):
+        osName=None
+        systemName = platform.system()
+        if systemName == 'Linux':
+            osName = platform.linux_distribution()[0]
+        elif systemName == 'Darwin':
+            osName = 'MacOS'
+        return osName
+
+    def getOSVersion(self):
+        osName = self.getOSName()
+        osVer = None
+        if osName == 'Linux':
+            osVer = platform.linux_distribution()[1]
+        elif osName == 'Darwin':
+            osVer = platform.mac_ver()[0]
+        return osVer
+
+    def checkFile4Errors(self, filename, errorMatchPattern='ERROR:'):
+        self.Logger.debug('Checking output file ['+filename+'] for error match ['+errorMatchPattern+']')
+        errLines = self.run('egrep '+errorMatchPattern+' '+filename)
+        return errLines
+
+    def run(self, command, useReturnCode=True, simMode=False, secureLog=False):
+        """
+        Use this to run an os command.  If the command itself is secure in nature or it could
+        output data that is considered secure (i.e. passwords), make sure to turn the secureLog
+        parameter to True.
+        :param command: The full command that is to be run
+        :param useReturnCode: Boolean flag to indicate if non-zero return value of command dictates failure
+        :param simMode: Boolean flag to only simulate the run.
+        :param secureLog: Boolean flag to turn logging off for any command references or logging output
+        :return: None
+        """
+        if not secureLog:
+            self.Logger.debug('Running command: ' + command)
+        if not simMode:
+            try:
+                stdout = check_output(command, stderr=STDOUT)
+                if not secureLog:
+                    self.Logger.debug('Returned: ' + str(stdout))
+                return stdout
+            except CalledProcessError as e:
+                self.Logger.error('Caught a non-zero return from running command')
+                if not secureLog:
+                    self.Logger.debug('Command was ['+command+']')
+                if useReturnCode:
+                    raise OSRunException(command=command, stderr=e.output)
+            except OSError as e:
+                raise OSRunException(command=command, stderr=str(e))
+        else:
+            print('If live run, the following command would have been run on host ['+self.getHostname()+']')
+            print(command)
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#pylegos.core.UnixOSHelper">UnixOSHelper</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="pylegos.core.UnixOSHelper.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.__init__" class="source">
+    <pre><code>def __init__(self):
+    self.Logger = LogFactory().getLibLogger()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.checkFile4Errors">
+    <p>def <span class="ident">checkFile4Errors</span>(</p><p>self, filename, errorMatchPattern=&#39;ERROR:&#39;)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.checkFile4Errors', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.checkFile4Errors" class="source">
+    <pre><code>def checkFile4Errors(self, filename, errorMatchPattern='ERROR:'):
+    self.Logger.debug('Checking output file ['+filename+'] for error match ['+errorMatchPattern+']')
+    errLines = self.run('egrep '+errorMatchPattern+' '+filename)
+    return errLines
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.getHostname">
+    <p>def <span class="ident">getHostname</span>(</p><p>self, shortName=False)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.getHostname', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.getHostname" class="source">
+    <pre><code>def getHostname(self,shortName=False):
+    hostname = platform.node()
+    if shortName:
+        hostname=platform.node().split('.')[0]
+    return hostname
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.getOSName">
+    <p>def <span class="ident">getOSName</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.getOSName', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.getOSName" class="source">
+    <pre><code>def getOSName(self):
+    osName=None
+    systemName = platform.system()
+    if systemName == 'Linux':
+        osName = platform.linux_distribution()[0]
+    elif systemName == 'Darwin':
+        osName = 'MacOS'
+    return osName
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.getOSVersion">
+    <p>def <span class="ident">getOSVersion</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.getOSVersion', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.getOSVersion" class="source">
+    <pre><code>def getOSVersion(self):
+    osName = self.getOSName()
+    osVer = None
+    if osName == 'Linux':
+        osVer = platform.linux_distribution()[1]
+    elif osName == 'Darwin':
+        osVer = platform.mac_ver()[0]
+    return osVer
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="pylegos.core.UnixOSHelper.run">
+    <p>def <span class="ident">run</span>(</p><p>self, command, useReturnCode=True, simMode=False, secureLog=False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Use this to run an os command.  If the command itself is secure in nature or it could
+output data that is considered secure (i.e. passwords), make sure to turn the secureLog
+parameter to True.
+:param command: The full command that is to be run
+:param useReturnCode: Boolean flag to indicate if non-zero return value of command dictates failure
+:param simMode: Boolean flag to only simulate the run.
+:param secureLog: Boolean flag to turn logging off for any command references or logging output
+:return: None</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-pylegos.core.UnixOSHelper.run', this);">Show source &equiv;</a></p>
+  <div id="source-pylegos.core.UnixOSHelper.run" class="source">
+    <pre><code>def run(self, command, useReturnCode=True, simMode=False, secureLog=False):
+    """
+    Use this to run an os command.  If the command itself is secure in nature or it could
+    output data that is considered secure (i.e. passwords), make sure to turn the secureLog
+    parameter to True.
+    :param command: The full command that is to be run
+    :param useReturnCode: Boolean flag to indicate if non-zero return value of command dictates failure
+    :param simMode: Boolean flag to only simulate the run.
+    :param secureLog: Boolean flag to turn logging off for any command references or logging output
+    :return: None
+    """
+    if not secureLog:
+        self.Logger.debug('Running command: ' + command)
+    if not simMode:
+        try:
+            stdout = check_output(command, stderr=STDOUT)
+            if not secureLog:
+                self.Logger.debug('Returned: ' + str(stdout))
+            return stdout
+        except CalledProcessError as e:
+            self.Logger.error('Caught a non-zero return from running command')
+            if not secureLog:
+                self.Logger.debug('Command was ['+command+']')
+            if useReturnCode:
+                raise OSRunException(command=command, stderr=e.output)
+        except OSError as e:
+            raise OSRunException(command=command, stderr=str(e))
+    else:
+        print('If live run, the following command would have been run on host ['+self.getHostname()+']')
+        print(command)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="pylegos.core.UnixOSHelper.Logger" class="name">var <span class="ident">Logger</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 import time
 
-from src.velexio.pylegos.core import TermColor
+from pylegos.core import TermColor
 
 
 def main():

@@ -208,7 +208,7 @@ class LogFactory(object):
     This class will retrieve a number of different loggers for you.  It can also be used safely
     by library type classes that want to log safely. Simply, if the calling application to a
     library does not setup a logger, then the libraries log statements will cause it to fail.  Libraries
-    can call the "addNullHandler" routine to prevent this as it will create a "/dev/null" type logger so
+    can call the "addNullHandler" routine to prevent this as it will create a "/cli/null" type logger so
     the library logging statements run without a logger.
     """
 

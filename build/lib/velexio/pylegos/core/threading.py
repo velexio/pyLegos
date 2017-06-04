@@ -1,12 +1,12 @@
+import threading
 import time
 
 from Queue import Queue
 
-import threading
-from src.velexio.pylegos.core import LogFactory
-from src.velexio.pylegos.core import ProgressBar
-from src.velexio.pylegos.core import Spinner
-from src.velexio.pylegos.core import SpinnerType
+from pylegos.core import LogFactory
+from pylegos.core import ProgressBar
+from pylegos.core import Spinner
+from pylegos.core import SpinnerType
 
 
 class Thread(object):
@@ -24,7 +24,7 @@ class Thread(object):
 
     def runAndWait(self, waitMessage, threadName, runFunc, funcNamedParams={}, spinnerType=SpinnerType.Classic):
         """
-        * NOTE: Still if dev, so use at own risk ;)
+        * NOTE: Still if cli, so use at own risk ;)
         This procedure will run the named function in a seperate thread so that async operation is possible
         :param threadName: <br>
         :param runFunc: <br>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 
-from src.velexio.pylegos.core import OSRunException
-from src.velexio.pylegos.core import UnixOSHelper
+from pylegos.core import OSRunException
+from pylegos.core import UnixOSHelper
 
 
 def errorCatchTest():

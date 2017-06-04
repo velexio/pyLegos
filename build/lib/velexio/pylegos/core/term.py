@@ -6,7 +6,7 @@ from progress.spinner import MoonSpinner
 from progress.spinner import PieSpinner
 from progress.spinner import Spinner as ProgressSpinner
 
-from src.velexio.pylegos.core import LogFactory
+from pylegos.core import LogFactory
 
 
 class SpinnerType(object):

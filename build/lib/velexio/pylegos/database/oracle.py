@@ -9,7 +9,7 @@ from collections import OrderedDict
 
 import cx_Oracle
 
-from src.velexio.pylegos.core import LogFactory
+from pylegos.core import LogFactory
 
 '''
 -----------------------
@@ -462,7 +462,7 @@ class Admin(object):
                "profile " + profile + " "
                "account unlock")
 
-        self.database.execDML(ddl);
+        self.database.execute(ddl);
 
 
 class DatabaseConnectionException(Exception):

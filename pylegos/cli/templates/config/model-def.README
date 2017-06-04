@@ -1,0 +1,28 @@
+; Comment lines can start with (#,;,--)
+;
+; Object Definition Syntax
+; ------------------------------------------------------
+; <object name>: <c|category>=<cat>;[S=<start value>] {
+; fieldOne: T=<datatype>;M=<maxsize>;U=<Y|N>;
+; fieldTwo: T=<datatype>;
+; fieldThree: t=integer; r=<referenced object name>; rf=<referenced field>; rd=<delete option>;
+; }
+; ------------------------------------------------------
+;
+; NOTES: Attribute options are not case-sensitive. (i.e. T=Boolean and t=boolean are valid)
+;        You specify the attribute option with either the shortcut or full name. (i.e T=Boolean and Datatype=Boolean are equivalent)
+;        *** If persistence is set to 'N', then of course you do not need to set attributes on the object fields
+;        *** DO NOT SPECIFY A PK FIELD OR CREATED/MODIFIED AS THESE ARE AUTOMATICALLY CREATED BY GENERATOR
+;            AND NAMED BY STANDARD CONVENTION.
+;        *** All object names should be singular.  By convention, table names (because a table represents a collection of objects,
+;            will be pluralized by the generator
+;        *** Define object names using InitCap naming format and attributes as camel case, which is standard coding convention.
+;        *** If you define a attribute as unique, by default it will not be allowed to have nulls and the convert
+;            function will be set to lower by default
+;        *** If you define a attribute w/ a reference, it will be set to not null by default (unless specified)
+;            and it will be indexed
+;
+; DISCLAIMER - This tool is meant to limit the amount of "boilerplate" code that is needed to be created.  It
+;              covers roughly 95% of typical use cases for most application model objects and database tables.  It
+;              does not support features such as composite unique keys, many-to-many relationships, composite
+;              indexes, etc.  It is anticipated that output will be changed, amended from time to time.

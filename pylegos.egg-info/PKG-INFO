@@ -1,0 +1,29 @@
+Metadata-Version: 1.1
+Name: pylegos
+Version: 0.2.0a6
+Summary: A python framework for enterprise projects
+Home-page: https://github.com/velexio/pylegos
+Author: Gerry Christiansen
+Author-email: gchristiansen@velexio.com
+License: MIT
+Description: A enterprise framework for developing true enterprise python applications
+        ===============================================================================
+        This project is designed to assist in building modern python applications and projects that meet the needs of an
+        enterprise level application.  There are many frameworks that exist for creating python web applications and/or web
+        apis using python.  However, there are needs of enterprise level applications that are not met by these frameworks.
+        -----
+        PyLegos borrows many of the concepts used by other application frameworks.  The framework is somewhat opinionated.  It
+        currently requires a particular file structure.  In future releases we hope to eliminate this requirement so that the
+        structure can be adjusted to meet the style of the development team.
+        
+        
+        
+Keywords: framework enterprise development libraries database tools
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3

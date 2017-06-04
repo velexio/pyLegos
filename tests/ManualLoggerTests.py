@@ -1,5 +1,5 @@
 
-from pylegos.logging_legos import LogFactory
+from pylegos import LogFactory
 
 def consoleOnlyTest():
 
